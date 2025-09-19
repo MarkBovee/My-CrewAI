@@ -1,0 +1,59 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.code-workspace
+
+# OS specific
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# CrewAI specific
+.crew/
+crew_output/
+temp/
+logs/
+
+# AI/ML artifacts
+models/
+checkpoints/
+wandb/
+
+# Temporary files
+*.tmp
+*.temp
+*~

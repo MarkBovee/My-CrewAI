@@ -1,0 +1,28 @@
+task_search:
+  description: |
+    Make a detailed report on the latest rising skills in AI and tech space. 
+    Your final answer MUST be a list of at least 5 exciting new AI and tech skills
+    in the format of bullet points.
+  expected_output: |
+    A comprehensive list of at least 5 exciting new AI and tech skills with brief explanations 
+    of why they are trending and in demand, formatted as bullet points.
+  agent: coach
+
+task_post:
+  description: |
+    Write a LinkedIn post with a short but impactful headline and at max 200 words. 
+    It should list the latest AI and tech skills which are going to be in demand.
+  expected_output: |
+    An engaging LinkedIn post with a compelling headline (max 30 characters) and content 
+    (max 200 words) that lists trending AI and tech skills with relevant emojis and hashtags.
+  agent: influencer
+
+task_critique:
+  description: |
+    Identify parts of the post that aren't written concise enough and improve them. 
+    Make sure that the post has engaging headline with 30 characters max, 
+    and that there are at max 200 words.
+  expected_output: |
+    A refined and improved LinkedIn post that is concise, engaging, within 200 words, 
+    has an impactful headline under 30 characters, includes relevant emojis and hashtags.
+  agent: critic
