@@ -1,16 +1,16 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from instagram.tools import DuckDuckGoSearchTool
-from instagram.helpers import OllamaHelper
+from .tools import DuckDuckGoSearchTool
+from .helpers import OllamaHelper
 from typing import List
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 @CrewBase
-class InstagramCrew():
-    """Instagram crew"""
+class LinkedInCrew():
+    """LinkedIn crew"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -75,7 +75,7 @@ class InstagramCrew():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the InstagramCrew crew"""
+        """Creates the LinkedInCrew crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

@@ -52,12 +52,12 @@ This approach ensures continuity between development sessions and provides clear
 ## Architecture & Key Patterns
 
 ### 1. YAML-Driven Configuration
-- **Agents**: `src/instagram/config/agents.yaml` - Define roles, goals, LLM models, and thinking behavior
-- **Tasks**: `src/instagram/config/tasks.yaml` - Define workflow steps and expected outputs
+- **Agents**: `src/linkedin/config/agents.yaml` - Define roles, goals, LLM models, and thinking behavior
+- **Tasks**: `src/linkedin/config/tasks.yaml` - Define workflow steps and expected outputs
 - **Pattern**: Use `{current_year}` templating in goals for dynamic inputs
 
 ### 2. Local Ollama LLM Integration
-- **Helper**: `src/instagram/helpers/ollama_helper.py` - Centralized LLM management
+- **Helper**: `src/linkedin/helpers/ollama_helper.py` - Centralized LLM management
 - **Key Pattern**: Pass thinking control via `model_kwargs["options"]["think"]` to disable LLM verbosity
 - **Configuration**: Each agent can have different models and thinking settings
 - **Connection**: Always uses `http://localhost:11434` base URL
@@ -70,7 +70,7 @@ This approach ensures continuity between development sessions and provides clear
 crewai run
 
 # Method 2: Direct Python execution
-python -c "import sys; sys.path.append('src'); from instagram.main import run; run()"
+python -c "import sys; sys.path.append('src'); from linkedin.main import run; run()"
 ```
 
 ## Concepts & Documentation

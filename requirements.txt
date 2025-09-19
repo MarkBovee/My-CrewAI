@@ -1,6 +1,12 @@
 # CrewAI and AI framework dependencies
 crewai>=0.80.0
 crewai-tools>=0.17.0
+pydantic>=2.0.0
+
+# Web Server Dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
 
 # DuckDuckGo search integration
 ddgs>=9.6.0

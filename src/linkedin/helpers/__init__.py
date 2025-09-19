@@ -1,5 +1,5 @@
 """
-Helper modules for CrewAI Instagram Project
+Helper modules for CrewAI LinkedIn Project
 """
 
 from .ollama_helper import OllamaHelper, create_ollama_llm

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Configuration Helper for CrewAI Instagram Project
+Configuration Helper for CrewAI LinkedIn Project
 Manages Ollama models and agent configurations with comprehensive utilities.
 """
 
@@ -200,7 +200,7 @@ class OllamaConfigManager:
         print("-" * 50)
     
     def setup_recommended_model(self):
-        """Setup recommended model for the Instagram crew"""
+        """Setup recommended model for the LinkedIn crew"""
         recommended_model = "openhermes:v2.5"
         
         print(f"🎯 Setting up recommended model: {recommended_model}")
@@ -221,7 +221,7 @@ class OllamaConfigManager:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="CrewAI Instagram Project Configuration Helper")
+    parser = argparse.ArgumentParser(description="CrewAI LinkedIn Project Configuration Helper")
     parser.add_argument("--status", action="store_true", help="Check Ollama and configuration status")
     parser.add_argument("--models", action="store_true", help="List available Ollama models")
     parser.add_argument("--validate", action="store_true", help="Validate agent model configurations")
