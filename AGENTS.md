@@ -1,7 +1,53 @@
 # AI Agent Instructions
 
-## Project Overview
-This is a CrewAI multi-agent system that generates LinkedIn content about AI/tech trends. Three AI agents collaborate: a **Coach** (researcher), **Influencer** (writer), and **Critic** (reviewer) working sequentially to produce refined LinkedIn posts.
+This is a CrewAI multi-agent system.
+
+This project uses CrewAI framework to create a multi-agent system for generating themed videos with AI agents.
+
+## Always Follow These Instructions
+0. **Take time to plan before coding**
+1. **Read the entire `AGENTS.md` file before starting any work.**
+2. **Strictly adhere to all mandatory requirements and guidelines outlined below.**
+3. **Do not deviate from the specified patterns, structures, or workflows. If you identify a need for change, document it and seek approval before proceeding.**
+4. **Ensure all code is clean, well-documented, and production-ready.**
+5. **Maintain clear progress documentation in `.github/copilot-progress.md`.**
+6. **Clean up all unused or redundant code files after completing tasks to keep the project organized.**
+
+## 📋 Progress Tracking & Documentation (Required)
+
+### Development Session Management
+When working on development tasks, especially complex implementations or multi-step processes:
+
+1. **Always check for existing progress**: Start by checking if the `.github/copilot-progress.md` file exists. If not, create it. Then read it to understand any ongoing work or previous session context.
+
+2. **Maintain progress documentation**: Update the progress file throughout your session with:
+   - Current status and completed steps
+   - Technical decisions and implementation details
+   - Issues encountered and solutions applied
+   - Next steps and remaining work
+
+3. **🚨 REQUIRED SESSION CLEANUP**: When completing a task or major milestone:
+   - **MANDATORY**: Clean up and organize script files by removing redundant/obsolete versions
+   - **MANDATORY**: Update progress documentation with "Task Completed Successfully" section
+   - **MANDATORY**: Document critical technical findings (like AutoGen compatibility issues)
+   - **MANDATORY**: Include implementation details, key features delivered, and technical approaches
+   - Note any follow-up actions needed for production
+
+4. **Start of a new task (housekeeping)**:
+   - If the previous task was completed successfully and the new task is unrelated, reset `.github/copilot-progress.md` so it contains only the new task’s progress. Do not keep prior task logs in this file.
+   - If the new task is a direct continuation of the previous one, keep the same task entry and append progress under the existing header.
+   - Optionally archive prior completed task notes elsewhere (e.g., a dated entry in a separate document) if historical context is needed, but keep `copilot-progress.md` focused on a single active task.
+
+### Progress File Structure
+The `.github/copilot-progress.md` should follow this pattern:
+- **Header**: Task name, date, and completion status
+- **Summary**: Brief overview of accomplishments (for completed tasks)
+- **Detailed Steps**: Numbered list of completed work with checkmarks
+- **Implementation Details**: Technical specifics, file changes, patterns used
+- **Testing/Verification**: Test results, compilation status, validation steps
+- **Next Steps**: Future work or production deployment notes
+
+This approach ensures continuity between development sessions and provides clear documentation of progress for complex implementations.
 
 ## Architecture & Key Patterns
 
@@ -16,16 +62,6 @@ This is a CrewAI multi-agent system that generates LinkedIn content about AI/tec
 - **Configuration**: Each agent can have different models and thinking settings
 - **Connection**: Always uses `http://localhost:11434` base URL
 
-### 3. CrewAI Framework Integration
-- **Crew Class**: `src/instagram/crew.py` uses `@CrewBase` decorator with `@agent`, `@task`, `@crew` methods
-- **Agent Creation**: Combine YAML config with programmatic LLM instances and tools
-- **Pattern**: Use `self.agents_config['agent_name']` and `self.tasks_config['task_name']` for YAML loading
-
-### 4. Custom Tools Architecture
-- **Location**: `src/instagram/tools/` - All custom tools inherit from `BaseTool`
-- **DuckDuckGo**: Modern implementation using `ddgs.DDGS().text()` API (not langchain_community)
-- **Pattern**: Define `Input` schema with Pydantic, implement `_run()` method
-
 ## Critical Development Workflows
 
 ### Running the Crew
@@ -37,60 +73,16 @@ crewai run
 python -c "import sys; sys.path.append('src'); from instagram.main import run; run()"
 ```
 
-### Configuration Management
-```bash
-# Comprehensive status check
-python config_helper.py --all
+## Concepts & Documentation
 
-# Check Ollama connectivity
-python config_helper.py --status
+The following resources are available, read them to understand CrewAI concepts:
 
-# Validate agent models exist
-python config_helper.py --validate
-```
-
-### Adding New Agents
-1. Add agent config to `agents.yaml` with `llm`, `thinking`, `role`, `goal`, `backstory`
-2. Create `@agent` method in `crew.py` using `OllamaHelper.create_llm_instance()`
-3. Add to crew's `agents=[]` list
-4. Define corresponding task in `tasks.yaml`
-
-## Project-Specific Conventions
-
-### Helper Module Pattern
-- **OllamaHelper**: LLM instance caching, YAML config loading, connection validation
-- **ConfigHelper**: Model management, pulling, validation, comprehensive reporting
-- Both provide CLI interfaces and programmatic APIs
-
-### Input Handling
-- Main execution uses `{'topic': 'AI LLMs', 'current_year': str(datetime.now().year)}`
-- YAML configs support templating: `goal: "Find skills in {current_year}"`
-
-### Thinking Control
-- Set `thinking: false` in agent YAML to disable LLM verbosity
-- Passed via `model_kwargs.options.think` to Ollama API
-- Critical for clean output in production
-
-## Integration Points
-
-### External Dependencies
-- **Ollama**: Local LLM server, requires `ollama serve` and model pulls
-- **DuckDuckGo**: Real-time search via `ddgs` package (not langchain)
-- **CrewAI**: Framework handles agent orchestration and task sequencing
-
-### Key Files for Extension
-- `src/instagram/tools/` - Add new capabilities (web scraping, APIs, etc.)
-- `src/instagram/helpers/` - Add new LLM providers or config management
-- `config/*.yaml` - Modify agent behavior without code changes
-
-## Common Pitfalls
-- Always run from project root (path dependencies)
-- Ensure Ollama server is running before crew execution
-- Check model exists locally before referencing in agent config
-- Use `ddgs` directly, not `langchain_community.tools.DuckDuckGoSearchRun`
-- Import tools properly: `from instagram.tools import DuckDuckGoSearchTool`
-
-## Testing & Debugging
-- Use `config_helper.py --all` to diagnose setup issues
-- Check `verbose: true` in agent configs for detailed execution logs
-- Validate YAML syntax and agent/task relationships before running crew
+- [Official CrewAI Documentation](https://docs.crewai.com)
+- [Agents Documentation](https://docs.crewai.com/en/concepts/agents)
+- [Tasks Documentation](https://docs.crewai.com/en/concepts/tasks)  
+- [Crews Documentation](https://docs.crewai.com/en/concepts/crews)
+- [Tools Documentation](https://docs.crewai.com/en/concepts/tools)
+- [Knowledge Documentation](https://docs.crewai.com/en/concepts/knowledge)
+- [Collaboration Documentation](https://docs.crewai.com/en/concepts/collaboration)
+- [Flows Documentation](https://docs.crewai.com/en/concepts/flows)
+- [Event Listener Documentation](https://docs.crewai.com/en/concepts/event-listener)
