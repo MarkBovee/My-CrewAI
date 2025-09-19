@@ -99,7 +99,7 @@ class FlowControlServer:
                     "name": "create_new_post_flow",
                     "display_name": "Create New Post Flow",
                     "description": "Generate social media posts using multi-agent collaboration",
-                    "agents": ["Coach", "Influencer", "Critic"],
+                    "agents": ["Coach", "Influencer", "Researcher"],
                     "status": "active",
                     "runs": len([f for f in self.flow_history if f.flow_name == "create_new_post_flow"]),
                     "avg_runtime": "2.1s"

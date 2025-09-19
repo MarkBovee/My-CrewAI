@@ -47,7 +47,7 @@ class OllamaHelper:
         Get the LLM model name for a specific agent
         
         Args:
-            agent_name: Name of the agent (e.g., 'coach', 'influencer', 'critic')
+            agent_name: Name of the agent (e.g., 'coach', 'influencer', 'researcher')
             
         Returns:
             LLM model name specified in the agent configuration
@@ -89,7 +89,7 @@ class OllamaHelper:
         
         # Configure model options including thinking parameter
         model_options = {
-            "temperature": 0.7,    # Balanced creativity 
+            "temperature": 0.5,    # Balanced creativity 
             "top_p": 0.9,
             "top_k": 40,
             "repeat_penalty": 1.08,

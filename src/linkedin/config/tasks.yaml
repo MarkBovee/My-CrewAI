@@ -11,6 +11,7 @@ task_search:
 task_research:
   description: |
     IMPORTANT: You MUST select EXACTLY ONE skill from the coach's research list about {topic} skills.
+    Pick the one that you find most interesting or promising for a deep dive related to a senior .NET Developer and DevOps engineer.
     
     COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen skill:
     - Search for recent trends, statistics, and market demand data
@@ -36,19 +37,18 @@ task_research:
 
 task_post:
   description: |
-    Write a LinkedIn post based on the comprehensive research article provided.
-    It should list the latest skills in {topic} which are going to be in demand.
+    Write a reflective LinkedIn post about {topic}, making it personal by drawing
+    on your own experience as a senior .NET Developer and DevOps engineer. The post
+    should balance insight with practicality: not just hype, but real examples of
+    where AI and technology make an impact. Structure the post with a clear
+    headline (30 characters max), conversational yet professional tone, and
+    short, readable paragraphs. Include your perspective on both the opportunities
+    and the limitations of {topic}.
   expected_output: |
-    An engaging LinkedIn post with a compelling headline (max 30 characters) and content 
-    that is based on the comprehensive research article provided.
+    - A LinkedIn post under 500 words
+    - A headline under 30 characters
+    - Clear, professional, and personal tone
+    - Concrete examples or insights from experience
+    - Reflective and thought-leadership style
+    - Includes relevant hashtags (1–4, not overdone)
   agent: influencer
-
-task_critique:
-  description: |
-    Identify parts of the post that aren't written concise enough and improve them. 
-    Make sure that the post has engaging headline with 30 characters max, 
-    and that there are at max 500 words.
-  expected_output: |
-    A refined and improved LinkedIn post that is concise, engaging, within 500 words, 
-    has an impactful headline under 30 characters, includes relevant hashtags but don't overdo it. Keep it professional.
-  agent: critic

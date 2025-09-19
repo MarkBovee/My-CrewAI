@@ -62,15 +62,6 @@ class LinkedInCrew():
         )
 
     @agent
-    def critic(self) -> Agent:
-        """Expert Writing Critic agent for content refinement"""
-        return Agent(
-            config=self.agents_config['critic'], # type: ignore[index]
-            llm=self.ollama_helper.create_llm_instance('critic'),
-            verbose=self.agents_config['critic'].get('verbose', False)
-        )
-
-    @agent
     def researcher(self) -> Agent:
         """Content Researcher agent for in-depth article research"""
         return Agent(
@@ -104,15 +95,6 @@ class LinkedInCrew():
             config=self.tasks_config['task_post'], # type: ignore[index]
             agent=self.influencer(),
             context=[self.task_research()]  # Now uses the in-depth research
-        )
-
-    @task
-    def task_critique(self) -> Task:
-        """Critique and refinement task"""
-        return Task(
-            config=self.tasks_config['task_critique'], # type: ignore[index]
-            agent=self.critic(),
-            context=[self.task_post()]  # Proper context management
         )
 
     @crew

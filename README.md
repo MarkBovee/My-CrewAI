@@ -7,7 +7,7 @@ Welcome to the CrewAI Flow Control Center, powered by [crewAI](https://crewai.co
 - 🌐 **Web Interface**: Professional web-based flow management and execution
 - 🔄 **CrewAI Flows**: Advanced flow architecture for complex multi-agent workflows
 - 🔍 **DuckDuckGo Search Integration**: Research latest AI and tech trends
-- 🤖 **Three-Agent Crew System**: Coach, Influencer Writer, and Critic working together
+- 🤖 **Three-Agent Crew System**: Coach, Researcher, and Influencer Writer working together
 - 🧠 **Local Ollama LLM**: Uses `qwen3:4b` model for AI processing
 - 📊 **Flow Visualization**: Real-time flow plots and execution tracking
 - ⚙️ **Modular Architecture**: Organized helpers and tools
@@ -148,7 +148,8 @@ python -c "import sys; sys.path.append('src'); from linkedin.flows.create_new_po
 This will start the crew execution, where agents collaborate to:
 1. **Research**: Coach agent searches for latest AI/tech skills using DuckDuckGo
 2. **Create**: Influencer agent writes a LinkedIn post based on research
-3. **Critique**: Critic agent reviews and refines the content
+2. **Research**: Researcher agent conducts in-depth research and creates comprehensive articles
+3. **Content Creation**: Influencer Writer agent creates engaging LinkedIn posts
 
 ## Crew Agents
 
@@ -162,7 +163,7 @@ This will start the crew execution, where agents collaborate to:
 - **Goal**: Write engaging LinkedIn posts (max 200 words)
 - **Style**: Includes emojis and hashtags
 
-### 🔍 Expert Writing Critic
+
 - **Role**: Quality assurance specialist
 - **Goal**: Provide actionable feedback and ensure content quality
 - **Focus**: Concise, compelling, and properly formatted content

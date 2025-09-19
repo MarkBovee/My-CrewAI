@@ -6,6 +6,11 @@
 .DESCRIPTION
     This script starts the CrewAI Flow Control Center web interface.
     It checks dependencies, creates required directories, and launches the FastAPI server.
+    
+    Can be run without any parameters using sensible defaults:
+    - Port: 8000
+    - Host: localhost  
+    - Auto-reload: disabled
 
 .PARAMETER Port
     Port number to run the server on (default: 8000)
@@ -14,11 +19,11 @@
     Host address to bind to (default: localhost)
 
 .PARAMETER Reload
-    Enable auto-reload for development (default: false)
+    Enable auto-reload for development (default: true)
 
 .EXAMPLE
     .\start-web.ps1
-    Start the server with default settings
+    Start the server with default settings (localhost:8000, no auto-reload)
 
 .EXAMPLE
     .\start-web.ps1 -Port 3000 -Host 0.0.0.0
@@ -34,7 +39,7 @@ param(
     [int]$Port = 8000,
     # allow a commonly-used name 'Host' while keeping HostAddress for backward compat
     [Alias('Host')][string]$HostAddress = "localhost",
-    [switch]$Reload
+    [switch]$Reload=$true
 )
 
 # Colors for output
@@ -109,10 +114,10 @@ try {
         Write-SuccessMessage "   ✅ FastAPI dependencies found"
     } catch {
         Write-WarningMessage "   ⚠️  Web server dependencies missing"
-        $response = Read-Host "Install dependencies from requirements-web.txt? (Y/n)"
+        $response = Read-Host "Install dependencies from requirements.txt? (Y/n)"
         if ($response -eq "" -or $response -match "^[Yy]") {
             Write-InfoMessage "   📥 Installing dependencies..."
-            & $pipCmd install -r requirements-web.txt
+            & $pipCmd install -r requirements.txt
             if ($LASTEXITCODE -eq 0) {
                 Write-SuccessMessage "   ✅ Dependencies installed successfully"
             } else {
