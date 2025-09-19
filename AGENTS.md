@@ -1,4 +1,4 @@
-# AI Coding Assistant Instructions
+# AI Agent Instructions
 
 ## Project Overview
 This is a CrewAI multi-agent system that generates LinkedIn content about AI/tech trends. Three AI agents collaborate: a **Coach** (researcher), **Influencer** (writer), and **Critic** (reviewer) working sequentially to produce refined LinkedIn posts.
