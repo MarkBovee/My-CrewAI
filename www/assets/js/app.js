@@ -9,6 +9,7 @@ class FlowControlCenter {
     init() {
         this.bindEvents();
         this.updateFlowStats();
+        this.bindKnowledgeEvents();
     }
 
     bindEvents() {
@@ -32,6 +33,37 @@ class FlowControlCenter {
         document.getElementById('cancel-flow')?.addEventListener('click', () => {
             this.closeModal('flow-modal');
         });
+    }
+
+    bindKnowledgeEvents() {
+        // Knowledge management events
+        document.getElementById('reset-topics')?.addEventListener('click', () => {
+            this.resetKnowledge('topics');
+        });
+
+        document.getElementById('reset-web')?.addEventListener('click', () => {
+            this.resetKnowledge('web');
+        });
+
+        document.getElementById('reset-all')?.addEventListener('click', () => {
+            this.resetKnowledge('all');
+        });
+
+        document.getElementById('check-topic-btn')?.addEventListener('click', () => {
+            this.checkTopic();
+        });
+
+        document.getElementById('refresh-knowledge-stats')?.addEventListener('click', () => {
+            this.loadKnowledgeStats();
+        });
+
+        // Load stats when settings section is activated
+        const settingsNav = document.querySelector('[data-section="settings"]');
+        if (settingsNav) {
+            settingsNav.addEventListener('click', () => {
+                setTimeout(() => this.loadKnowledgeStats(), 100);
+            });
+        }
     }
 
     bindModalEvents() {
@@ -307,6 +339,128 @@ class FlowControlCenter {
         } catch (error) {
             console.error('Failed to load flow plots:', error);
         }
+    }
+
+    // Knowledge Management Methods
+    async loadKnowledgeStats() {
+        try {
+            const response = await fetch('/api/knowledge/stats');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.updateKnowledgeStatsDisplay(data.data);
+            } else {
+                console.error('Failed to load knowledge stats:', data.error);
+            }
+        } catch (error) {
+            console.error('Error loading knowledge stats:', error);
+        }
+    }
+
+    updateKnowledgeStatsDisplay(stats) {
+        const statsContainer = document.getElementById('knowledge-stats');
+        if (!statsContainer) return;
+
+        statsContainer.innerHTML = `
+            <div class="knowledge-stat-grid">
+                <div class="knowledge-stat-item">
+                    <h4>Total Articles</h4>
+                    <span class="stat-value">${stats.total_articles}</span>
+                </div>
+                <div class="knowledge-stat-item">
+                    <h4>Web Results</h4>
+                    <span class="stat-value">${stats.total_web_results}</span>
+                </div>
+                <div class="knowledge-stat-item">
+                    <h4>Topic Memory</h4>
+                    <span class="stat-value">${stats.topics_in_memory}</span>
+                </div>
+                <div class="knowledge-stat-item">
+                    <h4>Last Updated</h4>
+                    <span class="stat-value">${stats.last_updated || 'Never'}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    async resetKnowledge(type) {
+        if (!confirm(`Are you sure you want to reset ${type} knowledge data? This action cannot be undone.`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/knowledge/reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ type: type })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showNotification(data.message, 'success');
+                this.loadKnowledgeStats(); // Refresh stats
+            } else {
+                this.showNotification(`Reset failed: ${data.error}`, 'error');
+            }
+        } catch (error) {
+            console.error('Error resetting knowledge:', error);
+            this.showNotification('Reset failed: Network error', 'error');
+        }
+    }
+
+    async checkTopic() {
+        const topicInput = document.getElementById('topic-check-input');
+        const resultsDiv = document.getElementById('topic-check-results');
+        
+        if (!topicInput || !topicInput.value.trim()) {
+            this.showNotification('Please enter a topic to check', 'warning');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/knowledge/check-topic', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ topic: topicInput.value.trim() })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                this.displayTopicCheckResults(data.data, resultsDiv);
+            } else {
+                this.showNotification(`Topic check failed: ${data.error}`, 'error');
+            }
+        } catch (error) {
+            console.error('Error checking topic:', error);
+            this.showNotification('Topic check failed: Network error', 'error');
+        }
+    }
+
+    displayTopicCheckResults(results, container) {
+        if (!container) return;
+
+        const { is_covered, similarity_score, similar_topics } = results;
+        
+        container.innerHTML = `
+            <div class="topic-check-result ${is_covered ? 'covered' : 'new'}">
+                <h4>${is_covered ? '⚠️ Topic Already Covered' : '✅ New Topic'}</h4>
+                <p><strong>Similarity Score:</strong> ${(similarity_score * 100).toFixed(1)}%</p>
+                ${similar_topics.length > 0 ? `
+                    <div class="similar-topics">
+                        <h5>Similar Topics Found:</h5>
+                        <ul>
+                            ${similar_topics.map(topic => `<li>${topic}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : '<p>No similar topics found in memory.</p>'}
+            </div>
+        `;
     }
 }
 

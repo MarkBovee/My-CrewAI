@@ -1,0 +1,115 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-crewai"
+version = "0.1.0"
+description = "CrewAI multi-agent system for generating themed LinkedIn content"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Mark Bovee", email = "mark@example.com"}
+]
+keywords = ["crewai", "ai", "linkedin", "content-generation", "multi-agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "crewai>=0.80.0",
+    "crewai-tools>=0.17.0",
+    "pydantic>=2.0.0",
+    "fastapi==0.104.1",
+    "uvicorn[standard]==0.24.0",
+    "python-multipart==0.0.6",
+    "ddgs>=9.6.0",
+    "pyyaml>=6.0.1",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=22.0",
+    "flake8>=4.0",
+    "mypy>=0.991",
+]
+
+[project.urls]
+Homepage = "https://github.com/MarkBovee/My-CrewAI"
+Repository = "https://github.com/MarkBovee/My-CrewAI"
+Issues = "https://github.com/MarkBovee/My-CrewAI/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+# CrewAI specific configuration
+[tool.crewai]
+crew_name = "LinkedIn Content Creation Crew"
+description = "Multi-agent crew for researching trends and creating LinkedIn content"
+
+[tool.crewai.crew]
+# Main crew configuration
+main_crew = "linkedin.linkedin_crew:LinkedInCrew"
+
+[tool.crewai.flows]
+# Flow configurations
+create_post = "linkedin.flows.create_new_post_flow:CreateNewPostFlow"
+
+# Development tools configuration
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "crewai.*",
+    "ddgs.*",
+    "requests.*",
+    "fastapi.*",
+    "uvicorn.*",
+]
+ignore_missing_imports = true

@@ -221,6 +221,113 @@
                 </div>
             </section>
 
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <div class="settings-grid">
+                    <!-- Knowledge Management Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-brain"></i> Knowledge Management</h3>
+                            <p>Manage AI knowledge base and article memory</p>
+                        </div>
+                        
+                        <div class="settings-card-content">
+                            <!-- Knowledge Statistics -->
+                            <div class="knowledge-section">
+                                <div class="section-header">
+                                    <h4>Knowledge Statistics</h4>
+                                    <button class="btn btn-outline btn-sm" id="refresh-knowledge-stats">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                                <div id="knowledge-stats" class="knowledge-stats-container">
+                                    <div class="loading-spinner">Loading...</div>
+                                </div>
+                            </div>
+
+                            <!-- Reset Options -->
+                            <div class="knowledge-section">
+                                <h4>Reset Knowledge Data</h4>
+                                <p class="section-description">⚠️ These actions cannot be undone. Use with caution.</p>
+                                <div class="reset-options">
+                                    <div class="reset-option">
+                                        <div class="reset-option-info">
+                                            <h5>Topic Memory</h5>
+                                            <p>Reset article memory and topic similarity checking</p>
+                                        </div>
+                                        <button class="btn btn-outline btn-warning" id="reset-topics">
+                                            <i class="fas fa-trash"></i> Reset Topics
+                                        </button>
+                                    </div>
+                                    <div class="reset-option">
+                                        <div class="reset-option-info">
+                                            <h5>Web Search Results</h5>
+                                            <p>Clear all stored web search results</p>
+                                        </div>
+                                        <button class="btn btn-outline btn-warning" id="reset-web">
+                                            <i class="fas fa-trash"></i> Reset Web Data
+                                        </button>
+                                    </div>
+                                    <div class="reset-option">
+                                        <div class="reset-option-info">
+                                            <h5>All Knowledge Data</h5>
+                                            <p>Complete reset of all knowledge and memory</p>
+                                        </div>
+                                        <button class="btn btn-outline btn-danger" id="reset-all">
+                                            <i class="fas fa-exclamation-triangle"></i> Reset All
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Topic Checking -->
+                            <div class="knowledge-section">
+                                <h4>Topic Coverage Check</h4>
+                                <p class="section-description">Check if a topic has been covered before writing new content</p>
+                                <div class="topic-check-form">
+                                    <div class="form-group">
+                                        <input type="text" id="topic-check-input" placeholder="Enter topic to check..." class="form-input">
+                                        <button class="btn btn-primary" id="check-topic-btn">
+                                            <i class="fas fa-search"></i> Check Topic
+                                        </button>
+                                    </div>
+                                    <div id="topic-check-results" class="topic-check-results"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Information Card -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <h3><i class="fas fa-cog"></i> System Information</h3>
+                            <p>CrewAI system status and configuration</p>
+                        </div>
+                        
+                        <div class="settings-card-content">
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>Framework Version</label>
+                                    <span class="info-value">CrewAI 0.80+</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>LLM Provider</label>
+                                    <span class="info-value">Ollama (Local)</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Knowledge Storage</label>
+                                    <span class="info-value">JSON + String Sources</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Model Cleanup</label>
+                                    <span class="info-value badge-success">Enabled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Flow Execution Modal -->
             <div id="flow-modal" class="modal">
                 <div class="modal-content">

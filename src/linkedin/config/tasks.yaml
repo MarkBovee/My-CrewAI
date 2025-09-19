@@ -4,7 +4,7 @@ task_search:
     Your final answer MUST be a list of at least 5 exciting new {topic} skills
     in the format of bullet points.
   expected_output: |
-    A comprehensive list of at least 5 exciting new {topic} skills with brief explanations 
+    A comprehensive list of at least 10 exciting new {topic} skills with brief explanations 
     of why they are trending and in demand, formatted as bullet points.
   agent: coach
 
@@ -12,6 +12,7 @@ task_research:
   description: |
     IMPORTANT: You MUST select EXACTLY ONE skill from the coach's research list about {topic} skills.
     Pick the one that you find most interesting or promising for a deep dive related to a senior .NET Developer and DevOps engineer.
+    Try to avoid political topics or topics about ethics, diversity, or social issues.
     
     COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen skill:
     - Search for recent trends, statistics, and market demand data
@@ -22,33 +23,53 @@ task_research:
     - Research career paths and progression opportunities
     - Search for challenges and opportunities in this field
     
-    ARTICLE CREATION: Write a comprehensive, well-researched article (1000-1500 words) about this ONE skill.
-    Structure your article with:
-    1. Introduction to the skill and its importance
-    2. Current market demand and statistics
-    3. Real-world applications and case studies
-    4. Career opportunities
-    6. Future outlook and predictions
+    RESEARCH OUTPUT: Compile all your research findings into a comprehensive research document.
+    Include all data, statistics, sources, and insights you've gathered.
     
     Base ALL content on REAL DATA from your search results with proper source attribution.
   expected_output: |
-    A comprehensive, well-researched article (1000-1500 words) about EXACTLY ONE {topic} skill.
+    A comprehensive research document with all findings, data, statistics, case studies, 
+    and sources about EXACTLY ONE {topic} skill.
   agent: researcher
+  context:
+    - task_search
+
+task_blog:
+  description: |
+    Using the research findings as your foundation, write a reflective blog post about the 
+    specific {topic} skill that was researched. Make it personal by drawing on your own 
+    experience as a senior developer and DevOps engineer. The blog should balance insight 
+    with practicality: not just hype, but real examples of where this technology makes an impact. 
+    
+    Use the research data, statistics, case studies, and market trends to support your points.
+    Structure the post with a clear, professional headline (no strict character limit), 
+    an introduction, body, and conclusion. Keep the tone reflective and thoughtful, while 
+    still being accessible and engaging for a professional audience.
+  expected_output: |
+    - A blog post between 800 and 1,500 words
+    - A clear, professional headline (no strict character limit)
+    - A reflective and personal tone, grounded in research data and real-world experience
+    - Concrete examples, statistics, and insights from the research
+    - Well-structured with intro, body, and conclusion
+    - Focused on thought leadership backed by data
+  agent: writer
+  context:
+    - task_research
 
 task_post:
   description: |
-    Write a reflective LinkedIn post about {topic}, making it personal by drawing
-    on your own experience as a senior .NET Developer and DevOps engineer. The post
-    should balance insight with practicality: not just hype, but real examples of
-    where AI and technology make an impact. Structure the post with a clear
-    headline (30 characters max), conversational yet professional tone, and
-    short, readable paragraphs. Include your perspective on both the opportunities
-    and the limitations of {topic}.
+    Write a short, engaging LinkedIn post (almost one-liner style) to promote
+    a blog post about {topic}. The post should be concise, professional,
+    and spark curiosity without giving everything away. It should encourage
+    readers to click the blog link for the full story. The style should be
+    direct, pragmatic, and slightly personal, reflecting the voice of a senior
+    .NET Developer and DevOps engineer.
   expected_output: |
-    - A LinkedIn post under 500 words
-    - A headline under 30 characters
-    - Clear, professional, and personal tone
-    - Concrete examples or insights from experience
-    - Reflective and thought-leadership style
-    - Includes relevant hashtags (1–4, not overdone)
+    - A LinkedIn promo post under 75 words
+    - Clear, engaging, and professional tone
+    - Includes a placeholder for the blog link
+    - Optional 1–3 relevant hashtags (keep it minimal and professional)
+    - Written in an almost one-liner style
   agent: influencer
+  context:
+    - task_blog

@@ -48,6 +48,14 @@ class FlowPlot(BaseModel):
     created_at: str
 
 
+class KnowledgeResetRequest(BaseModel):
+    type: str = "topics"  # topics, web, or all
+
+
+class TopicCheckRequest(BaseModel):
+    topic: str
+
+
 class FlowControlServer:
     def __init__(self):
         self.app = FastAPI(
@@ -243,6 +251,60 @@ class FlowControlServer:
                 "active_flows": len(self.active_flows),
                 "avg_runtime": "2.1s"  # This would be calculated from actual runtimes
             }
+
+        @self.app.get("/api/knowledge/stats")
+        async def get_knowledge_stats():
+            """Get knowledge statistics"""
+            try:
+                from linkedin.helpers.knowledge_helper import KnowledgeHelper
+                helper = KnowledgeHelper()
+                stats = helper.get_knowledge_stats()
+                return {"success": True, "data": stats}
+            except Exception as e:
+                logger.error(f"Error getting knowledge stats: {e}")
+                return {"success": False, "error": str(e)}
+
+        @self.app.post("/api/knowledge/reset")
+        async def reset_knowledge(request: KnowledgeResetRequest):
+            """Reset knowledge data"""
+            try:
+                from linkedin.helpers.knowledge_helper import KnowledgeHelper
+                helper = KnowledgeHelper()
+                
+                if request.type == "topics":
+                    success = helper.reset_article_memory()
+                    message = "Topic checking (article memory) reset successfully"
+                elif request.type == "web":
+                    success = helper.reset_web_search_results()
+                    message = "Web search results reset successfully"
+                elif request.type == "all":
+                    success = helper.reset_all_knowledge()
+                    message = "All knowledge data reset successfully"
+                else:
+                    return {"success": False, "error": "Invalid reset type"}
+                
+                return {
+                    "success": success,
+                    "message": message if success else "Reset operation failed"
+                }
+            except Exception as e:
+                logger.error(f"Error resetting knowledge: {e}")
+                return {"success": False, "error": str(e)}
+
+        @self.app.post("/api/knowledge/check-topic")
+        async def check_topic_coverage(request: TopicCheckRequest):
+            """Check if a topic has been covered before"""
+            try:
+                from linkedin.helpers.knowledge_helper import check_topic_similarity
+                
+                if not request.topic:
+                    return {"success": False, "error": "Topic is required"}
+                
+                coverage = check_topic_similarity(request.topic)
+                return {"success": True, "data": coverage}
+            except Exception as e:
+                logger.error(f"Error checking topic coverage: {e}")
+                return {"success": False, "error": str(e)}
 
         @self.app.get("/health")
         async def health_check():
