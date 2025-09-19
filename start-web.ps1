@@ -30,8 +30,10 @@
 #>
 
 param(
+    # Keep defaults so script can be run without arguments
     [int]$Port = 8000,
-    [string]$HostAddress = "localhost",
+    # allow a commonly-used name 'Host' while keeping HostAddress for backward compat
+    [Alias('Host')][string]$HostAddress = "localhost",
     [switch]$Reload
 )
 
@@ -90,8 +92,10 @@ try {
     
     # Check Python
     Write-InfoMessage "🐍 Checking Python installation..."
+    $pythonCmd = "python"
+    $pipCmd = "pip"
     try {
-        $pythonVersion = python --version 2>&1
+        $pythonVersion = & $pythonCmd --version 2>&1
         Write-SuccessMessage "   ✅ $pythonVersion"
     } catch {
         Write-ErrorMessage "❌ Python not found. Please install Python and add it to PATH"
@@ -101,14 +105,14 @@ try {
     # Check dependencies
     Write-InfoMessage "📦 Checking web server dependencies..."
     try {
-        python -c "import fastapi, uvicorn" 2>$null
+    & $pythonCmd -c "import fastapi, uvicorn" 2>$null
         Write-SuccessMessage "   ✅ FastAPI dependencies found"
     } catch {
         Write-WarningMessage "   ⚠️  Web server dependencies missing"
         $response = Read-Host "Install dependencies from requirements-web.txt? (Y/n)"
         if ($response -eq "" -or $response -match "^[Yy]") {
             Write-InfoMessage "   📥 Installing dependencies..."
-            pip install -r requirements-web.txt
+            & $pipCmd install -r requirements-web.txt
             if ($LASTEXITCODE -eq 0) {
                 Write-SuccessMessage "   ✅ Dependencies installed successfully"
             } else {
@@ -138,7 +142,7 @@ try {
     Write-Host "-" * 60 -ForegroundColor Gray
     
     # Build command arguments
-    $arguments = @("web_server.py", "--host", $HostAddress, "--port", $Port)
+    $arguments = @("web_server.py", "--host", $HostAddress, "--port", "${Port}")
     if ($Reload) {
         $arguments += "--reload"
     }
@@ -147,7 +151,8 @@ try {
     Write-InfoMessage "🚀 Launching FastAPI server..."
     Write-Host ""
     
-    python @arguments
+    # Launch the server with constructed arguments. Use call operator to invoke python.
+    & $pythonCmd @arguments
     
 } catch {
     Write-ErrorMessage "❌ Unexpected error: $($_.Exception.Message)"
