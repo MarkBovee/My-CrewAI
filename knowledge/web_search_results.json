@@ -1,5 +1,72 @@
 {
-  "searches": [],
-  "last_updated": "2025-09-19T15:53:39.868119",
+  "searches": [
+    {
+      "timestamp": "2025-09-19T16:09:43.680944",
+      "query": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
+      "topic": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "Blockchain meets machine learning: a survey - Journal of Big Data",
+          "snippet": "Blockchain and machine learning are two rapidly growing technologies that are increasingly being used in various industries. Blockchain technology provides a secure and transparent method for recording transactions, while machine learning enables data -driven decision-making by analyzing large amounts of data . In recent years, researchers and practitioners have been exploring the potential ...",
+          "link": "https://journalofbigdata.springeropen.com/articles/10.1186/s40537-023-00852-y"
+        },
+        {
+          "title": "Artificial Intelligence and Blockchain Integration in Business: Trends ...",
+          "snippet": "Abstract Artificial intelligence (AI) and blockchain are the two disruptive technologies emerging from the Fourth Industrial Revolution (IR4.0) that have introduced radical shifts in the industry. The amalgamation of AI and blockchain holds tremendous potential to create new business models enabled through digitalization. Although research on the application and convergence of AI and ...",
+          "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9005027/"
+        },
+        {
+          "title": "Review article AI-enhanced blockchain technology: A review of ...",
+          "snippet": "The ability of intelligent algorithms to extract meaningful patterns from large data sets makes the use of AI to analyze and study data saved in the blockchain a seamless integration of these two cutting-edge technologies.",
+          "link": "https://www.sciencedirect.com/science/article/pii/S1084804524000353"
+        },
+        {
+          "title": "Blockchain AI Market Size, Share, Trends | CAGR of 23.1%",
+          "snippet": "Report Overview The Global Blockchain AI Market size is expected to be worth around USD 2,787 Million by 2033, from USD 349 Million in 2023, growing at a CAGR of 23.1% during the forecast period from 2024 to 2033. Blockchain AI refers to the integration of artificial intelligence (AI) technologies with blockchain technology.",
+          "link": "https://market.us/report/blockchain-ai-market/"
+        },
+        {
+          "title": "Blockchain AI Market Report 2025-2034 |Trends - The Business Research ...",
+          "snippet": "The blockchain ai market research report is one of a series of new reports from The Business Research Company that provides market statistics, including industry global market size, regional shares, competitors with the market share, detailed market segments, market trends and opportunities, and any further data you may need to thrive in the ...",
+          "link": "https://www.thebusinessresearchcompany.com/report/blockchain-ai-global-market-report"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-19T16:09:44.199506",
+      "query": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
+      "topic": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "Blockchain AI Market Size, Share, Trends & Growth Rate ...",
+          "snippet": "The global blockchain AI market , valued at USD 184.6 million in 2019 and projected to reach USD 973.6 million by 2027, growing at a CAGR of 23.6%.",
+          "link": "https://www.fortunebusinessinsights.com/blockchain-ai-artificial-intelligence-market-104588"
+        },
+        {
+          "title": "AI and Machine Learning in Blockchain Compliance ...",
+          "snippet": "16 Jun 2025 — The AI -powered RegTech market in blockchain compliance is forecasted to grow at a compound annual growth rate (CAGR) of 23.4% from 2025 to 2030.",
+          "link": "https://coinlaw.io/ai-and-machine-learning-in-blockchain-compliance-statistics/"
+        },
+        {
+          "title": "Blockchain AI Market Size and Forecast 2025 to 2034",
+          "snippet": "The global blockchain AI market is projected to grow from USD 680.89 million in 2025 to USD 4,338.66 million by 2034, expanding at a CAGR of 22.93% during ...",
+          "link": "https://www.precedenceresearch.com/blockchain-ai-market"
+        },
+        {
+          "title": "Artificial Intelligence and Blockchain Integration in Business",
+          "snippet": "by S Kumar · 2023 · Cited by 428 — This study aims to characterize the applications and benefits of integrated AI and blockchain platforms across different verticals of business.",
+          "link": "https://link.springer.com/article/10.1007/s10796-022-10279-0"
+        },
+        {
+          "title": "AI in Blockchain: Use Cases, Benefits & Future Trends",
+          "snippet": "28 Aug 2025 — This has further made the combined market size of AI and blockchain technologies to exceed $703 million by 2025, witnessing a CAGR of 25.3% from ...",
+          "link": "https://appinventiv.com/blog/ai-in-blockchain/"
+        }
+      ]
+    }
+  ],
+  "last_updated": "2025-09-19T16:09:44.199506",
   "description": "Web search results storage for CrewAI knowledge system"
 }
