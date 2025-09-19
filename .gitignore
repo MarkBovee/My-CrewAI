@@ -57,3 +57,7 @@ wandb/
 *.tmp
 *.temp
 *~
+
+# Ignore generated outputs
+output/
+output/**
