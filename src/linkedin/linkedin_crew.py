@@ -184,6 +184,9 @@ class LinkedInCrew():
         # Create knowledge sources for the crew
         knowledge_sources = []
         
+        # Temporarily disable knowledge sources to avoid OpenAI API errors
+        # TODO: Configure local embeddings or use different knowledge approach
+        """
         try:
             # Add web search results knowledge
             web_knowledge = self.knowledge_helper.get_web_results_knowledge_source()
@@ -197,6 +200,9 @@ class LinkedInCrew():
             
         except Exception as e:
             print(f"⚠️ Warning: Could not load all knowledge sources: {e}")
+        """
+        
+        print("⚠️ Knowledge sources temporarily disabled to avoid API errors")
         
         return Crew(
             agents=self.agents,  # Automatically collected by @agent decorator
@@ -204,7 +210,7 @@ class LinkedInCrew():
             process=Process.sequential,
             verbose=True,
             max_execution_time=None,
-            knowledge_sources=knowledge_sources  # Add crew-level knowledge
+            # knowledge_sources=knowledge_sources  # Temporarily disabled
             # Use default OpenAI embeddings (no extra model needed)
             # Disable features that require OpenAI for now
             # memory=True,  # Enable memory for better context retention

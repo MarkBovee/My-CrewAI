@@ -125,16 +125,41 @@ class KnowledgeHelper:
             print(f"❌ Error storing web search results: {e}")
             return False
     
-    def get_web_results_knowledge_source(self) -> JSONKnowledgeSource:
+    def get_web_results_knowledge_source(self) -> StringKnowledgeSource:
         """
-        Create a JSONKnowledgeSource from stored web search results
+        Create a StringKnowledgeSource from stored web search results
         
         Returns:
-            JSONKnowledgeSource for web search results
+            StringKnowledgeSource for web search results
         """
-        return JSONKnowledgeSource(
-            file_paths=[str(self.web_results_file.name)]  # Use just the filename since it's in knowledge/ dir
-        )
+        try:
+            # Load and format web search results as string
+            data = self._load_json_file(self.web_results_file)
+            
+            content_parts = ["# Web Search Results Knowledge Base\n"]
+            
+            for search in data.get('searches', []):
+                content_parts.append(f"## Search: {search.get('query', 'Unknown')}")
+                content_parts.append(f"Date: {search.get('timestamp', 'Unknown')}")
+                content_parts.append(f"Results Count: {search.get('results_count', 0)}\n")
+                
+                for i, result in enumerate(search.get('results', []), 1):
+                    content_parts.append(f"### Result {i}: {result.get('title', 'Untitled')}")
+                    content_parts.append(f"URL: {result.get('link', 'No URL')}")
+                    content_parts.append(f"Content: {result.get('snippet', 'No content')}\n")
+            
+            content = "\n".join(content_parts)
+            
+            return StringKnowledgeSource(
+                content=content,
+                metadata={"source": "web_search_results", "type": "search_data"}
+            )
+        except Exception as e:
+            # Return empty knowledge source if file doesn't exist or has issues
+            return StringKnowledgeSource(
+                content="# Web Search Results\n\nNo web search data available.",
+                metadata={"source": "web_search_results", "type": "search_data", "error": str(e)}
+            )
     
     def store_article_memory(self, topic: str, article_path: str, post_path: str = "") -> bool:
         """
@@ -265,16 +290,51 @@ class KnowledgeHelper:
                 'recommendation': 'Error checking coverage - proceeding with caution'
             }
     
-    def get_article_memory_knowledge_source(self) -> JSONKnowledgeSource:
+    def get_article_memory_knowledge_source(self) -> StringKnowledgeSource:
         """
-        Create a JSONKnowledgeSource from article memory
+        Create a StringKnowledgeSource from article memory
         
         Returns:
-            JSONKnowledgeSource for article memory
+            StringKnowledgeSource for article memory
         """
-        return JSONKnowledgeSource(
-            file_paths=[str(self.article_memory_file.name)]  # Use just the filename since it's in knowledge/ dir
-        )
+        try:
+            # Load and format article memory as string
+            data = self._load_json_file(self.article_memory_file)
+            
+            content_parts = ["# Article Memory Knowledge Base\n"]
+            content_parts.append(f"Last Updated: {data.get('last_updated', 'Unknown')}")
+            content_parts.append(f"Total Articles: {len(data.get('articles', []))}")
+            content_parts.append(f"Topics Covered: {len(data.get('topics_covered', []))}\n")
+            
+            # Add covered topics
+            if data.get('topics_covered'):
+                content_parts.append("## Previously Covered Topics:")
+                for topic in data.get('topics_covered', []):
+                    content_parts.append(f"- {topic}")
+                content_parts.append("")
+            
+            # Add article details
+            if data.get('articles'):
+                content_parts.append("## Article History:")
+                for i, article in enumerate(data.get('articles', []), 1):
+                    content_parts.append(f"### Article {i}: {article.get('topic', 'Unknown Topic')}")
+                    content_parts.append(f"Date: {article.get('timestamp', 'Unknown')}")
+                    content_parts.append(f"Status: {article.get('status', 'Unknown')}")
+                    content_parts.append(f"Keywords: {', '.join(article.get('topic_keywords', []))}")
+                    content_parts.append("")
+            
+            content = "\n".join(content_parts)
+            
+            return StringKnowledgeSource(
+                content=content,
+                metadata={"source": "article_memory", "type": "article_history"}
+            )
+        except Exception as e:
+            # Return empty knowledge source if file doesn't exist or has issues
+            return StringKnowledgeSource(
+                content="# Article Memory\n\nNo article history available.",
+                metadata={"source": "article_memory", "type": "article_history", "error": str(e)}
+            )
     
     def create_search_results_string_knowledge(self, search_query: str, results: List[Dict[str, Any]], 
                                              task_topic: str = "") -> StringKnowledgeSource:
