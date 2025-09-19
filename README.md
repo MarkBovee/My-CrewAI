@@ -135,6 +135,7 @@ For more information about CrewAI concepts:
 - [Tasks Documentation](https://docs.crewai.com/en/concepts/tasks)  
 - [Crews Documentation](https://docs.crewai.com/en/concepts/crews)
 - [Tools Documentation](https://docs.crewai.com/en/concepts/tools)
+- [Knowledge Documentation](https://docs.crewai.com/en/concepts/knowledge)
 - [Collaboration Documentation](https://docs.crewai.com/en/concepts/collaboration)
 - [Flows Documentation](https://docs.crewai.com/en/concepts/flows)
 - [Event Listener Documentation](https://docs.crewai.com/en/concepts/event-listener)

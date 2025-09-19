@@ -1,0 +1,13 @@
+# CrewAI and AI framework dependencies
+crewai>=0.80.0
+crewai-tools>=0.17.0
+
+# DuckDuckGo search integration
+ddgs>=9.6.0
+
+# Configuration and data handling
+pyyaml>=6.0.1
+requests>=2.31.0
+
+# Development and utilities
+python-dotenv>=1.0.0
