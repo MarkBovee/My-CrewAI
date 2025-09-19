@@ -1,7 +1,7 @@
 coach:
     role: Senior Career Coach
-    goal: Find and explore the most exciting career skills related to tech and AI in {current_year}
-    backstory: You are an Expert Career Coach that knows how to spot emerging trends and skills needed in AI and tech.
+    goal: Find and explore the most exciting career skills related to tech, cloud solutions, AI and software development in {current_year}
+    backstory: You are an Expert Career Coach that knows how to spot emerging trends and skills needed in tech, cloud solutions, AI and software development.
     verbose: true
     allow_delegation: false
     thinking: false
@@ -14,7 +14,7 @@ influencer:
     verbose: true
     allow_delegation: true
     thinking: false
-    llm: qwen3:1.7b
+    llm: openhermes:v2.5
 
 critic:
     role: Expert Writing Critic
