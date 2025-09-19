@@ -1,36 +1,60 @@
-from crewai import Agent, Crew, Process, Task, LLM
+from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from .tools import DuckDuckGoSearchTool
-from .helpers import OllamaHelper
+from .tools.search_tool import search_tool
+from .helpers.ollama_helper import OllamaHelper
 from typing import List
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 @CrewBase
 class LinkedInCrew():
-    """LinkedIn crew"""
+    """LinkedIn Content Creation Crew
+    
+    A multi-agent crew designed to research trending skills and create engaging 
+    LinkedIn content following CrewAI best practices.
+    """
 
     agents: List[BaseAgent]
     tasks: List[Task]
 
-    # Ollama LLM configuration using helper
+    # Configuration paths following CrewAI documentation patterns
+    agents_config = 'config/agents.yaml'
+    tasks_config = 'config/tasks.yaml'
+
     def __init__(self):
         super().__init__()
         self.ollama_helper = OllamaHelper()
 
+    @before_kickoff
+    def prepare_inputs(self, inputs):
+        """Prepare and validate inputs before crew execution"""
+        # Add current year if not provided
+        if 'current_year' not in inputs:
+            import datetime
+            inputs['current_year'] = datetime.datetime.now().year
+        
+        print(f"🚀 Starting LinkedIn crew with inputs: {inputs}")
+        return inputs
+
+    @after_kickoff
+    def process_output(self, output):
+        """Process output after crew execution"""
+        print(f"✅ LinkedIn crew completed successfully!")
+        print(f"📊 Token usage: {output.token_usage}")
+        return output
+
     @agent
     def coach(self) -> Agent:
+        """Senior Career Coach agent with search capabilities"""
         return Agent(
             config=self.agents_config['coach'], # type: ignore[index]
-            tools=[DuckDuckGoSearchTool()],
             llm=self.ollama_helper.create_llm_instance('coach'),
+            tools=[search_tool],  # Use the tool directly, not call it
             verbose=self.agents_config['coach'].get('verbose', False)
         )
 
     @agent
     def influencer(self) -> Agent:
+        """LinkedIn Influencer Writer agent for content creation"""
         return Agent(
             config=self.agents_config['influencer'], # type: ignore[index]
             llm=self.ollama_helper.create_llm_instance('influencer'),
@@ -39,51 +63,70 @@ class LinkedInCrew():
 
     @agent
     def critic(self) -> Agent:
+        """Expert Writing Critic agent for content refinement"""
         return Agent(
             config=self.agents_config['critic'], # type: ignore[index]
             llm=self.ollama_helper.create_llm_instance('critic'),
             verbose=self.agents_config['critic'].get('verbose', False)
         )
 
+    @agent
+    def researcher(self) -> Agent:
+        """Content Researcher agent for in-depth article research"""
+        return Agent(
+            config=self.agents_config['researcher'], # type: ignore[index]
+            llm=self.ollama_helper.create_llm_instance('researcher'),
+            tools=[search_tool],  # Search tool for comprehensive research
+            verbose=self.agents_config['researcher'].get('verbose', False)
+        )
+
     @task
     def task_search(self) -> Task:
+        """Research task for finding trending skills"""
         return Task(
             config=self.tasks_config['task_search'], # type: ignore[index]
+            agent=self.coach()
+        )
+
+    @task
+    def task_research(self) -> Task:
+        """In-depth research task for creating comprehensive content"""
+        return Task(
+            config=self.tasks_config['task_research'], # type: ignore[index]
+            agent=self.researcher(),
+            context=[self.task_search()]  # Uses initial skill list as context
         )
 
     @task
     def task_post(self) -> Task:
+        """Content creation task for LinkedIn post"""
         return Task(
             config=self.tasks_config['task_post'], # type: ignore[index]
+            agent=self.influencer(),
+            context=[self.task_research()]  # Now uses the in-depth research
         )
 
     @task
     def task_critique(self) -> Task:
+        """Critique and refinement task"""
         return Task(
             config=self.tasks_config['task_critique'], # type: ignore[index]
+            agent=self.critic(),
+            context=[self.task_post()]  # Proper context management
         )
-
-    # @before_kickoff
-    # def before_kickoff_function(self, inputs):
-    #     print(f"Before kickoff function with inputs: {inputs}")
-    #     return inputs # You can return the inputs or modify them as needed
-
-    # @after_kickoff
-    # def after_kickoff_function(self, result):
-    #     print(f"After kickoff function with result: {result}")
-    #     return result # You can return the result or modify it as needed    
 
     @crew
     def crew(self) -> Crew:
-        """Creates the LinkedInCrew crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
-
+        """Creates the LinkedIn Content Creation Crew following CrewAI best practices"""
         return Crew(
-            agents=[self.coach(), self.influencer(), self.critic()], # Specific agents for our use case
-            tasks=[self.task_search(), self.task_post(), self.task_critique()], # Specific tasks for our use case
+            agents=self.agents,  # Automatically collected by @agent decorator
+            tasks=self.tasks,    # Automatically collected by @task decorator
             process=Process.sequential,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
             verbose=True,
-            max_execution_time=None
+            max_execution_time=None,
+            # Disable features that require OpenAI for now
+            # memory=True,  # Enable memory for better context retention
+            # cache=True,   # Enable caching for performance
+            # planning=True,  # Enable planning feature
+            # output_log_file="linkedin_crew_logs.json"  # Log execution details
         )

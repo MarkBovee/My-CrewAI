@@ -1,27 +1,54 @@
 task_search:
   description: |
-    Make a detailed report on the latest rising skills in space of {topic}. 
-    Your final answer MUST be a list of at least 5 exciting new skills
+    Make a detailed report on the latest rising skills in {topic} space. 
+    Your final answer MUST be a list of at least 5 exciting new {topic} skills
     in the format of bullet points.
   expected_output: |
-    A comprehensive list of at least 5 exciting new skills with brief explanations 
+    A comprehensive list of at least 5 exciting new {topic} skills with brief explanations 
     of why they are trending and in demand, formatted as bullet points.
   agent: coach
 
+task_research:
+  description: |
+    IMPORTANT: You MUST select EXACTLY ONE skill from the coach's research list about {topic} skills.
+    
+    COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen skill:
+    - Search for recent trends, statistics, and market demand data
+    - Find real job postings, salary ranges, and employment growth projections
+    - Research current industry examples, case studies, and success stories
+    - Look for expert opinions, predictions, and future outlook
+    - Find specific tools, technologies, and certifications related to this skill
+    - Research career paths and progression opportunities
+    - Search for challenges and opportunities in this field
+    
+    ARTICLE CREATION: Write a comprehensive, well-researched article (1000-2500 words) about this ONE skill.
+    Structure your article with:
+    1. Introduction to the skill and its importance
+    2. Current market demand and statistics
+    3. Real-world applications and case studies
+    4. Career opportunities
+    6. Future outlook and predictions
+    
+    Base ALL content on REAL DATA from your search results with proper source attribution.
+  expected_output: |
+    A comprehensive, well-researched article (1000-2500 words) about EXACTLY ONE {topic} skill.
+  agent: researcher
+
 task_post:
   description: |
-    Write a LinkedIn post with a short but impactful headline. 
+    Write a LinkedIn post based on the comprehensive research article provided.
     It should list the latest skills in {topic} which are going to be in demand.
   expected_output: |
     An engaging LinkedIn post with a compelling headline (max 30 characters) and content 
-    that lists trending skills in {topic} with relevant emojis and hashtags.
+    that is based on the comprehensive research article provided.
   agent: influencer
 
 task_critique:
   description: |
     Identify parts of the post that aren't written concise enough and improve them. 
-    Make sure that the post has engaging headline with 30 characters max.
+    Make sure that the post has engaging headline with 30 characters max, 
+    and that there are at max 500 words.
   expected_output: |
-    A refined and improved LinkedIn post that is concise, professional and engaging.
-    Has an impactful headline under 30 characters, includes relevant emojis and hashtags.
+    A refined and improved LinkedIn post that is concise, engaging, within 500 words, 
+    has an impactful headline under 30 characters, includes relevant hashtags but don't overdo it. Keep it professional.
   agent: critic

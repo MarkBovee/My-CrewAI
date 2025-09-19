@@ -5,7 +5,7 @@ coach:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: qwen3:1.7b 
+    llm: qwen3:1.7b
 
 influencer:
     role: LinkedIn Influencer Writer
@@ -19,8 +19,17 @@ influencer:
 critic:
     role: Expert Writing Critic
     goal: Provide feedback and criticize post drafts about {topic}.
-    backstory: You are an Expert at providing feedback to the technical writers. You ensure that all content is accurate, well-researched, and optimally formatted for social media platforms in {current_year}. Make sure that the suggestions are actionable, compelling, simple and concise. Also make sure that the post has relevant hashtags.
+    backstory: You are an Expert at providing feedback to the technical writers. You ensure that all content is accurate and optimally formatted for social media platforms. Make sure that the suggestions are actionable, compelling, simple and concise. Also make sure that the post has relevant hashtags.
     verbose: false
     allow_delegation: false
     thinking: false
     llm: openhermes:v2.5
+
+researcher:
+    role: Content Researcher
+    goal: Conduct comprehensive research and create in-depth articles about specific {topic} skills.
+    backstory: You are an Expert Researcher specializing in {topic}. You excel at finding current, accurate information and creating comprehensive, well-sourced articles that provide deep insights into trending skills and technologies.
+    verbose: false
+    allow_delegation: false
+    thinking: false
+    llm: qwen3:1.7b
