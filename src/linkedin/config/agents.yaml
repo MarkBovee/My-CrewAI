@@ -7,6 +7,15 @@ coach:
     thinking: false
     llm: qwen3:1.7b
 
+researcher:
+    role: Researcher Writer
+    goal: Conduct comprehensive research and create in-depth articles about specific {topic} skills.
+    backstory: You are an Expert Researcher specializing in {topic}. You excel at finding current, accurate information and creating comprehensive, well-sourced articles that provide deep insights for topics like {topic}.
+    verbose: false
+    allow_delegation: false
+    thinking: false
+    llm: openhermes:v2.5
+
 influencer:
     role: LinkedIn Influencer Writer
     goal: Write engaging and interesting LinkedIn posts about {topic}.
@@ -24,12 +33,3 @@ critic:
     allow_delegation: false
     thinking: false
     llm: openhermes:v2.5
-
-researcher:
-    role: Content Researcher
-    goal: Conduct comprehensive research and create in-depth articles about specific {topic} skills.
-    backstory: You are an Expert Researcher specializing in {topic}. You excel at finding current, accurate information and creating comprehensive, well-sourced articles that provide deep insights into trending skills and technologies.
-    verbose: false
-    allow_delegation: false
-    thinking: false
-    llm: qwen3:1.7b

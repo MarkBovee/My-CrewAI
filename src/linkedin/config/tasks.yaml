@@ -21,7 +21,7 @@ task_research:
     - Research career paths and progression opportunities
     - Search for challenges and opportunities in this field
     
-    ARTICLE CREATION: Write a comprehensive, well-researched article (1000-2500 words) about this ONE skill.
+    ARTICLE CREATION: Write a comprehensive, well-researched article (1000-1500 words) about this ONE skill.
     Structure your article with:
     1. Introduction to the skill and its importance
     2. Current market demand and statistics
@@ -31,7 +31,7 @@ task_research:
     
     Base ALL content on REAL DATA from your search results with proper source attribution.
   expected_output: |
-    A comprehensive, well-researched article (1000-2500 words) about EXACTLY ONE {topic} skill.
+    A comprehensive, well-researched article (1000-1500 words) about EXACTLY ONE {topic} skill.
   agent: researcher
 
 task_post:
