@@ -181,28 +181,23 @@ class LinkedInCrew():
     @crew
     def crew(self) -> Crew:
         """Creates the LinkedIn Content Creation Crew following CrewAI best practices"""
-        # Create knowledge sources for the crew
+        # Create knowledge sources for the crew using proper file-based sources
         knowledge_sources = []
         
-        # Temporarily disable knowledge sources to avoid OpenAI API errors
-        # TODO: Configure local embeddings or use different knowledge approach
-        """
         try:
-            # Add web search results knowledge
+            # Add web search results knowledge using JSONKnowledgeSource with relative path
             web_knowledge = self.knowledge_helper.get_web_results_knowledge_source()
             knowledge_sources.append(web_knowledge)
             print("📚 Added web search results to crew knowledge")
             
-            # Add article memory knowledge
+            # Add article memory knowledge using JSONKnowledgeSource with relative path
             article_knowledge = self.knowledge_helper.get_article_memory_knowledge_source()
             knowledge_sources.append(article_knowledge)
             print("📖 Added article memory to crew knowledge")
             
         except Exception as e:
             print(f"⚠️ Warning: Could not load all knowledge sources: {e}")
-        """
-        
-        print("⚠️ Knowledge sources temporarily disabled to avoid API errors")
+            print("🔄 Continuing with crew execution without knowledge sources")
         
         return Crew(
             agents=self.agents,  # Automatically collected by @agent decorator
@@ -210,11 +205,18 @@ class LinkedInCrew():
             process=Process.sequential,
             verbose=True,
             max_execution_time=None,
-            # knowledge_sources=knowledge_sources  # Temporarily disabled
-            # Use default OpenAI embeddings (no extra model needed)
-            # Disable features that require OpenAI for now
+            knowledge_sources=knowledge_sources,  # Re-enabled with proper configuration
+            # Configure local Ollama embeddings to avoid OpenAI API dependency
+            embedder={
+                "provider": "ollama",
+                "config": {
+                    "model": "mxbai-embed-large",  # Local embedding model
+                    "base_url": "http://localhost:11434"  # Local Ollama server
+                }
+            }
+            # Note: Removed other OpenAI-dependent features for now
             # memory=True,  # Enable memory for better context retention
-            # cache=True,   # Enable caching for performance
+            # cache=True,   # Enable caching for performance 
             # planning=True,  # Enable planning feature
             # output_log_file="linkedin_crew_logs.json"  # Log execution details
         )
