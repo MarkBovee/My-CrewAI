@@ -1,31 +1,31 @@
 task_search:
   description: |
-    Make a detailed report on the latest rising skills in {topic} space. 
-    Your final answer MUST be a list of at least 5 exciting new {topic} skills
+    Make a detailed report on the latest items featuring the topic {topic}. 
+    Your final answer MUST be a list of at least 10 exciting items about {topic}
     in the format of bullet points.
   expected_output: |
-    A comprehensive list of at least 10 exciting new {topic} skills with brief explanations 
+    A comprehensive list of at least 10 exciting new items about {topic} with brief explanations
     of why they are trending and in demand, formatted as bullet points.
   agent: coach
 
 task_research:
   description: |
-    IMPORTANT: You MUST select EXACTLY ONE skill from the coach's research list about {topic} skills.
+    IMPORTANT: You MUST select EXACTLY ONE item from the coach's research list about {topic}.
     Pick the one that you find most interesting or promising for a deep dive related to a senior .NET Developer and DevOps engineer.
     Try to avoid political topics or topics about ethics, diversity, or social issues.
-    
-    COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen skill:
+
+    COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen item:
     - Search for recent trends, statistics, and market demand data
-    - Find real job postings, salary ranges, and employment growth projections
+    - Find real job postings, and employment growth projections
     - Research current industry examples, case studies, and success stories
     - Look for expert opinions, predictions, and future outlook
-    - Find specific tools, technologies, and certifications related to this skill
+    - Find specific tools and technologies related to this item
     - Research career paths and progression opportunities
     - Search for challenges and opportunities in this field
     
     RESEARCH OUTPUT: Compile all your research findings into a comprehensive research document.
-    Include all data, statistics, sources, and insights you've gathered.
-    
+    Include all data, statistics, sources, and insights you've gathered. 
+    Be as thorough and detailed as possible, go for a minimum of 2000 words so that the writer has plenty of material to work with.
     Base ALL content on REAL DATA from your search results with proper source attribution.
   expected_output: |
     A comprehensive research document with all findings, data, statistics, case studies, 
@@ -37,7 +37,8 @@ task_research:
 task_blog:
   description: |
     Write a reflective and professional blog post about {topic}, grounded in real-world
-    experience as a developer. You can gather additional information using your search tool if needed.
+    experience as a senior developer. Use the research document from the researcher as your primary source. 
+    But you can use the search_tool if you need extra info to fill in gaps or add extra depth.
 
     STRUCTURE:
     - Open with a clear personal hook (a challenge, incident, or insight that makes the story real).
@@ -49,7 +50,6 @@ task_blog:
     TECHNICAL DEPTH:
     - Mention specific tools, frameworks, and integrations (with versions where relevant).
     - Include technical details where they add value (snippets, CLI commands, configs).
-    - Share measurable improvements (metrics, benchmarks, before/after results).
     - Discuss architecture decisions or trade-offs where applicable.
 
     TONE AND STYLE:
@@ -84,7 +84,7 @@ task_post:
     
     HOOK FIRST:
     - Open with a relatable pain point, strong question, or surprising moment
-    - Make it feel human and specific ("2 AM. Production down. Nobody remembered why...")
+    - Make it feel human and specific
 
     STORY + VALUE:
     - Give a quick glimpse of the challenge and the insight that changed everything

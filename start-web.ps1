@@ -39,7 +39,7 @@ param(
     [int]$Port = 8000,
     # allow a commonly-used name 'Host' while keeping HostAddress for backward compat
     [Alias('Host')][string]$HostAddress = "localhost",
-    [switch]$Reload=$true
+    [switch]$Reload
 )
 
 # Colors for output
@@ -99,20 +99,21 @@ try {
     Write-InfoMessage "🐍 Checking Python installation..."
     $pythonCmd = "python"
     $pipCmd = "pip"
-    try {
-        $pythonVersion = & $pythonCmd --version 2>&1
-        Write-SuccessMessage "   ✅ $pythonVersion"
-    } catch {
+    $pythonPath = Get-Command $pythonCmd -ErrorAction SilentlyContinue
+    if (-not $pythonPath) {
         Write-ErrorMessage "❌ Python not found. Please install Python and add it to PATH"
         exit 1
+    } else {
+        $pythonVersion = & $pythonCmd --version 2>&1
+        Write-SuccessMessage "   ✅ $pythonVersion"
     }
-    
+
     # Check dependencies
     Write-InfoMessage "📦 Checking web server dependencies..."
-    try {
     & $pythonCmd -c "import fastapi, uvicorn" 2>$null
+    if ($LASTEXITCODE -eq 0) {
         Write-SuccessMessage "   ✅ FastAPI dependencies found"
-    } catch {
+    } else {
         Write-WarningMessage "   ⚠️  Web server dependencies missing"
         $response = Read-Host "Install dependencies from requirements.txt? (Y/n)"
         if ($response -eq "" -or $response -match "^[Yy]") {

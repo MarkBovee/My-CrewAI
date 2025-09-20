@@ -109,7 +109,7 @@ class CreateNewPostFlow(Flow[PostState]):
         print("\n" + "=" * 60)
         print("🎉 CREATE NEW POST FLOW COMPLETED SUCCESSFULLY!")
         print("=" * 60)
-        print(f"� Topic: {self.state.topic}")
+        print(f"Topic: {self.state.topic}")
         
         print(f"\n📁 GENERATED FILES:")
         print(f"📊 Research Article: {result_data['files']['research']}")
@@ -125,7 +125,6 @@ class CreateNewPostFlow(Flow[PostState]):
         print(f"💼 All content ready in output/ directories")
         
         return result_data
-        return self.state.final_post
 
 
 def run_create_new_post_flow(topic: str = "Latest AI, Software Development"):
@@ -158,8 +157,10 @@ def run_create_new_post_flow(topic: str = "Latest AI, Software Development"):
     # Create output directories
     output_dir = "output"
     articles_dir = os.path.join(output_dir, "articles")
+    blogs_dir = os.path.join(output_dir, "blogs")
     posts_dir = os.path.join(output_dir, "posts")
     os.makedirs(articles_dir, exist_ok=True)
+    os.makedirs(blogs_dir, exist_ok=True)
     os.makedirs(posts_dir, exist_ok=True)
     
     # Generate filename components
