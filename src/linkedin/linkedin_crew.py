@@ -67,6 +67,7 @@ class LinkedInCrew():
                 
                 # Create output directories
                 os.makedirs("output/articles", exist_ok=True)
+                os.makedirs("output/blogs", exist_ok=True)
                 os.makedirs("output/posts", exist_ok=True)
                 
                 # Generate timestamp and safe topic name
@@ -115,7 +116,7 @@ class LinkedInCrew():
                 # Save Blog Post (task_blog output - index 2)
                 if len(tasks_output) > 2:
                     blog_content = tasks_output[2].raw if hasattr(tasks_output[2], 'raw') else str(tasks_output[2])
-                    blog_file = f"output/articles/blog_post_{topic_safe}_{timestamp}.md"
+                    blog_file = f"output/blogs/blog_post_{topic_safe}_{timestamp}.md"
                     
                     blog_full = f"""# Blog Post: {topic}
 

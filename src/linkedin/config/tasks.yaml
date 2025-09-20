@@ -1,99 +1,160 @@
 task_search:
   description: |
-    Research {topic} to discover compelling content angles and real-world impact stories.
+    Research {topic} to discover compelling, technically-specific content angles with real implementation depth.
     Focus on finding:
-    - Recent adoption trends and success metrics
-    - Common challenges developers face with {topic}
-    - Business impact and productivity improvements
-    - Developer experience stories (both positive and negative)
-    - Industry use cases and practical applications
-    - Career opportunities and skill development aspects
+    - Specific technical implementation challenges and solutions
+    - Concrete code examples, configurations, and best practices
+    - Performance metrics, benchmarks, and measurable improvements
+    - Real developer stories with specific tools, versions, and scenarios
+    - Integration patterns, architectural decisions, and technical trade-offs
+    - Advanced use cases, edge cases, and troubleshooting scenarios
+    - Team transformation stories with specific technical details
     
-    Your goal is to identify content angles that would resonate with senior developers,
-    not just technical features. Look for the "why this matters" and "how this changes things" stories.
+    Your goal is to identify content angles that provide ACTIONABLE TECHNICAL VALUE to senior developers.
+    Focus on "how to implement", "what went wrong and how we fixed it", and "here's the exact approach that worked".
     
     Your final answer MUST be a curated list of 5-7 compelling content angles about {topic}
-    that focus on developer experience, business impact, and career relevance.
+    that focus on specific technical implementation, real-world problem-solving, and actionable insights.
   expected_output: |
     A curated list of 5-7 compelling content angles about {topic}, each with:
-    - The angle/story approach (e.g., "How {topic} changed our deployment process")
-    - Key supporting data or trends that make this angle relevant
-    - Target audience appeal (why senior developers would care)
-    - Potential personal experience hooks for the writer
+    - The specific technical angle/story approach (e.g., "How we migrated from X to {topic} and reduced build time by Y%")
+    - Concrete technical challenges and solutions involved
+    - Specific tools, versions, configurations, or code patterns discussed
+    - Measurable outcomes and technical metrics
+    - Target audience appeal with technical depth (why senior developers would implement this)
+    - Potential personal experience hooks with specific technical scenarios
   agent: coach
 
 task_research:
   description: |
-    CONTENT ANGLE SELECTION: Choose the MOST compelling content angle from the coach's research
+    CONTENT ANGLE SELECTION: Choose the MOST technically compelling and implementable content angle from the coach's research
     about {topic}. Select based on:
-    - Relevance to senior .NET Developer and DevOps engineer experience
-    - Availability of supporting data and real-world examples
-    - Potential for personal, experience-driven storytelling
-    - Career and business impact potential
+    - Specific technical relevance to senior .NET Developer and DevOps engineer daily work
+    - Availability of concrete implementation examples, code samples, and configuration details
+    - Potential for detailed, step-by-step technical storytelling
+    - Real-world problem-solving value and actionable insights
     
-    TARGETED RESEARCH PHASE: Use your search_tool to gather supporting evidence for this angle:
-    - Real-world implementation examples and case studies
-    - Developer productivity metrics and business impact data
-    - Common challenges and how teams overcome them
-    - Before/after scenarios and transformation stories
-    - Industry adoption trends and future projections
-    - Expert opinions and developer community feedback
-    - Specific tools, workflows, and best practices
+    DEEP TECHNICAL RESEARCH PHASE: Use your search_tool strategically to gather comprehensive evidence:
     
-    STORYTELLING SUPPORT: Find narrative elements that support personal experience storytelling:
-    - Team transformation stories
-    - Learning curve experiences
-    - Problem-solution scenarios
-    - "Aha moments" and breakthrough insights
+    Search Strategy:
+    - Use specific technical terms, version numbers, and integration scenarios
+    - Look for GitHub repositories, Stack Overflow discussions, and technical blogs
+    - Search for "how to implement", "migration guide", "best practices", "troubleshooting"
+    - Find real case studies with concrete metrics and implementation details
     
-    Base ALL findings on REAL DATA with proper source attribution.
+    Gather this supporting evidence:
+    - Specific implementation examples with code snippets and configurations
+    - Real performance metrics, benchmarks, and before/after comparisons
+    - Common technical challenges and their detailed solutions
+    - Step-by-step migration guides and setup procedures
+    - Integration patterns with other tools and frameworks
+    - Expert technical opinions from recognized developers and architects
+    - Specific tools, workflows, and development environment setups
+    
+    TECHNICAL STORYTELLING SUPPORT: Find narrative elements that support detailed technical storytelling:
+    - Specific technical problems encountered and solutions implemented
+    - Learning curve experiences with concrete examples
+    - Architecture decisions and their technical rationale
+    - Performance optimization stories with measurable results
+    - "Aha moments" with specific technical discoveries
+    
+    Base ALL findings on REAL TECHNICAL DATA with proper source attribution.
   expected_output: |
-    A comprehensive research package for ONE compelling content angle about {topic}, including:
-    - The chosen content angle and why it was selected
-    - Supporting data, statistics, and real-world examples
-    - Narrative elements for personal experience storytelling
-    - Quotes, case studies, and expert insights
-    - Sources and attribution for all claims
+    A comprehensive technical research package for ONE compelling content angle about {topic}, including:
+    - The chosen technical angle and detailed technical rationale for selection
+    - Specific implementation data: code examples, configurations, setup procedures
+    - Real performance metrics, benchmarks, and measurable technical outcomes
+    - Detailed technical narrative elements for step-by-step implementation storytelling
+    - Expert technical insights, quotes, and case studies with implementation details
+    - Comprehensive sources and attribution for all technical claims
+    - Specific tools, versions, frameworks, and integration requirements mentioned
   agent: researcher
   context:
     - task_search
 
 task_blog:
   description: |
-    Using the research findings as your foundation, write a reflective blog post about the 
-    specific {topic} skill that was researched. Make it personal by drawing on your own 
-    experience as a senior developer and DevOps engineer. The blog should balance insight 
-    with practicality: not just hype, but real examples of where this technology makes an impact. 
+    Write a compelling, deeply personal blog post about your real-world experience with {topic}.
+    This is your chance to share genuine insights that only come from hands-on implementation.
     
-    Use the research data, statistics, case studies, and market trends to support your points.
-    Structure the post with a clear, professional headline (no strict character limit), 
-    an introduction, body, and conclusion. Keep the tone reflective and thoughtful, while 
-    still being accessible and engaging for a professional audience.
+    PERSONAL STORYTELLING APPROACH:
+    - Start with a specific moment or challenge you faced ("Last Tuesday at 2 AM, our production deployment failed...")
+    - Share genuine frustrations, discoveries, and "aha moments" from your experience
+    - Include specific details: what you tried, what failed, what worked, and why
+    - Be vulnerable about mistakes and learning experiences
+    - Show the human side of technical problem-solving
+    
+    TECHNICAL DEPTH REQUIREMENTS:
+    - Include specific code snippets, configurations, or command-line examples
+    - Mention exact tools, versions, and integration scenarios you used
+    - Provide step-by-step implementation insights from your experience
+    - Share performance metrics, benchmarks, or measurable improvements you achieved
+    - Discuss architecture decisions and technical trade-offs you made
+    
+    PROFESSIONAL VALUE:
+    - Address specific pain points your LinkedIn audience faces daily
+    - Provide actionable insights that readers can implement immediately
+    - Share lessons learned that can save others time and frustration
+    - Include practical tips, gotchas, and best practices from your experience
+    - End with clear next steps or recommendations based on your journey
+    
+    TONE AND STYLE:
+    - Conversational and authentic (like talking to a colleague over coffee)
+    - Professional but personal (share your thought process and decision-making)
+    - Honest about challenges and limitations (build trust through transparency)
+    - Confident but humble (show expertise while acknowledging what you learned)
+    - Engaging and relatable (make technical content accessible and interesting)
+    
+    Use the research data to support your personal experience, but let YOUR STORY be the primary narrative.
+    This should feel like reading a senior developer's personal technical journal, not a marketing article.
   expected_output: |
-    - A blog post between 1200 and 2000 words
-    - A clear, professional headline (no strict character limit)
-    - A reflective and personal tone, grounded in research data and real-world experience
-    - Concrete examples, statistics, and insights from the research
-    - Well-structured with intro, body, and conclusion
-    - Focused on thought leadership backed by data
+    - A compelling blog post between 1500 and 2500 words
+    - An engaging, curiosity-driven headline that promises practical value
+    - A personal hook in the first paragraph (specific moment, challenge, or discovery)
+    - Technical depth with specific examples: code snippets, configurations, tools, versions
+    - Personal storytelling throughout: your thought process, decisions, mistakes, and learnings
+    - Actionable insights and practical tips that readers can implement
+    - Authentic, conversational tone that builds trust and relatability
+    - Clear structure with natural flow between personal story and technical insights
+    - Conclusion with specific next steps or recommendations based on your experience
+    - Content that makes readers think "I need to try this" or "This person really knows what they're talking about"
   agent: writer
   context:
     - task_research
 
 task_post:
   description: |
-    Write a short, engaging LinkedIn post (almost one-liner style) to promote
-    a blog post about {topic}. The post should be concise, professional,
-    and spark curiosity without giving everything away. It should encourage
-    readers to click the blog link for the full story. The style should be
-    direct, pragmatic, and slightly personal, reflecting the voice of a senior
-    .NET Developer and DevOps engineer.
+    Write a compelling LinkedIn post that makes people STOP scrolling and want to read your blog.
+    You're not just promoting content - you're sharing a genuine insight that hooks your professional network.
+    
+    ENGAGEMENT STRATEGY:
+    - Start with a relatable problem or surprising insight ("Ever spent 3 hours debugging something that should take 5 minutes?")
+    - Tease the most interesting or valuable insight from the blog without giving it all away
+    - Use a conversational tone that feels like you're talking directly to a colleague
+    - Include a specific benefit or outcome that readers will gain from the full article
+    - Create curiosity gap: give enough to intrigue, but not enough to satisfy
+    
+    PROFESSIONAL VOICE:
+    - Sound like a senior developer sharing a genuine experience
+    - Be confident but approachable (avoid jargon while showing expertise)
+    - Include a touch of personality (humor, frustration, excitement - whatever fits the story)
+    - Make it feel authentic, not like marketing copy
+    
+    CALL TO ACTION:
+    - Natural transition to "Here's what I learned..." or "Full story in comments/link"
+    - Make readers feel they'll miss out on something valuable if they don't click
+    - Use engaging language that promises immediate value
+    
+    Remember: LinkedIn users scroll fast. You have 2 seconds to make them stop and engage.
   expected_output: |
-    - A LinkedIn promo post under 75 words
-    - Clear, engaging, and professional tone
-    - Includes a placeholder for the blog link
-    - Optional 1–3 relevant hashtags (keep it minimal and professional)
-    - Written in an almost one-liner style
+    - A LinkedIn post between 50-100 words (optimal for engagement)
+    - Hook that stops the scroll (question, surprising stat, relatable problem)
+    - Conversational, authentic tone that sounds like a real person, not a brand
+    - Specific tease of value without giving away the full insight
+    - Natural call-to-action that creates urgency or curiosity
+    - 2-4 strategic hashtags that reach the right technical audience
+    - Content that makes readers think "I need to know more about this"
+    - Professional but personable voice of an experienced developer sharing genuine insights
   agent: influencer
   context:
     - task_blog

@@ -71,6 +71,7 @@ class CreateNewPostFlow(Flow[PostState]):
         
         # Create output directories if they don't exist
         os.makedirs("output/articles", exist_ok=True)
+        os.makedirs("output/blogs", exist_ok=True)
         os.makedirs("output/posts", exist_ok=True)
         
         # Generate timestamp and safe topic name
@@ -79,7 +80,7 @@ class CreateNewPostFlow(Flow[PostState]):
         
         # Expected file paths (should match @after_kickoff naming)
         research_file = f"output/articles/research_article_{topic_safe}_{timestamp}.md"
-        blog_file = f"output/articles/blog_post_{topic_safe}_{timestamp}.md"
+        blog_file = f"output/blogs/blog_post_{topic_safe}_{timestamp}.md"
         linkedin_file = f"output/posts/linkedin_post_{topic_safe}_{timestamp}.md"
         
         # Store file paths in state for completion message
