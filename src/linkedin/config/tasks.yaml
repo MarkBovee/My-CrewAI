@@ -1,73 +1,35 @@
 task_search:
   description: |
-    Research {topic} to discover compelling, technically-specific content angles with real implementation depth.
-    Focus on finding:
-    - Specific technical implementation challenges and solutions
-    - Concrete code examples, configurations, and best practices
-    - Performance metrics, benchmarks, and measurable improvements
-    - Real developer stories with specific tools, versions, and scenarios
-    - Integration patterns, architectural decisions, and technical trade-offs
-    - Advanced use cases, edge cases, and troubleshooting scenarios
-    - Team transformation stories with specific technical details
-    
-    Your goal is to identify content angles that provide ACTIONABLE TECHNICAL VALUE to senior developers.
-    Focus on "how to implement", "what went wrong and how we fixed it", and "here's the exact approach that worked".
-    
-    Your final answer MUST be a curated list of 5-7 compelling content angles about {topic}
-    that focus on specific technical implementation, real-world problem-solving, and actionable insights.
+    Make a detailed report on the latest rising skills in {topic} space. 
+    Your final answer MUST be a list of at least 5 exciting new {topic} skills
+    in the format of bullet points.
   expected_output: |
-    A curated list of 5-7 compelling content angles about {topic}, each with:
-    - The specific technical angle/story approach (e.g., "How we migrated from X to {topic} and reduced build time by Y%")
-    - Concrete technical challenges and solutions involved
-    - Specific tools, versions, configurations, or code patterns discussed
-    - Measurable outcomes and technical metrics
-    - Target audience appeal with technical depth (why senior developers would implement this)
-    - Potential personal experience hooks with specific technical scenarios
+    A comprehensive list of at least 10 exciting new {topic} skills with brief explanations 
+    of why they are trending and in demand, formatted as bullet points.
   agent: coach
 
 task_research:
   description: |
-    CONTENT ANGLE SELECTION: Choose the MOST technically compelling and implementable content angle from the coach's research
-    about {topic}. Select based on:
-    - Specific technical relevance to senior .NET Developer and DevOps engineer daily work
-    - Availability of concrete implementation examples, code samples, and configuration details
-    - Potential for detailed, step-by-step technical storytelling
-    - Real-world problem-solving value and actionable insights
+    IMPORTANT: You MUST select EXACTLY ONE skill from the coach's research list about {topic} skills.
+    Pick the one that you find most interesting or promising for a deep dive related to a senior .NET Developer and DevOps engineer.
+    Try to avoid political topics or topics about ethics, diversity, or social issues.
     
-    DEEP TECHNICAL RESEARCH PHASE: Use your search_tool strategically to gather comprehensive evidence:
+    COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen skill:
+    - Search for recent trends, statistics, and market demand data
+    - Find real job postings, salary ranges, and employment growth projections
+    - Research current industry examples, case studies, and success stories
+    - Look for expert opinions, predictions, and future outlook
+    - Find specific tools, technologies, and certifications related to this skill
+    - Research career paths and progression opportunities
+    - Search for challenges and opportunities in this field
     
-    Search Strategy:
-    - Use specific technical terms, version numbers, and integration scenarios
-    - Look for GitHub repositories, Stack Overflow discussions, and technical blogs
-    - Search for "how to implement", "migration guide", "best practices", "troubleshooting"
-    - Find real case studies with concrete metrics and implementation details
+    RESEARCH OUTPUT: Compile all your research findings into a comprehensive research document.
+    Include all data, statistics, sources, and insights you've gathered.
     
-    Gather this supporting evidence:
-    - Specific implementation examples with code snippets and configurations
-    - Real performance metrics, benchmarks, and before/after comparisons
-    - Common technical challenges and their detailed solutions
-    - Step-by-step migration guides and setup procedures
-    - Integration patterns with other tools and frameworks
-    - Expert technical opinions from recognized developers and architects
-    - Specific tools, workflows, and development environment setups
-    
-    TECHNICAL STORYTELLING SUPPORT: Find narrative elements that support detailed technical storytelling:
-    - Specific technical problems encountered and solutions implemented
-    - Learning curve experiences with concrete examples
-    - Architecture decisions and their technical rationale
-    - Performance optimization stories with measurable results
-    - "Aha moments" with specific technical discoveries
-    
-    Base ALL findings on REAL TECHNICAL DATA with proper source attribution.
+    Base ALL content on REAL DATA from your search results with proper source attribution.
   expected_output: |
-    A comprehensive technical research package for ONE compelling content angle about {topic}, including:
-    - The chosen technical angle and detailed technical rationale for selection
-    - Specific implementation data: code examples, configurations, setup procedures
-    - Real performance metrics, benchmarks, and measurable technical outcomes
-    - Detailed technical narrative elements for step-by-step implementation storytelling
-    - Expert technical insights, quotes, and case studies with implementation details
-    - Comprehensive sources and attribution for all technical claims
-    - Specific tools, versions, frameworks, and integration requirements mentioned
+    A comprehensive research document with all findings, data, statistics, case studies, 
+    and sources about EXACTLY ONE {topic} skill.
   agent: researcher
   context:
     - task_search
@@ -75,7 +37,7 @@ task_research:
 task_blog:
   description: |
     Write a reflective and professional blog post about {topic}, grounded in real-world
-    experience as a senior .NET Developer and DevOps engineer.
+    experience as a developer. You can gather additional information using your search tool if needed.
 
     STRUCTURE:
     - Open with a clear personal hook (a challenge, incident, or insight that makes the story real).
@@ -131,7 +93,6 @@ task_post:
     - Add personality (frustration, relief, humor, or excitement) to make it memorable
     
     CALL TO ACTION:
-    - Transition naturally: "Here’s what I learned..." / "The full story’s here ↓"
     - Make readers feel curious and that they’ll miss out if they don’t click
     - Keep it authentic, not salesy
     
@@ -150,7 +111,7 @@ task_post:
     - Tease of the most valuable blog insight, without full detail
     - Conversational tone, authentic voice, and human emotion
     - Smooth call-to-action that invites reading the blog
-    - 2–4 strategic hashtags (#DevOps #AItools #GitHub #Productivity)
+    - 2–4 strategic hashtags
     - Short, scannable structure with line breaks
   agent: influencer
   context:

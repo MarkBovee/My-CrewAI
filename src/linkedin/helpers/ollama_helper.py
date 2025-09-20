@@ -32,12 +32,12 @@ class LLMHelper:
         # Set OpenAI API key from environment
         self.openai_api_key = os.getenv('OPENAI_API_KEY')
         
-        # Memory optimization settings for 12GB GPU - reduced by 10% for stability
+        # Memory optimization settings for 12GB GPU 
         self.memory_optimization = {
-            'auto_unload': True,        # Automatically unload models when not needed
-            'max_context_length': 14746, # Reduced by 10% from 16,384 for stability
-            'prefer_quantized': True,   # Prefer quantized models when available
-            'cpu_offload': False        # Disable CPU offloading with 12GB GPU memory
+            'auto_unload': True,         # Automatically unload models when not needed
+            'max_context_length': 14746, 
+            'prefer_quantized': True,    # Prefer quantized models when available
+            'cpu_offload': False         # Disable CPU offloading with 12GB GPU memory
         }
     
     def load_agents_config(self) -> Dict[str, Any]:
@@ -165,24 +165,24 @@ class LLMHelper:
         Returns:
             Optimal context length
         """
-        # Model size-based context optimization - reduced by 10% for stability
+        # Model size-based context optimization 
         context_map = {
-            # Small models (1.7B and below) - reduced by 10% for stability
-            'qwen2.5:0.5b': 16384,    # Reduced by 10% from 16,384 for stability
-            'qwen2.5:1.5b': 16384,    # Reduced by 10% from 16,384 for stability
-            'qwen2.5:3b': 16384,      # Reduced by 10% from 16,384 for stability
-            'qwen3:1.7b': 16384,      # Reduced by 10% from 16,384 for stability
-            # Medium models (7B range) - reduced by 10% for stability
-            'openhermes:v2.5': 16384, # Reduced by 10% from 16,384 for stability
-            'llama3.2:3b': 16384,     # Reduced by 10% from 16,384 for stability
-            'llama3.1:7b': 16384,     # Reduced by 10% from 12,288 for stability
-            # Larger models - reduced by 10% for stability
-            'llama3.1:13b': 16384,     # Reduced by 10% from 8,192 for stability
-            'llama3.1:70b': 16384,     # Reduced by 10% from 4,096 for stability
+            # Small models (1.7B and below) 
+            'qwen2.5:0.5b': 14746,    
+            'qwen2.5:1.5b': 14746,    
+            'qwen2.5:3b': 14746,      
+            'qwen3:1.7b': 14746,      
+            # Medium models (7B range) 
+            'openhermes:v2.5': 14746, 
+            'llama3.2:3b': 14746,     
+            'llama3.1:7b': 14746,     
+            # Larger models 
+            'llama3.1:13b': 14746,     
+            'llama3.1:70b': 14746,    
         }
         
         # Get context length for specific model, with fallback to reduced default
-        return context_map.get(model_name, 16384)  # Reduced by 10% from 16,384 for stability
+        return context_map.get(model_name, 14746)  
     
     def get_optimal_thread_count(self) -> int:
         """

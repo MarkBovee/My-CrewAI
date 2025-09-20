@@ -252,15 +252,6 @@ class LinkedInCrew():
         )
 
     @agent
-    def influencer(self) -> Agent:
-        """LinkedIn Influencer Writer agent for content creation"""
-        return Agent(
-            config=self.agents_config['influencer'], # type: ignore[index]
-            llm=self.llm_helper.create_llm_instance('influencer'),
-            verbose=self.agents_config['influencer'].get('verbose', False)
-        )
-
-    @agent
     def researcher(self) -> Agent:
         """Content Researcher agent for in-depth article research"""
         return Agent(
@@ -276,7 +267,17 @@ class LinkedInCrew():
         return Agent(
             config=self.agents_config['writer'], # type: ignore[index]
             llm=self.llm_helper.create_llm_instance('writer'),
+            tools=[search_tool],  # Add search tool for additional research during writing
             verbose=self.agents_config['writer'].get('verbose', False)
+        )
+        
+    @agent
+    def influencer(self) -> Agent:
+        """LinkedIn Influencer Writer agent for content creation"""
+        return Agent(
+            config=self.agents_config['influencer'], # type: ignore[index]
+            llm=self.llm_helper.create_llm_instance('influencer'),
+            verbose=self.agents_config['influencer'].get('verbose', False)
         )
 
     @task
