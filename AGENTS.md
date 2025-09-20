@@ -1,88 +1,149 @@
-# AI Agent Instructions
+---
+applyTo: '**'
+---
+# CrewAI Multi-Agent System Instructions
 
-This is a CrewAI multi-agent system.
+This is a CrewAI multi-agent system for AI-powered content generation with web interface and knowledge management.
 
-This project uses CrewAI framework to create a multi-agent system for generating themed videos with AI agents.
+**📋 Follow the general coding workflow from `default.instructions.md` + these CrewAI-specific patterns.**
 
-## Always Follow These Instructions
-0. **Take time to plan before coding**
-1. **Read the entire `AGENTS.md` file before starting any work.**
-2. **Strictly adhere to all mandatory requirements and guidelines outlined below.**
-3. **Do not deviate from the specified patterns, structures, or workflows. If you identify a need for change, document it and seek approval before proceeding.**
-4. **Ensure all code is clean, well-documented, and production-ready.**
-5. **Maintain clear progress documentation in `.github/copilot-progress.md`.**
-6. **Clean up all unused or redundant code files after completing tasks to keep the project organized.**
+---
 
-## 📋 Progress Tracking & Documentation (Required)
+## 🏗️ Architecture Overview
 
-### Development Session Management
-When working on development tasks, especially complex implementations or multi-step processes:
+**Multi-Agent Content Creation System:**
+- **4 Specialized Agents**: Coach, Influencer, Researcher, Writer (defined in `agents.yaml`)
+- **Sequential Task Flow**: Research → Analysis → Content Creation → Post Generation
+- **Knowledge System**: Persistent learning from web searches and article history
+- **Web Interface**: FastAPI server with real-time flow execution and management
 
-1. **Always check for existing progress**: Start by checking if the `.github/copilot-progress.md` file exists. If not, create it. Then read it to understand any ongoing work or previous session context.
+**Key Components:**
+- `src/linkedin/` - Main CrewAI implementation
+- `knowledge/` - File-based knowledge sources (JSONKnowledgeSource with relative paths)
+- `www/` - Web interface for flow management
+- `web_server.py` - FastAPI server with streaming execution
 
-2. **Maintain progress documentation**: Update the progress file throughout your session with:
-   - Current status and completed steps
-   - Technical decisions and implementation details
-   - Issues encountered and solutions applied
-   - Next steps and remaining work
+---
 
-3. **🚨 REQUIRED SESSION CLEANUP**: When completing a task or major milestone:
-   - **MANDATORY**: Clean up and organize script files by removing redundant/obsolete versions
-   - **MANDATORY**: Update progress documentation with "Task Completed Successfully" section
-   - **MANDATORY**: Document critical technical findings (like AutoGen compatibility issues)
-   - **MANDATORY**: Include implementation details, key features delivered, and technical approaches
-   - Note any follow-up actions needed for production
+## ⚡ Critical Workflows
 
-4. **Start of a new task (housekeeping)**:
-   - If the previous task was completed successfully and the new task is unrelated, reset `.github/copilot-progress.md` so it contains only the new task’s progress. Do not keep prior task logs in this file.
-   - If the new task is a direct continuation of the previous one, keep the same task entry and append progress under the existing header.
-   - Optionally archive prior completed task notes elsewhere (e.g., a dated entry in a separate document) if historical context is needed, but keep `copilot-progress.md` focused on a single active task.
-
-### Progress File Structure
-The `.github/copilot-progress.md` should follow this pattern:
-- **Header**: Task name, date, and completion status
-- **Summary**: Brief overview of accomplishments (for completed tasks)
-- **Detailed Steps**: Numbered list of completed work with checkmarks
-- **Implementation Details**: Technical specifics, file changes, patterns used
-- **Testing/Verification**: Test results, compilation status, validation steps
-- **Next Steps**: Future work or production deployment notes
-
-This approach ensures continuity between development sessions and provides clear documentation of progress for complex implementations.
-
-## Architecture & Key Patterns
-
-### 1. YAML-Driven Configuration
-- **Agents**: `src/linkedin/config/agents.yaml` - Define roles, goals, LLM models, and thinking behavior
-- **Tasks**: `src/linkedin/config/tasks.yaml` - Define workflow steps and expected outputs
-- **Pattern**: Use `{current_year}` templating in goals for dynamic inputs
-
-### 2. Local Ollama LLM Integration
-- **Helper**: `src/linkedin/helpers/ollama_helper.py` - Centralized LLM management
-- **Key Pattern**: Pass thinking control via `model_kwargs["options"]["think"]` to disable LLM verbosity
-- **Configuration**: Each agent can have different models and thinking settings
-- **Connection**: Always uses `http://localhost:11434` base URL
-
-## Critical Development Workflows
-
-### Running the Crew
+### Running CrewAI Flows
 ```bash
 # Method 1: CrewAI CLI (preferred)
 crewai run
 
-# Method 2: Direct Python execution
+# Method 2: Direct Python execution  
 python -c "import sys; sys.path.append('src'); from linkedin.main import run; run()"
+
+# Method 3: Web interface
+.\start-web.ps1    # Start web server on localhost:8000
 ```
 
-## Concepts & Documentation
+### Knowledge Management
+```bash
+# Reset knowledge data
+python reset_knowledge.py --type all --stats
 
-The following resources are available, read them to understand CrewAI concepts:
+# Check topic coverage
+python -c "from src.linkedin.helpers.knowledge_helper import KnowledgeHelper; print(KnowledgeHelper().check_topic_covered('AI trends'))"
+```
 
-- [Official CrewAI Documentation](https://docs.crewai.com)
-- [Agents Documentation](https://docs.crewai.com/en/concepts/agents)
-- [Tasks Documentation](https://docs.crewai.com/en/concepts/tasks)  
-- [Crews Documentation](https://docs.crewai.com/en/concepts/crews)
-- [Tools Documentation](https://docs.crewai.com/en/concepts/tools)
-- [Knowledge Documentation](https://docs.crewai.com/en/concepts/knowledge)
-- [Collaboration Documentation](https://docs.crewai.com/en/concepts/collaboration)
-- [Flows Documentation](https://docs.crewai.com/en/concepts/flows)
-- [Event Listener Documentation](https://docs.crewai.com/en/concepts/event-listener)
+---
+
+## 🔧 CrewAI-Specific Patterns
+
+### 1. YAML-Driven Configuration
+- **Agents**: `src/linkedin/config/agents.yaml` - Roles, goals, LLM models
+- **Tasks**: `src/linkedin/config/tasks.yaml` - Workflow steps, expected outputs
+- **Dynamic Templating**: Use `{current_year}` in goals for current context
+
+### 2. Local Ollama Integration  
+- **LLM Helper**: `src/linkedin/helpers/ollama_helper.py`
+- **Base URL**: Always `http://localhost:11434`
+- **Embedding Model**: `mxbai-embed-large` for knowledge sources
+- **Thinking Control**: `model_kwargs["options"]["think"]` to disable verbosity
+
+### 3. Knowledge Sources (Critical)
+- **Location**: Files MUST be in `/knowledge` directory at project root
+- **File Paths**: Use relative paths from knowledge directory (`"web_search_results.json"`)
+- **Source Type**: JSONKnowledgeSource (not StringKnowledgeSource)
+- **Embeddings**: Local Ollama embeddings configured to avoid OpenAI API errors
+
+```python
+# Correct Knowledge Source Pattern
+knowledge_source = JSONKnowledgeSource(
+    file_paths=["web_search_results.json"],  # Relative from /knowledge
+    metadata={"source": "web_search_results", "type": "search_data"}
+)
+```
+
+### 4. Web Interface Integration
+- **Server**: `web_server.py` with FastAPI and streaming responses
+- **Endpoints**: `/api/execute-flow`, `/api/knowledge/*`, `/api/stats`
+- **Frontend**: Vanilla JS with real-time updates via Server-Sent Events
+- **Startup**: Use `start-web.ps1` PowerShell script
+
+---
+
+## 🚨 Common Pitfalls & Solutions
+
+**❌ "Knowledge Search Failed" Errors:**
+- Cause: OpenAI API dependency in CrewAI knowledge system
+- Fix: Use local Ollama embeddings in crew configuration
+
+**❌ Import Errors:**
+- Always add `sys.path.append('src')` before importing from linkedin module
+- Use absolute imports: `from linkedin.main import run`
+
+**❌ Model Memory Issues:**
+- Use `ollama_helper.force_cleanup_memory()` after crew execution
+- Implement cleanup in `@after_kickoff` decorator
+
+**❌ Knowledge File Paths:**
+- Never use absolute paths for knowledge sources
+- Always use relative paths from `/knowledge` directory
+
+---
+
+## 📁 File Structure Patterns
+
+```
+src/linkedin/
+├── config/           # YAML configurations
+├── helpers/          # Utility classes (knowledge, ollama, config)
+├── tools/            # CrewAI custom tools (search)
+├── flows/            # CrewAI flow definitions
+├── linkedin_crew.py  # Main crew class with @agent, @task decorators
+└── main.py           # Entry point
+
+knowledge/            # Knowledge sources (relative paths)
+├── web_search_results.json
+└── article_memory.json
+
+www/                  # Web interface
+├── index.html
+└── assets/css/style.css
+```
+
+---
+
+## 🔍 Debugging & Verification
+
+**Check Knowledge System:**
+```python
+from linkedin.helpers.knowledge_helper import KnowledgeHelper
+helper = KnowledgeHelper()
+stats = helper.get_knowledge_stats()
+```
+
+**Verify Ollama Connection:**
+```python
+from linkedin.helpers.ollama_helper import OllamaHelper  
+helper = OllamaHelper()
+models = helper.list_available_models()
+```
+
+**Test Crew Execution:**
+- Expect: No "Knowledge Search Failed" errors
+- Expect: Local embeddings working with Ollama
+- Expect: Generated content in `/output` directory
