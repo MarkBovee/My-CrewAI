@@ -62,7 +62,7 @@ def run():
         
         # Attempt cleanup even on error
         try:
-            from .helpers.llm_helper import LLMHelper
+            from .helpers.ollama_helper import LLMHelper
             llm_helper = LLMHelper()
             print("🧹 Attempting emergency model cleanup...")
             llm_helper.force_cleanup_memory()

@@ -1,72 +1,270 @@
 {
   "searches": [
     {
-      "timestamp": "2025-09-19T16:09:43.680944",
-      "query": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
-      "topic": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
+      "timestamp": "2025-09-20T11:08:27.799413",
+      "query": "GitHub SpecFlow revolutionized CI/CD high-profile projects",
+      "topic": "GitHub SpecFlow revolutionized CI/CD high-profile projects",
       "results_count": 5,
       "results": [
         {
-          "title": "Blockchain meets machine learning: a survey - Journal of Big Data",
-          "snippet": "Blockchain and machine learning are two rapidly growing technologies that are increasingly being used in various industries. Blockchain technology provides a secure and transparent method for recording transactions, while machine learning enables data -driven decision-making by analyzing large amounts of data . In recent years, researchers and practitioners have been exploring the potential ...",
-          "link": "https://journalofbigdata.springeropen.com/articles/10.1186/s40537-023-00852-y"
+          "title": "SpecFlow to Reqnroll: A Step-by-Step Migration Guide",
+          "snippet": "20 Jun 2025 — Learn how to migrate from SpecFlow to Reqnroll in minutes . Step-by-step guide, benefits, FAQs, and tips to future-proof your .NET BDD tests.",
+          "link": "https://codoid.com/automation-testing/specflow-to-reqnroll-a-step-by-step-migration-guide/"
         },
         {
-          "title": "Artificial Intelligence and Blockchain Integration in Business: Trends ...",
-          "snippet": "Abstract Artificial intelligence (AI) and blockchain are the two disruptive technologies emerging from the Fourth Industrial Revolution (IR4.0) that have introduced radical shifts in the industry. The amalgamation of AI and blockchain holds tremendous potential to create new business models enabled through digitalization. Although research on the application and convergence of AI and ...",
-          "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9005027/"
+          "title": "SpecFlow BDD UI tests running on Azure DevOps pipeline",
+          "snippet": "I have created a test suite using SpecFlow BDD with Selenium that I am trying to run on the Azure DevOps using Pipelines.",
+          "link": "https://stackoverflow.com/questions/63752610/specflow-bdd-ui-tests-running-on-azure-devops-pipeline"
         },
         {
-          "title": "Review article AI-enhanced blockchain technology: A review of ...",
-          "snippet": "The ability of intelligent algorithms to extract meaningful patterns from large data sets makes the use of AI to analyze and study data saved in the blockchain a seamless integration of these two cutting-edge technologies.",
-          "link": "https://www.sciencedirect.com/science/article/pii/S1084804524000353"
+          "title": "Does anyone actually like using Specflow for test ...",
+          "snippet": "SpecFlow aids in the development, management, and execution of human-readable tests for .NET projects. Cucumber functions similarly to how it ...",
+          "link": "https://www.quora.com/Does-anyone-actually-like-using-Specflow-for-test-automation"
         },
         {
-          "title": "Blockchain AI Market Size, Share, Trends | CAGR of 23.1%",
-          "snippet": "Report Overview The Global Blockchain AI Market size is expected to be worth around USD 2,787 Million by 2033, from USD 349 Million in 2023, growing at a CAGR of 23.1% during the forecast period from 2024 to 2033. Blockchain AI refers to the integration of artificial intelligence (AI) technologies with blockchain technology.",
-          "link": "https://market.us/report/blockchain-ai-market/"
+          "title": "Using GitHub Copilot in Test Automation",
+          "snippet": "SpecFlow is an open-source BDD framework that enables the translation of business-readable descriptions into automated tests, primarily in Gherkin language.",
+          "link": "https://www.webpilot.ai/writeDetail/a94ab487-c680-4b55-be32-193a19c2414a"
         },
         {
-          "title": "Blockchain AI Market Report 2025-2034 |Trends - The Business Research ...",
-          "snippet": "The blockchain ai market research report is one of a series of new reports from The Business Research Company that provides market statistics, including industry global market size, regional shares, competitors with the market share, detailed market segments, market trends and opportunities, and any further data you may need to thrive in the ...",
-          "link": "https://www.thebusinessresearchcompany.com/report/blockchain-ai-global-market-report"
+          "title": "Open-source Cucumber-style BDD test automation ...",
+          "snippet": "Breaking news. It seems that Tricentis has removed the SpecFlow open-source project from GitHub (or made it private), the GitHub url ...",
+          "link": "https://www.linkedin.com/posts/gasparnagy_github-reqnrollreqnroll-open-source-cucumber-style-activity-7274869345271312384-Avos"
         }
       ]
     },
     {
-      "timestamp": "2025-09-19T16:09:44.199506",
-      "query": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
-      "topic": "AI/ML with Blockchain Integration recent trends, statistics, and market demand data",
+      "timestamp": "2025-09-20T11:08:28.287605",
+      "query": "GitHub SpecFlow revolutionized CI/CD high-profile projects",
+      "topic": "GitHub SpecFlow revolutionized CI/CD high-profile projects",
       "results_count": 5,
       "results": [
         {
-          "title": "Blockchain AI Market Size, Share, Trends & Growth Rate ...",
-          "snippet": "The global blockchain AI market , valued at USD 184.6 million in 2019 and projected to reach USD 973.6 million by 2027, growing at a CAGR of 23.6%.",
-          "link": "https://www.fortunebusinessinsights.com/blockchain-ai-artificial-intelligence-market-104588"
+          "title": "SpecFlow to Reqnroll: A Step-by-Step Migration Guide",
+          "snippet": "20 Jun 2025 — Learn how to migrate from SpecFlow to Reqnroll in minutes . Step-by-step guide, benefits, FAQs, and tips to future-proof your .NET BDD tests.",
+          "link": "https://codoid.com/automation-testing/specflow-to-reqnroll-a-step-by-step-migration-guide/"
         },
         {
-          "title": "AI and Machine Learning in Blockchain Compliance ...",
-          "snippet": "16 Jun 2025 — The AI -powered RegTech market in blockchain compliance is forecasted to grow at a compound annual growth rate (CAGR) of 23.4% from 2025 to 2030.",
-          "link": "https://coinlaw.io/ai-and-machine-learning-in-blockchain-compliance-statistics/"
+          "title": "SpecFlow BDD UI tests running on Azure DevOps pipeline",
+          "snippet": "I have created a test suite using SpecFlow BDD with Selenium that I am trying to run on the Azure DevOps using Pipelines.",
+          "link": "https://stackoverflow.com/questions/63752610/specflow-bdd-ui-tests-running-on-azure-devops-pipeline"
         },
         {
-          "title": "Blockchain AI Market Size and Forecast 2025 to 2034",
-          "snippet": "The global blockchain AI market is projected to grow from USD 680.89 million in 2025 to USD 4,338.66 million by 2034, expanding at a CAGR of 22.93% during ...",
-          "link": "https://www.precedenceresearch.com/blockchain-ai-market"
+          "title": "Does anyone actually like using Specflow for test ...",
+          "snippet": "SpecFlow aids in the development, management, and execution of human-readable tests for .NET projects. Cucumber functions similarly to how it ...",
+          "link": "https://www.quora.com/Does-anyone-actually-like-using-Specflow-for-test-automation"
         },
         {
-          "title": "Artificial Intelligence and Blockchain Integration in Business",
-          "snippet": "by S Kumar · 2023 · Cited by 428 — This study aims to characterize the applications and benefits of integrated AI and blockchain platforms across different verticals of business.",
-          "link": "https://link.springer.com/article/10.1007/s10796-022-10279-0"
+          "title": "Using GitHub Copilot in Test Automation",
+          "snippet": "SpecFlow is an open-source BDD framework that enables the translation of business-readable descriptions into automated tests, primarily in Gherkin language.",
+          "link": "https://www.webpilot.ai/writeDetail/a94ab487-c680-4b55-be32-193a19c2414a"
         },
         {
-          "title": "AI in Blockchain: Use Cases, Benefits & Future Trends",
-          "snippet": "28 Aug 2025 — This has further made the combined market size of AI and blockchain technologies to exceed $703 million by 2025, witnessing a CAGR of 25.3% from ...",
-          "link": "https://appinventiv.com/blog/ai-in-blockchain/"
+          "title": "Open-source Cucumber-style BDD test automation ...",
+          "snippet": "Breaking news. It seems that Tricentis has removed the SpecFlow open-source project from GitHub (or made it private), the GitHub url ...",
+          "link": "https://www.linkedin.com/posts/gasparnagy_github-reqnrollreqnroll-open-source-cucumber-style-activity-7274869345271312384-Avos"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-20T11:25:23.904587",
+      "query": "GitHub SpecFlow Revolutionized Our CI/CD Pipeline",
+      "topic": "GitHub SpecFlow Revolutionized Our CI/CD Pipeline",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "GitHub · Build and ship software on a single, collaborative platform",
+          "snippet": "Whether you’re scaling your development process or just learning how to code, GitHub is where you belong. Join the world’s most widely adopted AI-powered developer platform to build the …",
+          "link": "https://github.com/"
+        },
+        {
+          "title": "Sign in to GitHub · GitHub",
+          "snippet": "GitHub is where people build software. More than 150 million people use GitHub to discover, fork, and contribute to over 420 million projects.",
+          "link": "https://github.com/login"
+        },
+        {
+          "title": "GitHub Spark - Dream it. See it. Ship it. · GitHub",
+          "snippet": "GitHub is where people build software. More than 150 million people use GitHub to discover, fork, and contribute to over 420 million projects.",
+          "link": "https://github.com/features/spark"
+        },
+        {
+          "title": "Git · GitHub",
+          "snippet": "While Git takes care of the underlying version control, GitHub is the collaboration platform built on top of it. GitHub is the place for pull requests, comments, reviews, integrated tests, and so …",
+          "link": "https://github.com/git-guides"
+        },
+        {
+          "title": "GitHub - ExecutorDeltaDev/Delta: Executor Delta is the ultimate …",
+          "snippet": "Welcome to the official GitHub repository for Executor Delta, the most advanced and user-friendly keyless Lua executor for Roblox in 2025. With the community growing and Lua scripting …",
+          "link": "https://github.com/ExecutorDeltaDev/Delta"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-20T11:25:24.540617",
+      "query": "GitHub SpecFlow Revolutionized Our CI/CD Pipeline",
+      "topic": "GitHub SpecFlow Revolutionized Our CI/CD Pipeline",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "GitHub · Build and ship software on a single, collaborative platform",
+          "snippet": "Whether you’re scaling your development process or just learning how to code, GitHub is where you belong. Join the world’s most widely adopted AI-powered developer platform to build the …",
+          "link": "https://github.com/"
+        },
+        {
+          "title": "Sign in to GitHub · GitHub",
+          "snippet": "GitHub is where people build software. More than 150 million people use GitHub to discover, fork, and contribute to over 420 million projects.",
+          "link": "https://github.com/login"
+        },
+        {
+          "title": "GitHub Spark - Dream it. See it. Ship it. · GitHub",
+          "snippet": "GitHub is where people build software. More than 150 million people use GitHub to discover, fork, and contribute to over 420 million projects.",
+          "link": "https://github.com/features/spark"
+        },
+        {
+          "title": "Git · GitHub",
+          "snippet": "While Git takes care of the underlying version control, GitHub is the collaboration platform built on top of it. GitHub is the place for pull requests, comments, reviews, integrated tests, and so …",
+          "link": "https://github.com/git-guides"
+        },
+        {
+          "title": "GitHub - ExecutorDeltaDev/Delta: Executor Delta is the ultimate …",
+          "snippet": "Welcome to the official GitHub repository for Executor Delta, the most advanced and user-friendly keyless Lua executor for Roblox in 2025. With the community growing and Lua scripting …",
+          "link": "https://github.com/ExecutorDeltaDev/Delta"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-20T11:25:28.755820",
+      "query": "SpecFlow Cost of Inaction",
+      "topic": "SpecFlow Cost of Inaction",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "McAfee Antivirus - Wikipedia",
+          "snippet": "McAfee Antivirus is an antivirus software created and maintained by McAfee (formerly known as Intel Security, and Network Associates prior to that). Originally marketed as a standalone …",
+          "link": "https://en.wikipedia.org/wiki/McAfee_Antivirus"
+        },
+        {
+          "title": "McAfee Total Protection 2025 | Antivirus software",
+          "snippet": "McAfee Total Protection is easy to use, works for Mac, PC & mobile devices & is your best bet to stay safer online. Purchase our trustworthy antivirus software now!",
+          "link": "https://www.mcafee.com/en-us/antivirus/mcafee-total-protection.html?msockid=0ee068354ec8637b3e3f7e584f2d6283"
+        },
+        {
+          "title": "McAfee AntiVirus : Powerful Antivirus Protection for a Single PC",
+          "snippet": "Sep 10, 2025 · McAfee AntiVirus gets near-perfect lab scores and does well in our tests, but it only protects one PC.",
+          "link": "https://www.pcmag.com/reviews/mcafee-antivirus"
+        },
+        {
+          "title": "McAfee Antivirus Review 2025 - CNET",
+          "snippet": "May 30, 2025 · We evaluate McAfee antivirus’s security suite for performance, usability, value and more.",
+          "link": "https://www.cnet.com/tech/services-and-software/mcafee-antivirus-review/"
+        },
+        {
+          "title": "Mcafee Antivirus - Best Buy",
+          "snippet": "McAfee AntiVirus is the most trusted antivirus software on the market, protecting over 600 million devices worldwide. It's also the top-rated antivirus software by independent testing labs, …",
+          "link": "https://www.bestbuy.com/site/shop/mcafee-antivirus"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-20T11:25:29.356760",
+      "query": "SpecFlow Cost of Inaction",
+      "topic": "SpecFlow Cost of Inaction",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "Do You Want to Develop Your Leadership Talent? What is Inaction ...",
+          "snippet": "The cost of inaction is the continuation of all of the things that arise in your current set of conditions or your current situation.The choice not to invest, the cost of inaction looks like this. You miss out on the benefit, and you incur the cost of inaction .",
+          "link": "https://ashleycoaching.com.au/do-you-want-to-develop-your-leadership-talent-what-is-inaction-costing-ceos/"
+        },
+        {
+          "title": "GitHub - tawfiknouri/BDD-TDD_ParkingCostCalculator_ SpecFlow ...",
+          "snippet": "BDD/TDD With SpecFlow & .NET Core. Master Actions Status. The intention of this project is not create the best parking cost calculator in the world. We want the simplest parking cost calculator in the world so we can focus on Behavior Driven Development (BDD)...",
+          "link": "https://github.com/tawfiknouri/BDD-TDD_ParkingCostCalculator_SpecFlow"
+        },
+        {
+          "title": "Is inaction costing you?. The hidden business cost ... | Medium",
+          "snippet": "The cost of inaction is the cost you incur from not doing something to grow your business.But the cost of inaction held more risk. She was working 80 hours a week to be able to pay her bills. This was no way to live.",
+          "link": "https://vivianconstructionbizcoach.medium.com/is-inaction-costing-you-8c3ac2197f08"
+        },
+        {
+          "title": "How Much Does Inaction Cost ? The Economic Impacts of Climate...",
+          "snippet": "While the costs of inaction could cause the world to lose up to 27% of accumulated global GDP by 2100, the effort to mitigate and adapt would cost only between 1% and 2%. For every dollar invested now, up to ten dollars in future losses can be avoided, one of the most expressive returns...",
+          "link": "https://www.linkedin.com/pulse/how-much-does-inaction-cost-economic-impacts-climate-ernyf"
+        },
+        {
+          "title": "The cost of inaction",
+          "snippet": "The cost of inaction : Recognising the value at risk from climate change is a report by The Economist Intelligence Unit (The EIU). This research depicts the scope of assets at risk from climate change from the present to 2100.",
+          "link": "https://impact.economist.com/sustainability/cost-inaction/white-paper/cost-inaction"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-20T11:25:34.349066",
+      "query": "SpecFlow Rapid Product Launches",
+      "topic": "SpecFlow Rapid Product Launches",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "Google Help",
+          "snippet": "If you're having trouble accessing a Google product, there's a chance we're currently experiencing a temporary problem. You can check for outages and downtime on the Google Workspace Status …",
+          "link": "https://support.google.com/?hl=en"
+        },
+        {
+          "title": "Download and install Google Chrome",
+          "snippet": "How to install Chrome Important: Before you download, you can check if Chrome supports your operating system and other system requirements.",
+          "link": "https://support.google.com/chrome/answer/95346?hl=en&co=GENIE.Platform=Desktop"
+        },
+        {
+          "title": "ดาวน์โหลดและติดตั้ง Google Chrome",
+          "snippet": "ดาวน์โหลด Google Chrome ดาวน์โหลด Chrome สำหรับโทรศัพท์และแท็บเล็ต Android คุณสามารถใช้ Chrome ในโทรศัพท์และแท็บเล็ตที่ใช้ Android 10 ขึ้นไป ติดตั้ง Chrome …",
+          "link": "https://support.google.com/chrome/answer/95346?hl=th&co=GENIE.Platform=Android"
+        },
+        {
+          "title": "Search by latitude & longitude in Google Maps",
+          "snippet": "On your computer, open Google Maps. On the map, right-click the place or area. A pop-up window appears. At the top, you can find your latitude and longitude in decimal format. To copy the …",
+          "link": "https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform=Desktop"
+        },
+        {
+          "title": "Google rejected all my domain emails - Gmail Community",
+          "snippet": "Thanks for your help . I applied spf and dmarc and just gmail rejected all outbound also i checked spam rate on postmaster i found 0.0% i am sending all outbound mails from ofice365 ip so i …",
+          "link": "https://support.google.com/mail/thread/251607698/google-rejected-all-my-domain-emails?hl=en"
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-09-20T11:25:34.785321",
+      "query": "SpecFlow Rapid Product Launches",
+      "topic": "SpecFlow Rapid Product Launches",
+      "results_count": 5,
+      "results": [
+        {
+          "title": "Accelerating Product Launches with Automated Embedded QA",
+          "snippet": "16 Jul 2025 — Discover how automated embedded QA streamlines development, boosts product quality, and shortens release cycles, helping you launch products ...",
+          "link": "https://www.indium.tech/blog/automated-embedded-qa-product-launches/"
+        },
+        {
+          "title": "SpecFlow Tutorial for Automation Testing",
+          "snippet": "30 Sept 2022 — This guide will deep dive into the incorporation of BDD approaches while writing tests using SpecFlow automated testing.",
+          "link": "https://www.browserstack.com/guide/specflow-automated-testing-tutorial"
+        },
+        {
+          "title": "SpecFlow - Quick Guide",
+          "snippet": "SpecFlow is an open-source test automation tool built on BDD model. It is mostly used to build automation tests for projects built in .NET.",
+          "link": "https://www.tutorialspoint.com/specflow/specflow_quick_guide.htm"
+        },
+        {
+          "title": "SpecFlow API automation tests running slowly",
+          "snippet": "I am running circa 500 API automation tests using SpecFlow with CSharp (and Visual Studio). Sometimes the API tests run very rapidly (taking the expected few ...",
+          "link": "https://stackoverflow.com/questions/74784579/specflow-api-automation-tests-running-slowly"
+        },
+        {
+          "title": "10 Popular Test Automation Frameworks In 2025 | GAT",
+          "snippet": "SpecFlow is a behavior-driven development (BDD) framework that allows teams to define, manage, and execute automated acceptance tests using natural language ...",
+          "link": "https://www.globalapptesting.com/blog/automation-testing-framework"
         }
       ]
     }
   ],
-  "last_updated": "2025-09-19T16:09:44.199506",
+  "last_updated": "2025-09-20T11:25:34.785321",
   "description": "Web search results storage for CrewAI knowledge system"
 }

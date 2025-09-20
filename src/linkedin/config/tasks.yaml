@@ -1,35 +1,59 @@
 task_search:
   description: |
-    Make a detailed report on the latest rising skills in {topic} space. 
-    Your final answer MUST be a list of at least 5 exciting new {topic} skills
-    in the format of bullet points.
+    Research {topic} to discover compelling content angles and real-world impact stories.
+    Focus on finding:
+    - Recent adoption trends and success metrics
+    - Common challenges developers face with {topic}
+    - Business impact and productivity improvements
+    - Developer experience stories (both positive and negative)
+    - Industry use cases and practical applications
+    - Career opportunities and skill development aspects
+    
+    Your goal is to identify content angles that would resonate with senior developers,
+    not just technical features. Look for the "why this matters" and "how this changes things" stories.
+    
+    Your final answer MUST be a curated list of 5-7 compelling content angles about {topic}
+    that focus on developer experience, business impact, and career relevance.
   expected_output: |
-    A comprehensive list of at least 10 exciting new {topic} skills with brief explanations 
-    of why they are trending and in demand, formatted as bullet points.
+    A curated list of 5-7 compelling content angles about {topic}, each with:
+    - The angle/story approach (e.g., "How {topic} changed our deployment process")
+    - Key supporting data or trends that make this angle relevant
+    - Target audience appeal (why senior developers would care)
+    - Potential personal experience hooks for the writer
   agent: coach
 
 task_research:
   description: |
-    IMPORTANT: You MUST select EXACTLY ONE skill from the coach's research list about {topic} skills.
-    Pick the one that you find most interesting or promising for a deep dive related to a senior .NET Developer and DevOps engineer.
-    Try to avoid political topics or topics about ethics, diversity, or social issues.
+    CONTENT ANGLE SELECTION: Choose the MOST compelling content angle from the coach's research
+    about {topic}. Select based on:
+    - Relevance to senior .NET Developer and DevOps engineer experience
+    - Availability of supporting data and real-world examples
+    - Potential for personal, experience-driven storytelling
+    - Career and business impact potential
     
-    COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen skill:
-    - Search for recent trends, statistics, and market demand data
-    - Find real job postings, salary ranges, and employment growth projections
-    - Research current industry examples, case studies, and success stories
-    - Look for expert opinions, predictions, and future outlook
-    - Find specific tools, technologies, and certifications related to this skill
-    - Research career paths and progression opportunities
-    - Search for challenges and opportunities in this field
+    TARGETED RESEARCH PHASE: Use your search_tool to gather supporting evidence for this angle:
+    - Real-world implementation examples and case studies
+    - Developer productivity metrics and business impact data
+    - Common challenges and how teams overcome them
+    - Before/after scenarios and transformation stories
+    - Industry adoption trends and future projections
+    - Expert opinions and developer community feedback
+    - Specific tools, workflows, and best practices
     
-    RESEARCH OUTPUT: Compile all your research findings into a comprehensive research document.
-    Include all data, statistics, sources, and insights you've gathered.
+    STORYTELLING SUPPORT: Find narrative elements that support personal experience storytelling:
+    - Team transformation stories
+    - Learning curve experiences
+    - Problem-solution scenarios
+    - "Aha moments" and breakthrough insights
     
-    Base ALL content on REAL DATA from your search results with proper source attribution.
+    Base ALL findings on REAL DATA with proper source attribution.
   expected_output: |
-    A comprehensive research document with all findings, data, statistics, case studies, 
-    and sources about EXACTLY ONE {topic} skill.
+    A comprehensive research package for ONE compelling content angle about {topic}, including:
+    - The chosen content angle and why it was selected
+    - Supporting data, statistics, and real-world examples
+    - Narrative elements for personal experience storytelling
+    - Quotes, case studies, and expert insights
+    - Sources and attribution for all claims
   agent: researcher
   context:
     - task_search
@@ -46,7 +70,7 @@ task_blog:
     an introduction, body, and conclusion. Keep the tone reflective and thoughtful, while 
     still being accessible and engaging for a professional audience.
   expected_output: |
-    - A blog post between 800 and 1,500 words
+    - A blog post between 1200 and 2000 words
     - A clear, professional headline (no strict character limit)
     - A reflective and personal tone, grounded in research data and real-world experience
     - Concrete examples, statistics, and insights from the research
