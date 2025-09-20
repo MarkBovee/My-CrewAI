@@ -33,6 +33,7 @@ define expectations, plan steps, implement clean code, and verify results.
 ### 3. Tasks (Implementation Plan)
 - Break the plan into concrete coding tasks.
 - Map each task directly to the expected outcome.
+- Use the vscode tasks option for github copilot if available to show the breakdown and progress.
 
 ### 4. Implement (Code / Logic)
 - Write full working code with no placeholders.

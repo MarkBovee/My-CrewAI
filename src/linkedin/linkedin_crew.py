@@ -5,6 +5,8 @@ from .tools.search_tool import search_tool
 from .helpers.ollama_helper import LLMHelper
 from .helpers.knowledge_helper import KnowledgeHelper, check_topic_similarity, store_article_completion
 from typing import List
+import warnings
+import inspect
 
 @CrewBase
 class LinkedInCrew():
@@ -12,6 +14,8 @@ class LinkedInCrew():
     
     A multi-agent crew designed to research trending skills and create engaging 
     LinkedIn content following CrewAI best practices.
+    
+    IMPORTANT: Direct crew execution is deprecated. Use CreateNewPostFlow instead.
     """
 
     agents: List[BaseAgent]
@@ -25,6 +29,47 @@ class LinkedInCrew():
         super().__init__()
         self.llm_helper = LLMHelper()
         self.knowledge_helper = KnowledgeHelper()
+        self._flow_execution = False  # Track if executed via flow
+
+    def _enable_flow_execution(self):
+        """Enable flow execution mode (called by flows)"""
+        self._flow_execution = True
+
+    def _check_execution_mode(self):
+        """Check if this is being called directly (not via flow)"""
+        frame = inspect.currentframe()
+        try:
+            # Get caller information
+            caller_frame = frame.f_back.f_back  # Go back two frames
+            caller_filename = caller_frame.f_code.co_filename
+            caller_function = caller_frame.f_code.co_name
+            
+            # Check if caller is a flow or approved execution method
+            is_flow_execution = (
+                'flow' in caller_filename.lower() or 
+                caller_function in ['generate_content', 'run_via_flow'] or
+                self._flow_execution
+            )
+            
+            if not is_flow_execution:
+                warnings.warn(
+                    "Direct crew execution is deprecated. Use CreateNewPostFlow for proper execution.",
+                    DeprecationWarning,
+                    stacklevel=3
+                )
+                print("\n⚠️  SAFEGUARD WARNING: Direct crew execution detected!")
+                print("✅ Recommended: Use CreateNewPostFlow for proper execution:")
+                print("   from src.linkedin.flows.create_new_post_flow import CreateNewPostFlow")
+                print("   flow = CreateNewPostFlow()")
+                print("   flow.state.topic = 'your topic'")
+                print("   result = flow.kickoff()")
+                print("")
+                
+                # Allow execution but with warning
+                print("🔄 Proceeding with direct execution (not recommended)...\n")
+        
+        finally:
+            del frame
 
     @before_kickoff
     def prepare_inputs(self, inputs):
@@ -272,6 +317,10 @@ class LinkedInCrew():
     @crew
     def crew(self) -> Crew:
         """Creates the LinkedIn Content Creation Crew following CrewAI best practices"""
+        
+        # Execute safeguard check
+        self._check_execution_mode()
+        
         # Create knowledge sources for the crew using proper file-based sources
         knowledge_sources = []
         

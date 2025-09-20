@@ -44,6 +44,9 @@ class CreateNewPostFlow(Flow[PostState]):
         """Generate social media content using the CrewAI crew"""
         print(f"📝 Generating social media content for: {topic_data['topic']}")
         
+        # Enable flow execution mode in the crew
+        self.crew_instance._enable_flow_execution()
+        
         # Get the crew and execute it
         crew = self.crew_instance.crew()
         
