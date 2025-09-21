@@ -3,6 +3,9 @@
 .env.local
 .env.*.local
 
+# Git-crypt keys
+git-crypt-key.key
+
 # Python bytecode and cache
 __pycache__/
 *.py[cod]
