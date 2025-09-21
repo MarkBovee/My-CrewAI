@@ -266,7 +266,7 @@ class LLMHelper:
     def get_optimal_context_length(self, model_name: str) -> int:
         """
         Get optimal context length based on model size and available memory
-        Optimized for 12GB GPU memory utilization
+        Optimized for memory-constrained systems
 
         Args:
             model_name: Name of the model
@@ -274,24 +274,28 @@ class LLMHelper:
         Returns:
             Optimal context length
         """
-        # Model-specific context optimizations
+        # Model-specific context optimizations for memory efficiency
         context_map = {
-            # Small models (1.7B and below)
-            'qwen2.5:0.5b': DEFAULT_CONTEXT_LENGTH,
-            'qwen2.5:1.5b': DEFAULT_CONTEXT_LENGTH,
-            'qwen2.5:3b': DEFAULT_CONTEXT_LENGTH,
-            'qwen3:1.7b': DEFAULT_CONTEXT_LENGTH,
+            # Small models (1.7B and below) - use smaller context to prevent OOM
+            'qwen2.5:0.5b': 4096,
+            'qwen2.5:1.5b': 4096,
+            'qwen2.5:3b': 6144,
+            'qwen3:1.7b': 4096,  # Reduced from 14746 to prevent OOM
+            'phi3.5:3.8b': 4096,
+            'llama3.2:1b': 4096,
+            'gemma2:2b': 4096,
             # Medium models (7B range)
-            'openhermes:v2.5': DEFAULT_CONTEXT_LENGTH,
-            'llama3.2:3b': DEFAULT_CONTEXT_LENGTH,
-            'llama3.1:7b': DEFAULT_CONTEXT_LENGTH,
-            # Larger models
-            'llama3.1:13b': DEFAULT_CONTEXT_LENGTH,
-            'llama3.1:70b': DEFAULT_CONTEXT_LENGTH,
+            'openhermes:v2.5': 6144,
+            'mistral:7b': 6144,
+            'llama3.2:3b': 6144,
+            'llama3.1:7b': 6144,
+            # Larger models - keep higher context but still reasonable
+            'llama3.1:13b': 8192,
+            'llama3.1:70b': 8192,
         }
 
-        # Get context length for specific model, with fallback to default
-        return context_map.get(model_name, DEFAULT_CONTEXT_LENGTH)
+        # Get context length for specific model, with fallback to safe default
+        return context_map.get(model_name, 4096)
 
     def get_optimal_thread_count(self) -> int:
         """

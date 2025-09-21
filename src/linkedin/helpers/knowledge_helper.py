@@ -125,40 +125,41 @@ class KnowledgeHelper:
             print(f"❌ Error storing web search results: {e}")
             return False
     
-    def get_web_results_knowledge_source(self) -> StringKnowledgeSource:
+    def get_web_results_knowledge_source(self) -> JSONKnowledgeSource:
         """
-        Create a StringKnowledgeSource from stored web search results (no embeddings required)
+        Create a JSONKnowledgeSource from stored web search results for vector-based retrieval
         
         Returns:
-            StringKnowledgeSource for web search results
+            JSONKnowledgeSource for web search results with vector embeddings
         """
         try:
-            # Load and format web search results as string content
-            data = self._load_json_file(self.web_results_file)
-            
-            content_parts = ["# Web Search Results Knowledge Base\n"]
-            
-            for search in data.get('searches', []):
-                content_parts.append(f"## Search: {search.get('query', 'Unknown')}")
-                content_parts.append(f"Date: {search.get('timestamp', 'Unknown')}")
-                content_parts.append(f"Results Count: {search.get('results_count', 0)}\n")
-                
-                for i, result in enumerate(search.get('results', []), 1):
-                    content_parts.append(f"### Result {i}: {result.get('title', 'Untitled')}")
-                    content_parts.append(f"URL: {result.get('link', 'No URL')}")
-                    content_parts.append(f"Content: {result.get('snippet', 'No content')}\n")
-            
-            content = "\n".join(content_parts)
-            
-            return StringKnowledgeSource(
-                content=content,
-                metadata={"source": "web_search_results", "type": "search_data"}
+            # Use relative path from knowledge directory
+            # CrewAI expects files in /knowledge directory with relative paths
+            return JSONKnowledgeSource(
+                file_paths=["web_search_results.json"],  # Relative to knowledge directory
+                metadata={
+                    "source": "web_search_results", 
+                    "type": "search_data",
+                    "category": "web_search",
+                    "topic": "various",  # Will be updated based on content
+                    "recency": self._get_knowledge_recency("web_search_results.json"),
+                    "quality_score": self._calculate_knowledge_quality("web_search_results.json")
+                }
             )
         except Exception as e:
             print(f"⚠️ Warning: Could not create web results knowledge source: {e}")
-            return StringKnowledgeSource(
-                content="# Web Search Results\n\nNo web search data available.",
-                metadata={"source": "web_search_results", "type": "search_data", "error": str(e)}
+            # Fallback to empty knowledge source
+            return JSONKnowledgeSource(
+                file_paths=[],  # Empty list as fallback
+                metadata={
+                    "source": "web_search_results", 
+                    "type": "search_data", 
+                    "error": str(e),
+                    "category": "web_search",
+                    "topic": "various",
+                    "recency": "unknown",
+                    "quality_score": 0
+                }
             )
     
     def store_article_memory(self, topic: str, article_path: str, post_path: str = "") -> bool:
@@ -290,56 +291,32 @@ class KnowledgeHelper:
                 'recommendation': 'Error checking coverage - proceeding with caution'
             }
     
-    def get_article_memory_knowledge_source(self) -> StringKnowledgeSource:
+    def get_article_memory_knowledge_source(self) -> JSONKnowledgeSource:
         """
-        Create a StringKnowledgeSource from article memory (no embeddings required)
+        Create a JSONKnowledgeSource from article memory for vector-based retrieval
         
         Returns:
-            StringKnowledgeSource for article memory
+            JSONKnowledgeSource for article memory with vector embeddings
         """
         try:
-            # Load and format article memory as string content
-            data = self._load_json_file(self.article_memory_file)
-            
-            content_parts = ["# Article Memory Knowledge Base\n"]
-            content_parts.append(f"Last Updated: {data.get('last_updated', 'Unknown')}")
-            content_parts.append(f"Total Articles: {len(data.get('articles', []))}")
-            content_parts.append(f"Topics Covered: {len(data.get('topics_covered', []))}\n")
-            
-            # Add covered topics
-            if data.get('topics_covered'):
-                content_parts.append("## Previously Covered Topics:")
-                for topic in data.get('topics_covered', []):
-                    content_parts.append(f"- {topic}")
-                content_parts.append("")
-            
-            # Add article details
-            if data.get('articles'):
-                content_parts.append("## Article History:")
-                for i, article in enumerate(data.get('articles', []), 1):
-                    content_parts.append(f"### Article {i}: {article.get('topic', 'Unknown Topic')}")
-                    content_parts.append(f"Date: {article.get('timestamp', 'Unknown')}")
-                    content_parts.append(f"Status: {article.get('status', 'Unknown')}")
-                    content_parts.append(f"Keywords: {', '.join(article.get('topic_keywords', []))}")
-                    content_parts.append("")
-            
-            content = "\n".join(content_parts)
-            
-            return StringKnowledgeSource(
-                content=content,
+            # Use relative path from knowledge directory
+            # CrewAI expects files in /knowledge directory with relative paths
+            return JSONKnowledgeSource(
+                file_paths=["article_memory.json"],  # Relative to knowledge directory
                 metadata={"source": "article_memory", "type": "article_history"}
             )
         except Exception as e:
             print(f"⚠️ Warning: Could not create article memory knowledge source: {e}")
-            return StringKnowledgeSource(
-                content="# Article Memory\n\nNo article history available.",
+            # Fallback to empty knowledge source
+            return JSONKnowledgeSource(
+                file_paths=[],  # Empty list as fallback
                 metadata={"source": "article_memory", "type": "article_history", "error": str(e)}
             )
     
-    def create_search_results_string_knowledge(self, search_query: str, results: List[Dict[str, Any]], 
-                                             task_topic: str = "") -> StringKnowledgeSource:
+    def create_search_results_json_knowledge(self, search_query: str, results: List[Dict[str, Any]], 
+                                             task_topic: str = "") -> JSONKnowledgeSource:
         """
-        Create a StringKnowledgeSource from current search results for immediate use
+        Create a JSONKnowledgeSource from current search results for immediate vector-based use
         
         Args:
             search_query: The search query used
@@ -347,33 +324,60 @@ class KnowledgeHelper:
             task_topic: Topic being researched
             
         Returns:
-            StringKnowledgeSource with formatted search results
+            JSONKnowledgeSource with formatted search results as JSON
         """
-        # Format search results as readable text
-        content = f"Search Results for: {search_query}\n"
-        content += f"Topic: {task_topic}\n"
-        content += f"Timestamp: {datetime.now().isoformat()}\n"
-        content += f"Results Count: {len(results)}\n\n"
+        # Create a temporary JSON file for this search session
+        import tempfile
+        import json
         
-        for i, result in enumerate(results, 1):
-            content += f"Result {i}:\n"
-            content += f"Title: {result.get('title', 'No title')}\n"
-            content += f"Link: {result.get('link', 'No link')}\n"
-            content += f"Snippet: {result.get('snippet', 'No snippet')}\n"
-            content += "-" * 50 + "\n\n"
+        # Format search results as JSON structure
+        search_data = {
+            "search_query": search_query,
+            "task_topic": task_topic,
+            "timestamp": datetime.now().isoformat(),
+            "results_count": len(results),
+            "results": results
+        }
         
-        return StringKnowledgeSource(content=content)
+        # Create temporary file
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            json.dump(search_data, f, indent=2, ensure_ascii=False)
+            temp_file_path = f.name
+        
+        return JSONKnowledgeSource(
+            file_paths=[temp_file_path],
+            metadata={"source": "current_search", "type": "search_results", "query": search_query}
+        )
+    
+    def get_categorized_knowledge_sources(self) -> Dict[str, List[JSONKnowledgeSource]]:
+        """
+        Get knowledge sources organized by categories
+        
+        Returns:
+            Dictionary with knowledge sources grouped by category
+        """
+        sources = {
+            "web_search": [self.get_web_results_knowledge_source()],
+            "article_memory": [self.get_article_memory_knowledge_source()]
+        }
+        return sources
     
     def get_knowledge_stats(self) -> Dict[str, Any]:
         """
-        Get statistics about stored knowledge
+        Get statistics about stored knowledge including categorization
         
         Returns:
-            Dictionary with knowledge statistics
+            Dictionary with knowledge statistics and categorization
         """
         try:
             web_data = self._load_json_file(self.web_results_file)
             article_data = self._load_json_file(self.article_memory_file)
+            
+            # Get categorization info
+            web_recency = self._get_knowledge_recency("web_search_results.json")
+            web_quality = self._calculate_knowledge_quality("web_search_results.json")
+            article_recency = self._get_knowledge_recency("article_memory.json")
+            article_quality = self._calculate_knowledge_quality("article_memory.json")
             
             stats = {
                 'web_searches_stored': len(web_data.get('searches', [])),
@@ -384,7 +388,22 @@ class KnowledgeHelper:
                     'article_memory': self.article_memory_file.exists()
                 },
                 'last_web_search': web_data.get('last_updated', 'Never'),
-                'last_article': article_data.get('last_updated', 'Never')
+                'last_article': article_data.get('last_updated', 'Never'),
+                'categorization': {
+                    'web_search': {
+                        'category': 'web_search',
+                        'recency': web_recency,
+                        'quality_score': round(web_quality, 2),
+                        'topic': 'various'
+                    },
+                    'article_memory': {
+                        'category': 'article_memory', 
+                        'recency': article_recency,
+                        'quality_score': round(article_quality, 2),
+                        'topic': 'content_history'
+                    }
+                },
+                'overall_quality_score': round((web_quality + article_quality) / 2, 2)
             }
             
             return stats
@@ -435,23 +454,78 @@ class KnowledgeHelper:
             print(f"❌ Error resetting web search results: {e}")
             return False
     
-    def reset_all_knowledge(self) -> bool:
+    def _get_knowledge_recency(self, filename: str) -> str:
         """
-        Reset all knowledge data (article memory and web search results)
+        Calculate recency score for a knowledge file
         
+        Args:
+            filename: Name of the knowledge file
+            
         Returns:
-            True if all resets successful
+            Recency category: 'very_recent', 'recent', 'moderate', 'old', 'unknown'
         """
-        print("🔄 Resetting ALL knowledge data...")
-        article_reset = self.reset_article_memory()
-        web_reset = self.reset_web_search_results()
+        try:
+            file_path = self.knowledge_dir / filename
+            if not file_path.exists():
+                return "unknown"
+            
+            # Get file modification time
+            import time
+            file_age_hours = (time.time() - file_path.stat().st_mtime) / 3600
+            
+            if file_age_hours < 1:
+                return "very_recent"  # Less than 1 hour
+            elif file_age_hours < 24:
+                return "recent"  # Less than 1 day
+            elif file_age_hours < 168:  # 7 days
+                return "moderate"  # Less than 1 week
+            else:
+                return "old"  # Older than 1 week
+                
+        except Exception:
+            return "unknown"
+    
+    def _calculate_knowledge_quality(self, filename: str) -> float:
+        """
+        Calculate quality score for a knowledge file (0.0 to 1.0)
         
-        if article_reset and web_reset:
-            print("✅ All knowledge data reset successfully!")
-            return True
-        else:
-            print("⚠️ Some reset operations failed")
-            return False
+        Args:
+            filename: Name of the knowledge file
+            
+        Returns:
+            Quality score between 0.0 and 1.0
+        """
+        try:
+            data = self._load_json_file(self.knowledge_dir / filename)
+            if not data:
+                return 0.0
+            
+            if filename == "web_search_results.json":
+                # Quality based on number of searches and total results
+                searches = data.get('searches', [])
+                if not searches:
+                    return 0.0
+                
+                total_results = sum(search.get('results_count', 0) for search in searches)
+                # Score: 0.5 base + up to 0.5 based on volume (max at 100 results)
+                volume_score = min(total_results / 100.0, 1.0) * 0.5
+                return 0.5 + volume_score
+                
+            elif filename == "article_memory.json":
+                # Quality based on number of completed articles
+                articles = data.get('articles', [])
+                completed_articles = [a for a in articles if a.get('status') == 'completed']
+                
+                if not completed_articles:
+                    return 0.0
+                
+                # Score: up to 1.0 based on number of articles (max at 20 articles)
+                return min(len(completed_articles) / 20.0, 1.0)
+            
+            return 0.5  # Default quality score
+            
+        except Exception:
+            return 0.0
 
 
 # Convenience functions

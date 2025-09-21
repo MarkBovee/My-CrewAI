@@ -13,6 +13,41 @@ Welcome to the CrewAI Flow Control Center, powered by [crewAI](https://crewai.co
 - ⚙️ **Modular Architecture**: Organized helpers and tools
 - 🛠️ **Configuration Management**: Comprehensive utilities for managing models and settings
 
+## ⚠️ Knowledge Sources - DISABLED
+
+**Important**: Vector-based knowledge sources have been **permanently disabled** in this project due to GPU memory exhaustion issues.
+
+### Why Knowledge Sources Were Removed
+
+CrewAI's knowledge sources feature uses vector embeddings (via models like `mxbai-embed-large`) that consume significant GPU memory. In our testing:
+
+- **Problem**: Knowledge sources + Ollama embeddings consumed all available GPU memory
+- **Result**: Agent models (qwen3:1.7b) failed with "out of memory" errors during execution
+- **Impact**: Complete system failure when trying to run multi-agent workflows
+
+### Alternative Approach
+
+Instead of vector knowledge sources, agents now rely on:
+
+- **DuckDuckGo Search Tool**: Real-time web search for current information
+- **ScrapeWebsiteTool**: Direct website content extraction
+- **File-based Context**: Task outputs passed between agents via flow state
+
+This approach provides:
+
+- ✅ **Zero GPU memory overhead** for knowledge storage
+- ✅ **Real-time information** via web search
+- ✅ **Scalable execution** without memory constraints
+- ✅ **Reliable performance** on resource-constrained systems
+
+### Future Considerations
+
+If you have access to systems with more GPU memory (16GB+ dedicated GPU), you could re-enable knowledge sources by:
+
+1. Modifying `src/linkedin/crew.py` to include knowledge sources configuration
+2. Ensuring adequate GPU memory for both embeddings and agent models
+3. Testing with your specific hardware configuration
+
 ## Project Structure
 
 ```

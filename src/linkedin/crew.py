@@ -4,7 +4,6 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import FileReadTool, ScrapeWebsiteTool, CodeInterpreterTool, DirectoryReadTool
 from .tools.search_tool import search_tool
 from .helpers.llm_helper import LLMHelper
-from .helpers.knowledge_helper import KnowledgeHelper, check_topic_similarity, store_article_completion
 from typing import List
 import warnings
 import inspect
@@ -12,11 +11,12 @@ import inspect
 @CrewBase
 class LinkedInCrew():
     """LinkedIn Content Creation Crew
-    
-    A multi-agent crew designed to research trending skills and create engaging 
+
+    A multi-agent crew designed to research trending skills and create engaging
     LinkedIn content following CrewAI best practices.
-    
-    IMPORTANT: Direct crew execution is deprecated. Use CreateNewPostFlow instead.
+
+    IMPORTANT: Knowledge sources have been REMOVED due to GPU memory exhaustion.
+    Agents rely on search_tool for information gathering instead.
     """
 
     agents: List[BaseAgent]
@@ -29,7 +29,6 @@ class LinkedInCrew():
     def __init__(self):
         super().__init__()
         self.llm_helper = LLMHelper()
-        self.knowledge_helper = KnowledgeHelper()
         self._flow_execution = False  # Track if executed via flow
 
     def _enable_flow_execution(self):
@@ -44,14 +43,14 @@ class LinkedInCrew():
             caller_frame = frame.f_back.f_back  # Go back two frames
             caller_filename = caller_frame.f_code.co_filename
             caller_function = caller_frame.f_code.co_name
-            
+
             # Check if caller is a flow or approved execution method
             is_flow_execution = (
-                'flow' in caller_filename.lower() or 
+                'flow' in caller_filename.lower() or
                 caller_function in ['generate_content', 'run_via_flow'] or
                 self._flow_execution
             )
-            
+
             if not is_flow_execution:
                 warnings.warn(
                     "Direct crew execution is deprecated. Use CreateNewPostFlow for proper execution.",
@@ -65,10 +64,10 @@ class LinkedInCrew():
                 print("   flow.state.topic = 'your topic'")
                 print("   result = flow.kickoff()")
                 print("")
-                
+
                 # Allow execution but with warning
                 print("🔄 Proceeding with direct execution (not recommended)...\n")
-        
+
         finally:
             del frame
 
@@ -79,25 +78,43 @@ class LinkedInCrew():
         if 'current_year' not in inputs:
             import datetime
             inputs['current_year'] = datetime.datetime.now().year
-        
-        # Check if topic has been covered before
-        topic = inputs.get('topic', 'general tech topic')
-        coverage_check = check_topic_similarity(topic)
-        
+
         print(f"🚀 Starting LinkedIn crew with inputs: {inputs}")
-        print(f"📚 Topic coverage check: {coverage_check['recommendation']}")
-        
-        if coverage_check['covered'] and coverage_check['similar_articles']:
-            print("⚠️ Similar topics found:")
-            for article in coverage_check['similar_articles']:
-                print(f"  - {article['topic']} (similarity: {article['similarity']})")
-        
+        print("📚 Knowledge sources: DISABLED (GPU memory optimization)")
+        print("🔧 Using search_tool for information gathering")
+
         return inputs
 
     @after_kickoff
     def process_output(self, result):
         """Process the crew output - attach task outputs to result for flow persistence"""
         from datetime import datetime
+
+        # Store completion info - handle different result types
+        try:
+            if hasattr(result, 'inputs') and result.inputs:
+                topic = result.inputs.get('topic', 'unknown')
+            else:
+                topic = 'unknown'
+        except:
+            topic = 'unknown'
+
+        completion_data = {
+            "topic": topic,
+            "completed_at": datetime.now().isoformat(),
+            "task_count": len(result.tasks_output) if hasattr(result, 'tasks_output') else 0,
+            "has_knowledge_sources": False  # Knowledge sources disabled
+        }
+
+        print(f"✅ Crew execution completed: {completion_data}")
+
+        # Force cleanup after execution to free memory
+        try:
+            self.llm_helper.force_cleanup_memory()
+        except Exception as e:
+            print(f"⚠️ Warning: Could not perform memory cleanup: {e}")
+
+        return result
 
         try:
             # Attach task outputs to result for flow to access
@@ -191,25 +208,22 @@ class LinkedInCrew():
     @crew
     def crew(self) -> Crew:
         """Creates the LinkedIn Content Creation Crew following CrewAI best practices"""
-        
+
         # Execute safeguard check
         self._check_execution_mode()
-        
-        # CLEAN SOLUTION: Avoid knowledge_sources entirely to prevent API errors
-        # Instead, agents will access data through search_tool which reads the same files
-        print("📚 Knowledge data accessible via search_tool (no API required)")
-        print("🔍 Agents can search web_search_results.json and article_memory.json directly")
-        
+
+        print("📚 Knowledge sources: PERMANENTLY DISABLED (GPU memory optimization)")
+        print("� Agents rely on search_tool for information gathering")
+
         return Crew(
             agents=self.agents,  # Automatically collected by @agent decorator
             tasks=self.tasks,    # Automatically collected by @task decorator
             process=Process.sequential,
             verbose=True,
             max_execution_time=None
-            # Note: No knowledge_sources to avoid any embedding/API requirements
-            # All data accessible via search_tool which reads the same JSON files
+            # Knowledge sources and embeddings REMOVED due to GPU memory exhaustion
             # memory=True,  # Enable memory for better context retention
-            # cache=True,   # Enable caching for performance 
+            # cache=True,   # Enable caching for performance
             # planning=True,  # Enable planning feature
             # output_log_file="crew_logs.json"  # Log execution details
         )

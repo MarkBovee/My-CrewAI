@@ -2,7 +2,9 @@
 Create New Post Flow using CrewAI Flow Architecture
 Generates social media posts using multi-agent collaboration
 """
+
 import os
+import tempfile
 from datetime import datetime
 from pydantic import BaseModel
 from crewai.flow.flow import Flow, listen, start
@@ -18,6 +20,8 @@ class PostState(BaseModel):
     draft_post: str = ""
     final_post: str = ""
     output_files: dict = {}  # Store paths to all generated files
+    temp_dir: str = ""  # Temporary directory for intermediate files
+    intermediate_files: dict = {}  # Store paths to intermediate task outputs
 
 
 class CreateNewPostFlow(Flow[PostState]):
@@ -35,6 +39,12 @@ class CreateNewPostFlow(Flow[PostState]):
         print("🚀 Starting Create New Post Flow")
         print(f"📋 Topic: {self.state.topic}")
         print("=" * 60)
+        
+        # Create temporary directory for intermediate files to reduce memory usage
+        self.state.temp_dir = tempfile.mkdtemp(prefix="crewai_flow_")
+        self.state.intermediate_files = {}
+        
+        print(f"📁 Created temporary directory: {self.state.temp_dir}")
         
         # Return the topic to trigger the next step
         return {"topic": self.state.topic}
@@ -57,20 +67,33 @@ class CreateNewPostFlow(Flow[PostState]):
             "current_year": current_year
         })
         
-        # Extract task outputs for file creation
+        # Extract and save task outputs to intermediate files to reduce memory usage
         task_outputs = {}
         if hasattr(result, 'tasks_output') and result.tasks_output:
             for idx, task_out in enumerate(result.tasks_output):
                 try:
                     content = task_out.raw if hasattr(task_out, 'raw') else str(task_out)
-                    task_outputs[idx] = content
-                except Exception:
+                    
+                    # Save intermediate content to file to reduce memory usage
+                    temp_file = os.path.join(self.state.temp_dir, f"task_{idx}_output.txt")
+                    with open(temp_file, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    
+                    # Store file path instead of content
+                    task_outputs[idx] = temp_file
+                    self.state.intermediate_files[f"task_{idx}"] = temp_file
+                    
+                    print(f"💾 Saved task {idx} output to: {temp_file}")
+                    
+                except Exception as e:
+                    print(f"⚠️ Warning: Could not save task {idx} output: {e}")
                     task_outputs[idx] = str(task_out)
         
-        # Store task outputs and final post
+        # Store final post content
         self.state.final_post = result.raw if hasattr(result, 'raw') else str(result)
         
         print("✅ Content generation completed!")
+        print(f"📊 Saved {len(task_outputs)} intermediate task outputs to disk")
         
         return {
             "content": self.state.final_post,
@@ -187,7 +210,7 @@ class CreateNewPostFlow(Flow[PostState]):
 
     @listen(save_all_content)
     def flow_complete(self, result_data):
-        """Final step to display completion status"""
+        """Final step to display completion status and cleanup"""
         print("\n" + "=" * 60)
         print("🎉 CREATE NEW POST FLOW COMPLETED SUCCESSFULLY!")
         print("=" * 60)
@@ -203,8 +226,30 @@ class CreateNewPostFlow(Flow[PostState]):
         print(result_data['linkedin_content'])
         print("-" * 40)
         
+        # Clean up temporary files to free memory
+        try:
+            import shutil
+            if self.state.temp_dir and os.path.exists(self.state.temp_dir):
+                shutil.rmtree(self.state.temp_dir)
+                print(f"🧹 Cleaned up temporary directory: {self.state.temp_dir}")
+        except Exception as e:
+            print(f"⚠️ Warning: Could not clean up temporary directory: {e}")
+        
+        # Memory optimization: Clean up LLM models after flow completion
+        try:
+            from src.linkedin.helpers.llm_helper import LLMHelper
+            llm_helper = LLMHelper()
+            cleanup_success = llm_helper.force_cleanup_memory()
+            if cleanup_success:
+                print("🧠 LLM memory cleanup completed - GPU memory freed!")
+            else:
+                print("⚠️ LLM memory cleanup completed with warnings")
+        except Exception as e:
+            print(f"⚠️ Could not perform LLM memory cleanup: {e}")
+        
         print(f"\n🎯 FLOW COMPLETED SUCCESSFULLY!")
         print(f"💼 All content ready in output/ directories")
+        print(f"🧠 Memory optimized: intermediate files and LLM models cleaned up")
         
         return result_data
         return self.state.final_post
@@ -221,132 +266,27 @@ def run_create_new_post_flow(topic: str = "Latest AI, Software Development"):
     print(f"📋 Topic: {topic}")
     print("=" * 60)
     
-    # Create the LinkedIn crew directly (bypass Flow for now to avoid async issues)
-    from src.linkedin.crew import LinkedInCrew
+    # Memory optimization: Clean up any loaded models before starting
+    print("🧠 Optimizing memory before flow execution...")
+    try:
+        from src.linkedin.helpers.llm_helper import LLMHelper
+        llm_helper = LLMHelper()
+        cleanup_success = llm_helper.force_cleanup_memory()
+        if cleanup_success:
+            print("✅ Memory cleanup completed - GPU memory freed!")
+        else:
+            print("⚠️ Memory cleanup completed with warnings")
+    except Exception as e:
+        print(f"⚠️ Could not perform memory cleanup: {e}")
     
-    print("📝 Initializing crew...")
-    crew_instance = LinkedInCrew()
-    crew = crew_instance.crew()
+    # Initialize and run the Flow
+    flow = CreateNewPostFlow()
     
-    print(f"🚀 Executing crew for topic: {topic}")
+    print("🚀 Executing Flow...")
+    result = flow.kickoff(inputs={"topic": topic})
     
-    # Execute the crew directly with inputs
-    current_year = datetime.now().year
-    result = crew.kickoff(inputs={
-        "topic": topic,
-        "current_year": current_year
-    })
-    
-    # Create output directories
-    output_dir = "output"
-    articles_dir = os.path.join(output_dir, "articles")
-    blogs_dir = os.path.join(output_dir, "blogs")
-    posts_dir = os.path.join(output_dir, "posts")
-    os.makedirs(articles_dir, exist_ok=True)
-    os.makedirs(blogs_dir, exist_ok=True)
-    os.makedirs(posts_dir, exist_ok=True)
-    
-    # Generate filename components
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    topic_safe = topic.replace(" ", "_").replace("/", "_").replace("&", "and")
-    
-    # Extract task outputs from crew execution
-    task_outputs = result.tasks_output if hasattr(result, 'tasks_output') else []
-    
-    # Initialize content variables
-    research_article = ""
-    linkedin_post = ""
-    
-    # Extract research article and LinkedIn post from task outputs
-    if task_outputs and len(task_outputs) >= 3:
-        # task_outputs[1] should be the research task (task_research)
-        research_output = task_outputs[1]
-        research_article = research_output.raw if hasattr(research_output, 'raw') else str(research_output)
-        
-        print("📄 Research article captured successfully!")
-    else:
-        print("⚠️ Warning: Could not extract research article from task outputs")
-        research_article = "Research article not available - task outputs may have changed structure"
-    
-    # Get the final LinkedIn post
-    final_post = result.raw if hasattr(result, 'raw') else str(result)
-    linkedin_post = final_post
-    
-    # Save research article
-    article_filename = f"research_article_{topic_safe}_{timestamp}.md"
-    article_filepath = os.path.join(articles_dir, article_filename)
-    
-    article_content = f"""# Research Article: {topic}
-
-**Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
-**Topic:** {topic}  
-**Type:** Comprehensive Research Article
-
----
-
-{research_article}
-
----
-
-*Generated by CrewAI Research Agent - Comprehensive Analysis*
-"""
-    
-    with open(article_filepath, 'w', encoding='utf-8') as f:
-        f.write(article_content)
-    
-    # Save LinkedIn post
-    post_filename = f"linkedin_post_{topic_safe}_{timestamp}.md"
-    post_filepath = os.path.join(posts_dir, post_filename)
-    
-    post_content = f"""# LinkedIn Post: {topic}
-
-**Generated:** {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}  
-**Topic:** {topic}  
-**Type:** LinkedIn Social Media Post
-
----
-
-{linkedin_post}
-
----
-
-*Generated by CrewAI LinkedIn Content Creation Flow*
-"""
-    
-    with open(post_filepath, 'w', encoding='utf-8') as f:
-        f.write(post_content)
-    
-    # Get absolute paths
-    article_output = os.path.abspath(article_filepath)
-    post_output = os.path.abspath(post_filepath)
-    
-    print("✅ Content generation completed!")
-    print("\n📁 FILES SAVED:")
-    print(f"   📄 Research Article: {article_output}")
-    print(f"   📱 LinkedIn Post: {post_output}")
-    
-    print("\n📄 RESEARCH ARTICLE PREVIEW:")
-    print("-" * 60)
-    # Show first 300 characters of research article
-    preview_text = research_article[:300] + "..." if len(research_article) > 300 else research_article
-    print(preview_text)
-    print("-" * 60)
-    
-    print("\n📱 LINKEDIN POST PREVIEW:")
-    print("-" * 40)
-    print(linkedin_post)
-    print("-" * 40)
-    
-    print(f"\n🎯 FLOW COMPLETED SUCCESSFULLY!")
-    print(f"📊 Generated comprehensive research article ({len(research_article)} characters)")
-    print(f"📱 Generated LinkedIn post ({len(linkedin_post)} characters)")
-    
-    return {
-        "linkedin_post": linkedin_post,
-        "research_article": research_article,
-        "article_file": article_output,
-        "post_file": post_output
-    }
+    print("✅ Flow execution completed!")
+    return result
 
 
 if __name__ == "__main__":

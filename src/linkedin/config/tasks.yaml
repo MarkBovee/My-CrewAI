@@ -1,28 +1,28 @@
 task_search:
   description: |
-    Make a detailed report on the latest items featuring the topic {topic}. 
-    Your final answer MUST be a list of at least 10 exciting items about {topic}
+    Make a detailed report on the latest items featuring the the topic '{topic}'. 
+    Your final answer MUST be a list of at least 10 exciting items about the topic '{topic}'
     in the format of bullet points.
   expected_output: |
-    A comprehensive list of at least 10 exciting new items about {topic} with brief explanations
+    A comprehensive list of at least 10 exciting new items about the topic '{topic}' with brief explanations
     of why they are trending and in demand, formatted as bullet points.
   agent: coach
 
 task_research:
   description: |
-    Write a comprehensive research article about {topic}.
+    Write a comprehensive research article about the topic '{topic}'.
 
-    You are a technical writer. Your job is to create content about {topic}, not demonstrate tools.
+    You are a technical writer. Your job is to create content about the topic '{topic}', not demonstrate tools.
 
     CONTENT REQUIREMENTS:
-    - Write 800+ words of actual research content about {topic}
+    - Write 800+ words of actual research content about the topic '{topic}'
     - Include technical details, examples, and best practices
     - Structure: Introduction, main content sections, conclusion
     - Use search_tool ONLY if you need specific information - do not demonstrate tool usage
 
     IMPORTANT: Output the research article directly. Do not show tool code, tool usage examples, or instructions about tools.
   expected_output: |
-    A complete research article about {topic} with technical depth and practical insights.
+    A complete research article about the topic '{topic}' with technical depth and practical insights.
     No tool demonstrations or code examples - just the actual research content.
   agent: researcher
   context:
@@ -30,7 +30,7 @@ task_research:
 
 task_blog:
   description: |
-    Write a reflective and professional blog post about {topic}, grounded in real-world
+    Write a reflective and professional blog post about the topic '{topic}', grounded in real-world
     experience as a senior .NET Developer and DevOps engineer.
     Use the research document from task_research as your primary source of information 
     but feel free to get more information with provided tools if needed.
