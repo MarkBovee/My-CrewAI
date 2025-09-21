@@ -1,6 +1,6 @@
 """
 LLM Helper for CrewAI
-Provides utilities for configuring and managing LLM instances (Ollama and OpenAI)
+Provides utilities for configuring and managing LLM instances (Ollama, OpenAI, and GitHub Models)
 """
 import yaml
 import os
@@ -9,13 +9,17 @@ from pathlib import Path
 from crewai import LLM
 from typing import Dict, Any, Optional, List, Union
 from dataclasses import dataclass
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
 # Constants
 DEFAULT_OLLAMA_BASE_URL = "http://localhost:11434"
+DEFAULT_GITHUB_MODELS_BASE_URL = "https://models.github.ai/inference"
 DEFAULT_CONTEXT_LENGTH = 14746
 DEFAULT_TEMPERATURE = 0.5
 DEFAULT_MAX_TOKENS_OPENAI = 2000
@@ -25,6 +29,7 @@ CONNECTION_TIMEOUT = 5
 # Model families for detection
 OPENAI_MODEL_PREFIXES = ('gpt-', 'o1-')
 OPENAI_MODEL_NAMES = ('gpt-4o', 'gpt-4o-mini')
+GITHUB_MODEL_PREFIXES = ('github/',)
 
 
 @dataclass
@@ -68,11 +73,13 @@ class LLMHelper:
             self.config_path = Path(config_path)
 
         self.ollama_base_url = DEFAULT_OLLAMA_BASE_URL
+        self.github_base_url = DEFAULT_GITHUB_MODELS_BASE_URL
         self._agents_config: Optional[Dict[str, Any]] = None
         self._llm_cache: Dict[str, LLM] = {}
 
-        # Set OpenAI API key from environment
+        # Set API keys from environment
         self.openai_api_key = os.getenv('OPENAI_API_KEY')
+        self.github_token = os.getenv('GITHUB_TOKEN')
 
         # Memory optimization settings for 12GB GPU
         self.memory_optimization = MemoryOptimizationConfig()
@@ -193,6 +200,8 @@ class LLMHelper:
             # Determine provider and create appropriate LLM instance
             if self._is_openai_model(model_name):
                 llm_instance = self._create_openai_llm(model_name, agent_name)
+            elif self._is_github_model(model_name):
+                llm_instance = self._create_github_llm(model_name, agent_name)
             else:
                 llm_instance = self._create_ollama_llm(model_name, agent_name, thinking_enabled)
 
@@ -211,6 +220,10 @@ class LLMHelper:
         return (model_name.startswith(OPENAI_MODEL_PREFIXES) or
                 model_name in OPENAI_MODEL_NAMES)
 
+    def _is_github_model(self, model_name: str) -> bool:
+        """Check if the model is a GitHub Models model"""
+        return model_name.startswith(GITHUB_MODEL_PREFIXES)
+
     def _create_openai_llm(self, model_name: str, agent_name: str) -> LLM:
         """Create an OpenAI LLM instance"""
         if not self.openai_api_key:
@@ -220,6 +233,24 @@ class LLMHelper:
         llm_params = {
             "model": f"openai/{model_name}",
             "api_key": self.openai_api_key,
+            "temperature": 0.7,
+            "max_tokens": DEFAULT_MAX_TOKENS_OPENAI
+        }
+
+        return LLM(**llm_params)
+
+    def _create_github_llm(self, model_name: str, agent_name: str) -> LLM:
+        """Create a GitHub Models LLM instance"""
+        if not self.github_token:
+            raise ValueError(f"GitHub token not found in environment for agent '{agent_name}'. "
+                           "Please set GITHUB_TOKEN environment variable with a personal access token "
+                           "that has 'models: read' permission.")
+
+        # GitHub Models uses OpenAI-compatible API format
+        llm_params = {
+            "model": f"openai/{model_name.replace('github/', '')}",  # Remove github/ prefix for API call
+            "api_key": self.github_token,
+            "base_url": self.github_base_url,
             "temperature": 0.7,
             "max_tokens": DEFAULT_MAX_TOKENS_OPENAI
         }
@@ -518,6 +549,7 @@ class LLMHelper:
         return {
             'ollama_connected': self.validate_ollama_connection(),
             'openai_api_key_present': bool(self.openai_api_key),
+            'github_token_present': bool(self.github_token),
             'config_file_exists': self.config_path.exists(),
             'config_loaded': self._agents_config is not None
         }
@@ -555,21 +587,58 @@ if __name__ == "__main__":
     models = helper.list_available_models()
     for agent, model in models.items():
         thinking = helper.get_thinking_parameter(agent)
-        provider = "OpenAI" if helper._is_openai_model(model) else "Ollama"
-        context_length = helper.get_optimal_context_length(model) if provider == "Ollama" else "API managed"
+        if helper._is_openai_model(model):
+            provider = "OpenAI"
+            context_length = "API managed"
+        elif helper._is_github_model(model):
+            provider = "GitHub Models"
+            context_length = "API managed"
+        else:
+            provider = "Ollama"
+            context_length = helper.get_optimal_context_length(model)
         print(f"  {agent}: {model} ({provider}) (thinking: {thinking}) (context: {context_length})")
 
     # Show connection status
     connection_status = helper.validate_connection()
     print(f"\n🔗 Ollama Connection: {'✅ Connected' if connection_status['ollama_connected'] else '❌ Not connected'}")
     print(f"🔑 OpenAI API Key: {'✅ Found' if connection_status['openai_api_key_present'] else '❌ Not found'}")
+    print(f"🔑 GitHub Token: {'✅ Found' if connection_status['github_token_present'] else '❌ Not found'}")
     print(f"📄 Config File: {'✅ Loaded' if connection_status['config_loaded'] else '❌ Not loaded'}")
 
-    # Show memory statistics
-    print("\n💾 Memory Statistics:")
-    stats = helper.get_memory_stats()
-    for key, value in stats.items():
+    # Show cache statistics
+    print("\n📦 Cache Statistics:")
+    cache_stats = helper.get_cache_stats()
+    for key, value in cache_stats.items():
         print(f"  {key}: {value}")
+
+# Example usage
+if __name__ == "__main__":
+    # Configure logging for example
+    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+
+    helper = LLMHelper()
+
+    print("🤖 Available LLM Models:")
+    models = helper.list_available_models()
+    for agent, model in models.items():
+        thinking = helper.get_thinking_parameter(agent)
+        if helper._is_openai_model(model):
+            provider = "OpenAI"
+            context_length = "API managed"
+        elif helper._is_github_model(model):
+            provider = "GitHub Models"
+            context_length = "API managed"
+        else:
+            provider = "Ollama"
+            context_length = helper.get_optimal_context_length(model)
+        print(f"  {agent}: {model} ({provider}) (thinking: {thinking}) (context: {context_length})")
+
+    # Show connection status
+    connection_status = helper.validate_connection()
+    print(f"\n🔗 Ollama Connection: {'✅ Connected' if connection_status['ollama_connected'] else '❌ Not connected'}")
+    print(f"🔑 OpenAI API Key: {'✅ Found' if connection_status['openai_api_key_present'] else '❌ Not found'}")
+    print(f"🔑 GitHub Token: {'✅ Found' if connection_status['github_token_present'] else '❌ Not found'}")
+    print(f"📄 Config File: {'✅ Loaded' if connection_status['config_loaded'] else '❌ Not loaded'}")
 
     # Show cache statistics
     print("\n📦 Cache Statistics:")
@@ -589,3 +658,15 @@ if __name__ == "__main__":
 
     except Exception as e:
         print(f"\n❌ Error creating LLM: {e}")
+
+    # Demonstrate GitHub Models support
+    print("\n🧪 GitHub Models Integration Test:")
+    print("To use GitHub Models, set the GITHUB_TOKEN environment variable")
+    print("with a GitHub Personal Access Token that has 'models: read' permission.")
+    print("Then configure an agent in agents.yaml with a model like 'github/gpt-4o-mini'")
+    print("Example: llm: github/gpt-4o-mini")
+    print("\nSupported GitHub Models include:")
+    print("  - github/gpt-4o")
+    print("  - github/gpt-4o-mini")
+    print("  - github/gpt-3.5-turbo")
+    print("  - And other OpenAI-compatible models available through GitHub Models")

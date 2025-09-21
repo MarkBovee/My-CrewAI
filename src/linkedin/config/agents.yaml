@@ -7,7 +7,7 @@ coach:
     verbose: false
     allow_delegation: false
     thinking: true
-    llm: qwen3:1.7b
+    llm: github/gpt-4o
 
 researcher:
     role: Expert Technical Researcher & Analyst
@@ -24,7 +24,7 @@ researcher:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: qwen3:1.7b
+    llm: github/gpt-4o
 
 writer:
     role: Tech Thought Leadership Writer
@@ -39,7 +39,7 @@ writer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: qwen3:1.7b
+    llm: github/gpt-4o
 
 influencer:
     role: LinkedIn Influencer Writer
@@ -53,4 +53,4 @@ influencer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: mistral:7b
+    llm: github/gpt-4o

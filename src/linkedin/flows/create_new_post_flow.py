@@ -119,17 +119,28 @@ class CreateNewPostFlow(Flow[PostState]):
         blog_file = f"output/blogs/blog_post_{topic_safe}_{timestamp}.md"
         linkedin_file = f"output/posts/linkedin_post_{topic_safe}_{timestamp}.md"
         
-        # Extract content from task outputs
+        # Extract content from task outputs (read from files)
         task_outputs = content_data.get('task_outputs', {})
+        
+        def read_content_from_file(file_path):
+            """Read content from file if it's a file path, otherwise return as-is"""
+            if isinstance(file_path, str) and os.path.isfile(file_path):
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        return f.read()
+                except Exception as e:
+                    print(f"⚠️ Warning: Could not read from {file_path}: {e}")
+                    return f"Error reading content from {file_path}"
+            return file_path
         
         # Task 0: Coach search results
         # Task 1: Researcher article  
         # Task 2: Writer blog post
         # Task 3: Influencer LinkedIn post
         
-        research_content = task_outputs.get(1, "No research content available")
-        blog_content = task_outputs.get(2, "No blog content available") 
-        linkedin_content = task_outputs.get(3, content_data['content'])
+        research_content = read_content_from_file(task_outputs.get(1, "No research content available"))
+        blog_content = read_content_from_file(task_outputs.get(2, "No blog content available")) 
+        linkedin_content = read_content_from_file(task_outputs.get(3, content_data['content']))
         
         # Save research article
         research_md = f"""# Research Article: {self.state.topic}
