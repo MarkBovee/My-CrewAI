@@ -7,7 +7,7 @@ coach:
     verbose: false
     allow_delegation: false
     thinking: true
-    llm: github/gpt-4o
+    llm: github/gpt-4o-mini
 
 researcher:
     role: Expert Technical Researcher & Analyst
@@ -53,4 +53,4 @@ influencer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: github/gpt-4o
+    llm: github/gpt-4o-mini

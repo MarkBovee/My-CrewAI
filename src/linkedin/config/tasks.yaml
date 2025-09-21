@@ -60,6 +60,10 @@ task_blog:
     - Make complex concepts accessible without oversimplifying.
     - Inspire confidence and curiosity: readers should feel "I learned something useful here."
 
+    DONT'S:
+    - Don’t make it a tutorial or step-by-step guide.
+    - Don't mention yourself as a senior .NET developer and DevOps engineer
+
   expected_output: |
     - A blog post between 800 and 1500 words
     - An engaging, professional headline (not clickbait, but curiosity-driven)
