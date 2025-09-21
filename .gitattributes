@@ -4,7 +4,6 @@
 # Encrypt any files in secrets/ directory
 secrets/ filter=git-crypt diff=git-crypt
 
-# Encrypt API keys and sensitive config files
-*.key filter=git-crypt diff=git-crypt
+# Encrypt API keys and sensitive config files (but not git-crypt keys)
 *.pem filter=git-crypt diff=git-crypt
 *.p12 filter=git-crypt diff=git-crypt
