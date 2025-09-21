@@ -39,6 +39,7 @@ define expectations, plan steps, implement clean code, and verify results.
 - Write full working code with no placeholders.
 - Follow professional standards and include basic error handling.
 - Only change what is needed; preserve everything else.
+- Update the progress and update the user on your next step.
 
 ### 5. Verify (Self-Check / Test)
 - Perform a professional self-check of the code.

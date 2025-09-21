@@ -10,47 +10,20 @@ task_search:
 
 task_research:
   description: |
-    CRITICAL: You MUST select EXACTLY ONE item from the coach's research list about {topic}.
-    Pick the most technically interesting and practical item for senior developers and DevOps engineers.
-    Avoid political topics, ethics, or social issues - focus on technical substance.
+    Write a comprehensive research article about {topic}.
 
-    PRIMARY RESEARCH METHOD:
-    **USE SEARCH_TOOL TO ACCESS HIGH-QUALITY SOURCES**: Your search_tool has access to comprehensive web search results
-    containing expert articles, case studies, and authoritative sources about {topic}. This includes:
-    - Medium articles by recognized developers (especially about spec-driven development vs vibe coding)
-    - Technical blogs from industry experts and established publications  
-    - GitHub documentation and real-world case studies
-    - Developer publications like Dataconomy, Geeky Gadgets, etc.
-    - Articles comparing different development methodologies
+    You are a technical writer. Your job is to create content about {topic}, not demonstrate tools.
 
-    SEARCH STRATEGY:
-    1. **Search for your chosen topic** using relevant keywords
-    2. **Look for expert perspectives** from established sources
-    3. **Find implementation examples** and real-world case studies
-    4. **Supplement with additional searches** for specific details if needed
+    CONTENT REQUIREMENTS:
+    - Write 800+ words of actual research content about {topic}
+    - Include technical details, examples, and best practices
+    - Structure: Introduction, main content sections, conclusion
+    - Use search_tool ONLY if you need specific information - do not demonstrate tool usage
 
-    RESEARCH METHODOLOGY:
-    - **SYNTHESIS OVER SUMMARIZATION**: Don't just list information - analyze and synthesize insights
-    - **EXPERT PERSPECTIVES**: Identify and highlight expert opinions and authoritative viewpoints  
-    - **PRACTICAL FOCUS**: Emphasize real-world applications, tools, and actionable insights
-    - **TECHNICAL DEPTH**: Include specific technologies, methodologies, and implementation approaches
-    - **COMPARATIVE ANALYSIS**: When relevant, compare different approaches or tools
-    - **CREDIBLE SOURCES**: Prioritize information from established tech publications, recognized experts, and proven case studies
-
-    RESEARCH STRUCTURE:
-    1. **Executive Summary** (200 words): Key insights and why this matters to developers
-    2. **Technical Deep Dive** (800+ words): How it works, key technologies, implementation approaches
-    3. **Expert Analysis** (400+ words): What industry experts are saying, predictions, recommendations
-    4. **Real-World Applications** (400+ words): Case studies, success stories, practical examples
-    5. **Developer Impact** (300+ words): How this affects daily work, career implications, skill requirements
-    6. **Implementation Guidance** (200+ words): Next steps, tools to explore, learning resources
-    7. **Source Attribution**: Properly cite all sources from your searches
-
-    TARGET: Minimum 2300 words of substantive, well-researched content that gives the writer rich material to work with.
+    IMPORTANT: Output the research article directly. Do not show tool code, tool usage examples, or instructions about tools.
   expected_output: |
-    A comprehensive, analytically-driven research document of 2300+ words covering EXACTLY ONE {topic} skill.
-    Must include expert insights, technical depth, real-world applications, and proper source attribution.
-    Structure: Executive Summary, Technical Deep Dive, Expert Analysis, Real-World Applications, Developer Impact, Implementation Guidance, Sources.
+    A complete research article about {topic} with technical depth and practical insights.
+    No tool demonstrations or code examples - just the actual research content.
   agent: researcher
   context:
     - task_search
@@ -58,8 +31,7 @@ task_research:
 task_blog:
   description: |
     Write a reflective and professional blog post about {topic}, grounded in real-world
-    experience as a senior developer. Use the research document from the researcher as your primary source. 
-    But you can use the search_tool if you need extra info to fill in gaps or add extra depth.
+    experience as a senior .NET Developer and DevOps engineer.
 
     STRUCTURE:
     - Open with a clear personal hook (a challenge, incident, or insight that makes the story real).
@@ -71,6 +43,7 @@ task_blog:
     TECHNICAL DEPTH:
     - Mention specific tools, frameworks, and integrations (with versions where relevant).
     - Include technical details where they add value (snippets, CLI commands, configs).
+    - Share measurable improvements (metrics, benchmarks, before/after results).
     - Discuss architecture decisions or trade-offs where applicable.
 
     TONE AND STYLE:
@@ -105,7 +78,7 @@ task_post:
     
     HOOK FIRST:
     - Open with a relatable pain point, strong question, or surprising moment
-    - Make it feel human and specific
+    - Make it feel human and specific ("2 AM. Production down. Nobody remembered why...")
 
     STORY + VALUE:
     - Give a quick glimpse of the challenge and the insight that changed everything
@@ -114,6 +87,7 @@ task_post:
     - Add personality (frustration, relief, humor, or excitement) to make it memorable
     
     CALL TO ACTION:
+    - Transition naturally: "Here’s what I learned..." / "The full story’s here ↓"
     - Make readers feel curious and that they’ll miss out if they don’t click
     - Keep it authentic, not salesy
     
@@ -126,14 +100,17 @@ task_post:
     GOAL:
     - Create a moment where readers think: "That’s me." + "I need to know more."
     - Drive clicks to the blog while starting conversations in the comments.
+
+    IMPORTANT: Output the complete LinkedIn post directly. Do not show tool code, tool usage, or instructions about tools.
   expected_output: |
     - A LinkedIn post of 50–100 words
     - Strong hook in the first line (relatable problem, question, or dramatic moment)
     - Tease of the most valuable blog insight, without full detail
     - Conversational tone, authentic voice, and human emotion
     - Smooth call-to-action that invites reading the blog
-    - 2–4 strategic hashtags
+    - 2–4 strategic hashtags (#DevOps #AItools #GitHub #Productivity)
     - Short, scannable structure with line breaks
   agent: influencer
   context:
     - task_blog
+    

@@ -6,8 +6,8 @@ coach:
         You understand how to identify trending skills and create content that drives engagement and builds communities around technology topics in {current_year}.
     verbose: false
     allow_delegation: false
-    thinking: false
-    llm: gemma2:2b
+    thinking: true
+    llm: qwen3:1.7b
 
 researcher:
     role: Expert Technical Researcher & Analyst
@@ -24,7 +24,7 @@ researcher:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: gemma2:2b
+    llm: qwen3:1.7b
 
 writer:
     role: Tech Thought Leadership Writer
@@ -39,7 +39,7 @@ writer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: gemma2:2b
+    llm: qwen3:1.7b
 
 influencer:
     role: LinkedIn Influencer Writer
@@ -53,4 +53,4 @@ influencer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: gemma2:2b
+    llm: mistral:7b

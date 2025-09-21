@@ -1,6 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from crewai.agents.agent_builder.base_agent import BaseAgent
+from crewai_tools import FileReadTool, ScrapeWebsiteTool, CodeInterpreterTool, DirectoryReadTool
 from .tools.search_tool import search_tool
 from .helpers.llm_helper import LLMHelper
 from .helpers.knowledge_helper import KnowledgeHelper, check_topic_similarity, store_article_completion
@@ -119,7 +120,7 @@ class LinkedInCrew():
         return Agent(
             config=self.agents_config['coach'], # type: ignore[index]
             llm=self.llm_helper.create_llm_instance('coach'),
-            tools=[search_tool],  # Use the tool directly, not call it
+            tools=[search_tool],  # Search capabilities for career research
             verbose=self.agents_config['coach'].get('verbose', False)
         )
 
@@ -129,7 +130,7 @@ class LinkedInCrew():
         return Agent(
             config=self.agents_config['researcher'], # type: ignore[index]
             llm=self.llm_helper.create_llm_instance('researcher'),
-            tools=[search_tool],  # Search tool for comprehensive research
+            tools=[search_tool, ScrapeWebsiteTool()],  # Web search and scraping for research
             verbose=self.agents_config['researcher'].get('verbose', False)
         )
 
@@ -139,7 +140,7 @@ class LinkedInCrew():
         return Agent(
             config=self.agents_config['writer'], # type: ignore[index]
             llm=self.llm_helper.create_llm_instance('writer'),
-            tools=[search_tool],  # Add search tool for additional research during writing
+            tools=[search_tool, ScrapeWebsiteTool()],  # Search capabilities for additional research
             verbose=self.agents_config['writer'].get('verbose', False)
         )
         
