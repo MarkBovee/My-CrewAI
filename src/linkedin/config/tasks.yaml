@@ -32,6 +32,8 @@ task_blog:
   description: |
     Write a reflective and professional blog post about {topic}, grounded in real-world
     experience as a senior .NET Developer and DevOps engineer.
+    Use the research document from task_research as your primary source of information 
+    but feel free to get more information with provided tools if needed.
 
     STRUCTURE:
     - Open with a clear personal hook (a challenge, incident, or insight that makes the story real).
@@ -113,4 +115,3 @@ task_post:
   agent: influencer
   context:
     - task_blog
-    
