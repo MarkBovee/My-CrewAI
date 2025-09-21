@@ -58,7 +58,7 @@ python -c "from src.linkedin.helpers.knowledge_helper import KnowledgeHelper; pr
 - **Dynamic Templating**: Use `{current_year}` in goals for current context
 
 ### 2. Local Ollama Integration  
-- **LLM Helper**: `src/linkedin/helpers/ollama_helper.py`
+- **LLM Helper**: `src/linkedin/helpers/llm_helper.py`
 - **Base URL**: Always `http://localhost:11434`
 - **Embedding Model**: `mxbai-embed-large` for knowledge sources
 - **Thinking Control**: `model_kwargs["options"]["think"]` to disable verbosity
@@ -96,7 +96,7 @@ knowledge_source = JSONKnowledgeSource(
 - Use absolute imports: `from linkedin.main import run`
 
 **❌ Model Memory Issues:**
-- Use `ollama_helper.force_cleanup_memory()` after crew execution
+- Use `llm_helper.force_cleanup_memory()` after crew execution
 - Implement cleanup in `@after_kickoff` decorator
 
 **❌ Knowledge File Paths:**
@@ -113,7 +113,7 @@ src/linkedin/
 ├── helpers/          # Utility classes (knowledge, ollama, config)
 ├── tools/            # CrewAI custom tools (search)
 ├── flows/            # CrewAI flow definitions
-├── linkedin_crew.py  # Main crew class with @agent, @task decorators
+├── crew.py           # Main crew class with @agent, @task decorators
 └── main.py           # Entry point
 
 knowledge/            # Knowledge sources (relative paths)
@@ -138,8 +138,8 @@ stats = helper.get_knowledge_stats()
 
 **Verify Ollama Connection:**
 ```python
-from linkedin.helpers.ollama_helper import OllamaHelper  
-helper = OllamaHelper()
+from linkedin.helpers.llm_helper import LLMHelper  
+helper = LLMHelper()
 models = helper.list_available_models()
 ```
 

@@ -7,18 +7,24 @@ coach:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: qwen3:1.7b
+    llm: gemma2:2b
 
 researcher:
-    role: Researcher Writer
-    goal: Conduct comprehensive research and create in-depth articles about specific {topic} skills.
+    role: Expert Technical Researcher & Analyst
+    goal: |
+        Conduct deep, analytical research on {topic} by leveraging high-quality sources from web search results.
+        Create comprehensive research documents that synthesize expert opinions, case studies, and real-world applications.
+        Focus on practical insights that senior developers and DevOps engineers can immediately apply.
     backstory: |
-        You are an Expert Researcher specializing in {topic}. 
-        You excel at finding current, accurate information and creating comprehensive, well-sourced articles that provide deep insights for topics like {topic}.
+        You are a Senior Technical Researcher with 10+ years of experience analyzing emerging technologies and development practices.
+        You specialize in {topic} and have a talent for identifying the most valuable insights from complex technical discussions.
+        You excel at distilling expert opinions, real-world case studies, and industry trends into actionable intelligence.
+        You understand the difference between hype and substance, and always prioritize practical, evidence-based insights.
+        You have deep expertise in software development methodologies, AI-assisted coding, and developer productivity tools.
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: openhermes:v2.5
+    llm: gemma2:2b
 
 writer:
     role: Tech Thought Leadership Writer
@@ -33,7 +39,7 @@ writer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: openhermes:v2.5
+    llm: gemma2:2b
 
 influencer:
     role: LinkedIn Influencer Writer
@@ -47,4 +53,4 @@ influencer:
     verbose: false
     allow_delegation: false
     thinking: false
-    llm: qwen3:1.7b
+    llm: gemma2:2b

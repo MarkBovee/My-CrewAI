@@ -24,7 +24,7 @@ src/
     ├── flows/           # CrewAI flow definitions
     │   └── create_new_post_flow.py
     ├── helpers/         # Utility modules
-    │   ├── ollama_helper.py
+    │   ├── llm_helper.py
     │   ├── config_helper.py
     │   └── __init__.py
     ├── tools/           # Custom CrewAI tools
@@ -43,6 +43,70 @@ www/                     # Web interface
 web_server.py           # FastAPI backend server
 start-web.ps1           # PowerShell startup script
 ```
+
+## CrewAI Tools Overview
+
+CrewAI provides 40+ pre-built tools to enhance your agents' capabilities. Here are the main tool categories available:
+
+### 🔍 Search & Research Tools
+
+- **SerperDevTool**: Google search API integration
+- **DuckDuckGo Search**: Privacy-focused web search (currently used)
+- **YouTubeSearchTool**: Search and analyze YouTube content
+- **GitHubSearchTool**: Find and analyze code repositories
+
+### 📄 File & Document Tools
+
+- **FileReadTool**: Read various file formats (PDF, DOCX, JSON, CSV, etc.)
+- **DirectoryReadTool**: Navigate and read directory structures
+- **CSVSearchTool**: Search and analyze CSV files
+- **JSONSearchTool**: Query JSON data structures
+
+### 🌐 Web Scraping & Browsing Tools
+
+- **ScrapeWebsiteTool**: Extract content from websites
+- **FirecrawlTool**: Advanced web scraping with Firecrawl
+- **SeleniumTool**: Browser automation for dynamic content
+
+### 🗄️ Database & Data Tools
+
+- **MySQLTool**: Connect to MySQL databases
+- **PostgreSQLTool**: PostgreSQL database operations
+- **SnowflakeTool**: Data warehouse queries
+- **QdrantTool**: Vector database operations
+- **WeaviateTool**: Vector search and storage
+
+### 🤖 AI & Machine Learning Tools
+
+- **CodeInterpreterTool**: Execute Python code dynamically
+- **DALL-E Tool**: Generate images with OpenAI's DALL-E
+- **RAGTool**: Implement Retrieval-Augmented Generation
+- **VisionTool**: Process images and vision tasks
+
+### ☁️ Cloud & Storage Tools
+
+- **S3ReaderTool**: Access AWS S3 files
+- **AmazonBedrockTool**: AWS AI services integration
+
+### ⚙️ Automation Tools
+
+- **ApifyTool**: Web scraping and automation platform
+- **ComposioTool**: Connect with external services
+
+### 🔧 Tool Usage Example
+
+```python
+from crewai_tools import FileReadTool, SerperDevTool
+
+# Add tools to your agent
+agent = Agent(
+    role="Research Analyst",
+    tools=[FileReadTool(), SerperDevTool()],
+    # ... other configuration
+)
+```
+
+For the complete list of tools and detailed documentation, visit: [CrewAI Tools Documentation](https://docs.crewai.com/en/tools/overview)
 
 ## Installation
 

@@ -64,7 +64,7 @@ description = "Multi-agent crew for researching trends and creating LinkedIn con
 
 [tool.crewai.crew]
 # Main crew configuration
-main_crew = "linkedin.linkedin_crew:LinkedInCrew"
+main_crew = "linkedin.crew:LinkedInCrew"
 
 [tool.crewai.flows]
 # Flow configurations

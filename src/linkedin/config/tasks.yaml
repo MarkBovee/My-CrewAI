@@ -10,26 +10,47 @@ task_search:
 
 task_research:
   description: |
-    IMPORTANT: You MUST select EXACTLY ONE item from the coach's research list about {topic}.
-    Pick the one that you find most interesting or promising for a deep dive related to a senior .NET Developer and DevOps engineer.
-    Try to avoid political topics or topics about ethics, diversity, or social issues.
+    CRITICAL: You MUST select EXACTLY ONE item from the coach's research list about {topic}.
+    Pick the most technically interesting and practical item for senior developers and DevOps engineers.
+    Avoid political topics, ethics, or social issues - focus on technical substance.
 
-    COMPREHENSIVE RESEARCH PHASE: Use your search_tool to conduct in-depth research on this ONE chosen item:
-    - Search for recent trends, statistics, and market demand data
-    - Find real job postings, and employment growth projections
-    - Research current industry examples, case studies, and success stories
-    - Look for expert opinions, predictions, and future outlook
-    - Find specific tools and technologies related to this item
-    - Research career paths and progression opportunities
-    - Search for challenges and opportunities in this field
-    
-    RESEARCH OUTPUT: Compile all your research findings into a comprehensive research document.
-    Include all data, statistics, sources, and insights you've gathered. 
-    Be as thorough and detailed as possible, go for a minimum of 2000 words so that the writer has plenty of material to work with.
-    Base ALL content on REAL DATA from your search results with proper source attribution.
+    PRIMARY RESEARCH METHOD:
+    **USE SEARCH_TOOL TO ACCESS HIGH-QUALITY SOURCES**: Your search_tool has access to comprehensive web search results
+    containing expert articles, case studies, and authoritative sources about {topic}. This includes:
+    - Medium articles by recognized developers (especially about spec-driven development vs vibe coding)
+    - Technical blogs from industry experts and established publications  
+    - GitHub documentation and real-world case studies
+    - Developer publications like Dataconomy, Geeky Gadgets, etc.
+    - Articles comparing different development methodologies
+
+    SEARCH STRATEGY:
+    1. **Search for your chosen topic** using relevant keywords
+    2. **Look for expert perspectives** from established sources
+    3. **Find implementation examples** and real-world case studies
+    4. **Supplement with additional searches** for specific details if needed
+
+    RESEARCH METHODOLOGY:
+    - **SYNTHESIS OVER SUMMARIZATION**: Don't just list information - analyze and synthesize insights
+    - **EXPERT PERSPECTIVES**: Identify and highlight expert opinions and authoritative viewpoints  
+    - **PRACTICAL FOCUS**: Emphasize real-world applications, tools, and actionable insights
+    - **TECHNICAL DEPTH**: Include specific technologies, methodologies, and implementation approaches
+    - **COMPARATIVE ANALYSIS**: When relevant, compare different approaches or tools
+    - **CREDIBLE SOURCES**: Prioritize information from established tech publications, recognized experts, and proven case studies
+
+    RESEARCH STRUCTURE:
+    1. **Executive Summary** (200 words): Key insights and why this matters to developers
+    2. **Technical Deep Dive** (800+ words): How it works, key technologies, implementation approaches
+    3. **Expert Analysis** (400+ words): What industry experts are saying, predictions, recommendations
+    4. **Real-World Applications** (400+ words): Case studies, success stories, practical examples
+    5. **Developer Impact** (300+ words): How this affects daily work, career implications, skill requirements
+    6. **Implementation Guidance** (200+ words): Next steps, tools to explore, learning resources
+    7. **Source Attribution**: Properly cite all sources from your searches
+
+    TARGET: Minimum 2300 words of substantive, well-researched content that gives the writer rich material to work with.
   expected_output: |
-    A comprehensive research document with all findings, data, statistics, case studies, 
-    and sources about EXACTLY ONE {topic} skill.
+    A comprehensive, analytically-driven research document of 2300+ words covering EXACTLY ONE {topic} skill.
+    Must include expert insights, technical depth, real-world applications, and proper source attribution.
+    Structure: Executive Summary, Technical Deep Dive, Expert Analysis, Real-World Applications, Developer Impact, Implementation Guidance, Sources.
   agent: researcher
   context:
     - task_search

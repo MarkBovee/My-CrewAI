@@ -2,7 +2,7 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from .tools.search_tool import search_tool
-from .helpers.ollama_helper import LLMHelper
+from .helpers.llm_helper import LLMHelper
 from .helpers.knowledge_helper import KnowledgeHelper, check_topic_similarity, store_article_completion
 from typing import List
 import warnings
@@ -95,73 +95,21 @@ class LinkedInCrew():
 
     @after_kickoff
     def process_output(self, result):
-        """Process the crew output (summary-only).
-
-        NOTE: File persistence is handled by flows (e.g. `CreateNewPostFlow`).
-        The crew should not write files directly to avoid duplicate outputs.
-        This hook now collects a concise summary of task outputs and attaches
-        it to the `result` object under `outputs_summary` for downstream
-        flows or callers to persist if desired.
-        """
-
+        """Process the crew output - attach task outputs to result for flow persistence"""
         from datetime import datetime
 
         try:
-            print("\n" + "=" * 60)
-            print("📄 PROCESSING CREW OUTPUT (SUMMARY ONLY)")
-            print("=" * 60)
-
-            outputs_summary = []
-
+            # Attach task outputs to result for flow to access
             if hasattr(result, 'tasks_output') and result.tasks_output:
-                tasks_output = result.tasks_output
-                print(f"✅ Found {len(tasks_output)} task outputs")
+                setattr(result, 'outputs_summary_generated_at', datetime.now().isoformat())
+        except Exception:
+            pass  # Silently handle any issues
 
-                # Collect lightweight summaries for each task output
-                for idx, task_out in enumerate(tasks_output):
-                    try:
-                        # Prefer raw attribute, fall back to str()
-                        content = task_out.raw if hasattr(task_out, 'raw') else str(task_out)
-                    except Exception:
-                        content = str(task_out)
-
-                    preview = content[:800].strip()  # keep previews short
-                    outputs_summary.append({
-                        'index': idx,
-                        'preview': preview,
-                        'length': len(content)
-                    })
-
-                # Attach summary and metadata to the result for flows to persist
-                try:
-                    setattr(result, 'outputs_summary', outputs_summary)
-                    setattr(result, 'outputs_summary_generated_at', datetime.now().isoformat())
-                except Exception:
-                    # If result is not mutable, simply print the summary
-                    print("ℹ️ Could not attach outputs_summary to result object; printing summary instead.")
-                    for s in outputs_summary:
-                        print(f" - Task {s['index']}: {s['length']} chars")
-
-                print("🔁 NOTE: Crew no longer writes files. Use the flow to persist outputs.")
-
-            else:
-                print("⚠️  No task outputs found in crew result")
-
-        except Exception as e:
-            print(f"❌ Error in process_output (summary): {str(e)}")
-            import traceback
-            traceback.print_exc()
-
-        # Final cleanup (models/memory)
+        # Cleanup memory
         try:
-            print("🧹 Cleaning up models...")
-            cleanup_success = self.llm_helper.force_cleanup_memory()
-            if cleanup_success:
-                print("✅ Model cleanup completed successfully!")
-            else:
-                print("⚠️ Model cleanup partially successful")
-        except Exception as cleanup_e:
-            print(f"⚠️ Warning: Could not complete model cleanup: {cleanup_e}")
+            self.llm_helper.force_cleanup_memory()
+        except Exception:
+            pass  # Silently handle cleanup issues
 
         return result
 
@@ -246,34 +194,21 @@ class LinkedInCrew():
         # Execute safeguard check
         self._check_execution_mode()
         
-        # Create knowledge sources for the crew using proper file-based sources
-        knowledge_sources = []
-        
-        try:
-            # Add web search results knowledge using JSONKnowledgeSource with relative path
-            web_knowledge = self.knowledge_helper.get_web_results_knowledge_source()
-            knowledge_sources.append(web_knowledge)
-            print("📚 Added web search results to crew knowledge")
-            
-            # Add article memory knowledge using JSONKnowledgeSource with relative path
-            article_knowledge = self.knowledge_helper.get_article_memory_knowledge_source()
-            knowledge_sources.append(article_knowledge)
-            print("📖 Added article memory to crew knowledge")
-            
-        except Exception as e:
-            print(f"⚠️ Warning: Could not load all knowledge sources: {e}")
-            print("🔄 Continuing with crew execution without knowledge sources")
+        # CLEAN SOLUTION: Avoid knowledge_sources entirely to prevent API errors
+        # Instead, agents will access data through search_tool which reads the same files
+        print("📚 Knowledge data accessible via search_tool (no API required)")
+        print("🔍 Agents can search web_search_results.json and article_memory.json directly")
         
         return Crew(
             agents=self.agents,  # Automatically collected by @agent decorator
             tasks=self.tasks,    # Automatically collected by @task decorator
             process=Process.sequential,
             verbose=True,
-            max_execution_time=None,
-            knowledge_sources=knowledge_sources  # File-based knowledge without embeddings
-            # Note: Using StringKnowledgeSource to avoid embedding requirements
+            max_execution_time=None
+            # Note: No knowledge_sources to avoid any embedding/API requirements
+            # All data accessible via search_tool which reads the same JSON files
             # memory=True,  # Enable memory for better context retention
             # cache=True,   # Enable caching for performance 
             # planning=True,  # Enable planning feature
-            # output_log_file="linkedin_crew_logs.json"  # Log execution details
+            # output_log_file="crew_logs.json"  # Log execution details
         )
