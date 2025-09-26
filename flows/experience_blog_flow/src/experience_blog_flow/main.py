@@ -28,10 +28,9 @@ class ExperienceBlogFlow(Flow[ExperienceBlogState]):
         """
         print(f"🚀 Starting experience blog creation for: '{self.state.experience_topic}'")
         
-        # Execute the blog crew
+        # Execute the blog crew with simplified single-task workflow
         inputs = {
-            'experience_text': self.state.experience_text,
-            'experience_topic': self.state.experience_topic
+            'experience_text': self.state.experience_text
         }
         
         result = BlogCrew().crew().kickoff(inputs=inputs)

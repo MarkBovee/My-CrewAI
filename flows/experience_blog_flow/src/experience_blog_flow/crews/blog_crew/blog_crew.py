@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import ScrapeWebsiteTool
+from crewai_tools import ScrapeWebsiteTool, FileReadTool, DirectoryReadTool
 import sys
 import os
 from pathlib import Path
@@ -18,8 +18,8 @@ from helpers.llm_helper import LLMHelper
 class BlogCrew:
     """Experience Blog Creation Crew
     
-    A specialized crew for transforming personal experiences into comprehensive
-    blog posts with industry context and technical depth.
+    A simplified single-agent crew for transforming personal experiences 
+    into comprehensive blog posts with research and context.
     """
 
     agents_config = "config/agents.yaml"
@@ -30,66 +30,34 @@ class BlogCrew:
         self.llm_helper = LLMHelper()
 
     @agent
-    def coach(self) -> Agent:
-        """Senior Career Coach agent for analyzing experiences"""
-        return Agent(
-            config=self.agents_config['coach'],
-            llm=self.llm_helper.create_llm_instance('coach'),
-            tools=[search_tool],
-            verbose=self.agents_config['coach'].get('verbose', False)
-        )
-
-    @agent
-    def researcher(self) -> Agent:
-        """Content Researcher agent for enhancing experiences with industry insights"""
-        return Agent(
-            config=self.agents_config['researcher'],
-            llm=self.llm_helper.create_llm_instance('researcher'),
-            tools=[search_tool, ScrapeWebsiteTool()],
-            verbose=self.agents_config['researcher'].get('verbose', False)
-        )
-
-    @agent
     def writer(self) -> Agent:
-        """Tech Writer agent for creating comprehensive blog posts"""
+        """Expert Blog Writer agent for creating comprehensive blog posts from personal experiences"""
         return Agent(
             config=self.agents_config['writer'],
             llm=self.llm_helper.create_llm_instance('writer'),
-            tools=[search_tool, ScrapeWebsiteTool()],
-            verbose=self.agents_config['writer'].get('verbose', False)
+            tools=[
+                search_tool,
+                ScrapeWebsiteTool(),
+                FileReadTool(),
+                DirectoryReadTool()
+            ],
+            verbose=self.agents_config['writer'].get('verbose', True)
         )
 
     @task
-    def analyze_experience(self) -> Task:
-        """Analyze the personal experience to extract key themes"""
-        return Task(
-            config=self.tasks_config['task_experience_analysis'],
-            agent=self.coach()
-        )
-
-    @task
-    def research_context(self) -> Task:
-        """Research industry context to enhance the experience"""
-        return Task(
-            config=self.tasks_config['task_experience_research'],
-            agent=self.researcher(),
-            context=[self.analyze_experience()]
-        )
-
-    @task
-    def write_blog_post(self) -> Task:
-        """Create comprehensive blog post from experience and research"""
+    def create_blog_from_experience(self) -> Task:
+        """Transform personal experience into a comprehensive blog post with research and context"""
         return Task(
             config=self.tasks_config['task_experience_blog'],
-            agent=self.writer(),
-            context=[self.research_context()]
+            agent=self.writer()
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the Experience Blog Creation Crew"""
-        print("🚀 Starting Experience Blog Creation Crew")
-        print("🔧 Using enhanced research to transform personal experiences")
+        """Creates the simplified Experience Blog Creation Crew"""
+        print("🚀 Starting Simple Experience Blog Crew")
+        print("✍️ Single writer agent with comprehensive tools")
+        print("📝 Input: Experience Text → Output: Enhanced Blog Post")
 
         return Crew(
             agents=self.agents,
