@@ -56,7 +56,7 @@ task_experience_blog:
     - Research similar experiences and case studies for broader context
   
   expected_output: |
-    A comprehensive, well-structured blog post (1500-2500 words) that includes:
+    A comprehensive, well-structured blog post (2000-4000 words) that includes:
     
     **Structure:**
     - Compelling introduction that draws readers in with the personal story
@@ -81,3 +81,72 @@ task_experience_blog:
     The final output should be ready for publication on technical blogs, personal websites, or professional platforms like LinkedIn or Medium.
   
   agent: writer
+
+rewrite_and_expand_blog_post:
+  description: |
+    Take the initial blog draft from the previous task and transform it into a polished, 
+    long-form article suitable for LinkedIn Articles or Medium publication.
+    
+    REWRITING AND EXPANSION PROCESS:
+    
+    1. STRUCTURE ENHANCEMENT:
+       - Rewrite in personal blog style (professional but approachable)
+       - Add clear subheaders and improve narrative flow
+       - Expand sections with deeper storytelling and explanation
+       - Use short paragraphs and lists for optimal readability
+    
+    2. CONTENT ENRICHMENT:
+       - Add researched insights and context where needed (AI trends, best practices, examples)
+       - Include relevant industry statistics and expert opinions
+       - Provide references to authoritative sources and best practices
+       - Balance first-person storytelling with researched industry insights
+       - Create smooth transitions between personal story and industry context
+    
+    3. DEPTH AND VALUE:
+       - Expand the article to 1000-2000 words (Medium-style long read)
+       - Ensure content is valuable enough that readers want to bookmark or share
+       - Show both personal journey and practical lessons others can apply
+       - Keep tone authentic, not overly polished or "marketing-y"
+       - Avoid unnecessary jargon while maintaining technical accuracy
+    
+    4. PUBLICATION READINESS:
+       - Create an engaging, shareable title
+       - Structure with clear headers and logical progression
+       - End with thoughtful conclusion and clear call for discussion
+       - Include practical takeaways and actionable insights
+       - Format for professional publication platforms
+    
+    QUALITY REQUIREMENTS:
+    - Maintain authentic personal voice throughout
+    - Balance vulnerability with technical authority
+    - Provide real value that resonates with technical professionals
+    - Create content that inspires and educates simultaneously
+    - Ensure smooth reading experience with natural flow
+  
+  expected_output: |
+    A polished, publication-ready long-form blog article (1000-2000 words) that includes:
+    
+    **Enhanced Structure:**
+    - Compelling, shareable title
+    - Professional subheadings and logical flow
+    - Smooth transitions between sections
+    - Engaging introduction and thoughtful conclusion
+    
+    **Enriched Content:**
+    - Expanded personal narrative with deeper storytelling
+    - Research-backed insights seamlessly integrated
+    - Industry context, trends, and best practices
+    - Practical takeaways and actionable advice
+    - References to authoritative sources
+    
+    **Publication Quality:**
+    - Medium/LinkedIn Articles style and formatting
+    - Professional but approachable tone
+    - Optimal readability with short paragraphs and lists
+    - Call-to-action for reader engagement
+    - Content valuable enough to bookmark and share
+    
+    The final article should be ready for immediate publication on professional platforms 
+    and represent your authentic voice while providing significant value to technical audiences.
+  
+  agent: blog_writer

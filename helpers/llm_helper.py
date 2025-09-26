@@ -31,6 +31,16 @@ OPENAI_MODEL_PREFIXES = ('gpt-', 'o1-')
 OPENAI_MODEL_NAMES = ('gpt-4o', 'gpt-4o-mini')
 GITHUB_MODEL_PREFIXES = ('github/',)
 
+# GitHub Copilot available models
+GITHUB_AVAILABLE_MODELS = (
+    'gpt-4o',
+    'gpt-4o-mini', 
+    'gpt-4',
+    'gpt-3.5-turbo',
+    'text-embedding-3-large',
+    'text-embedding-3-small'
+)
+
 
 @dataclass
 class MemoryOptimizationConfig:
@@ -75,7 +85,7 @@ class LLMHelper:
         self.ollama_base_url = DEFAULT_OLLAMA_BASE_URL
         self.github_base_url = DEFAULT_GITHUB_MODELS_BASE_URL
         self._agents_config: Optional[Dict[str, Any]] = None
-        self._llm_cache: Dict[str, LLM] = {}
+        # Removed _llm_cache - no caching for simpler behavior
 
         # Set API keys from environment
         self.openai_api_key = os.getenv('OPENAI_API_KEY')
@@ -156,12 +166,13 @@ class LLMHelper:
     def get_llm_model_name(self, agent_name: str) -> str:
         """
         Get the LLM model name for a specific agent
+        Automatically prefers GitHub Copilot models when available
         
         Args:
             agent_name: Name of the agent (e.g., 'coach', 'influencer', 'researcher')
             
         Returns:
-            LLM model name specified in the agent configuration
+            LLM model name, automatically prefixed with 'github/' if it's a GitHub model
         """
         config = self.load_agents_config()
         
@@ -172,7 +183,16 @@ class LLMHelper:
         if 'llm' not in agent_config:
             raise ValueError(f"No LLM specified for agent '{agent_name}'")
         
-        return agent_config['llm']
+        model_name = agent_config['llm']
+        
+        # Auto-upgrade to GitHub Copilot if model is available and we have a token
+        if (model_name in GITHUB_AVAILABLE_MODELS and 
+            not model_name.startswith('github/') and 
+            self.github_token):
+            logger.info(f"Auto-upgrading '{model_name}' to GitHub Copilot: 'github/{model_name}'")
+            return f"github/{model_name}"
+        
+        return model_name
     
     def create_llm_instance(self, agent_name: str) -> LLM:
         """
@@ -188,11 +208,6 @@ class LLMHelper:
             ValueError: If agent configuration is invalid or missing
             RuntimeError: If LLM creation fails
         """
-        # Check cache first
-        if agent_name in self._llm_cache:
-            logger.debug(f"Returning cached LLM instance for agent '{agent_name}'")
-            return self._llm_cache[agent_name]
-
         try:
             model_name = self.get_llm_model_name(agent_name)
             thinking_enabled = self.get_thinking_parameter(agent_name)
@@ -205,10 +220,7 @@ class LLMHelper:
             else:
                 llm_instance = self._create_ollama_llm(model_name, agent_name, thinking_enabled)
 
-            # Cache the instance
-            self._llm_cache[agent_name] = llm_instance
-            logger.info(f"Created and cached LLM instance for agent '{agent_name}': {model_name}")
-
+            logger.info(f"Created LLM instance for agent '{agent_name}': {model_name}")
             return llm_instance
 
         except Exception as e:
@@ -432,10 +444,10 @@ class LLMHelper:
             return
 
         loaded_models = self.get_loaded_models()
-        used_models = set(self.get_llm_model_name(agent) for agent in self._llm_cache.keys())
-
-        unused_models = [model for model in loaded_models if model and model not in used_models]
-
+        # Note: Without caching, we can't track which models are actively used
+        # Return empty list as all loaded models could potentially be in use
+        unused_models = []
+        
         if unused_models:
             logger.info(f"Unloading {len(unused_models)} unused models: {unused_models}")
             for model in unused_models:
@@ -470,9 +482,8 @@ class LLMHelper:
                 else:
                     logger.warning(f"Failed to unload: {model}")
 
-        # Clear LLM cache to force recreation next time
-        self._llm_cache.clear()
-        logger.debug("Cleared LLM cache")
+        # Note: No LLM cache to clear (caching removed for simpler behavior)
+        logger.debug("LLM cache disabled - no cleanup needed")
 
         # Verify cleanup
         remaining_models = self.get_loaded_models()
@@ -496,8 +507,8 @@ class LLMHelper:
             # Step 1: Unload all models
             unload_results = self.unload_all_models()
 
-            # Step 2: Clear internal cache
-            self._llm_cache.clear()
+            # Step 2: Note - LLM cache disabled for simpler behavior
+            logger.info("LLM cache disabled - no internal cache to clear")
 
             # Step 3: Force garbage collection
             import gc
@@ -520,11 +531,9 @@ class LLMHelper:
     
     def clear_cache(self) -> None:
         """
-        Clear the LLM instance cache
+        Clear the LLM instance cache (disabled - no caching)
         """
-        cache_size = len(self._llm_cache)
-        self._llm_cache.clear()
-        logger.info(f"Cleared LLM cache ({cache_size} instances)")
+        logger.info("LLM caching disabled - no cache to clear")
 
     def get_cache_stats(self) -> Dict[str, Any]:
         """
@@ -534,9 +543,32 @@ class LLMHelper:
             Dictionary with cache statistics
         """
         return {
-            'cached_instances': len(self._llm_cache),
-            'cached_agents': list(self._llm_cache.keys()),
-            'cache_enabled': True
+            'cached_instances': 0,
+            'cached_agents': [],
+            'cache_enabled': False
+        }
+    
+    def list_github_models(self) -> List[str]:
+        """
+        List all available GitHub Copilot models
+        
+        Returns:
+            List of GitHub model names (without github/ prefix)
+        """
+        return list(GITHUB_AVAILABLE_MODELS)
+    
+    def get_github_model_status(self) -> Dict[str, Any]:
+        """
+        Get GitHub Copilot integration status
+        
+        Returns:
+            Dictionary with GitHub integration details
+        """
+        return {
+            'github_token_configured': bool(self.github_token),
+            'github_base_url': self.github_base_url,
+            'available_models': list(GITHUB_AVAILABLE_MODELS),
+            'auto_upgrade_enabled': True
         }
 
     def validate_connection(self) -> Dict[str, Any]:
