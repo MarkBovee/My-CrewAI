@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "linkedin-content-flow"
+version = "0.1.0"
+description = "CrewAI flow for LinkedIn content generation"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<=3.13"
+crewai = {extras = ["tools"], version = "^0.80.0"}
+agentops = "^0.3.14"
+duckduckgo-search = "^6.3.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+linkedin_content_flow = "linkedin_content_flow.main:run"
+
+[tool.crewai]
+flow_name = "LinkedIn Content Flow"

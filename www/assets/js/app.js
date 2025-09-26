@@ -33,6 +33,16 @@ class FlowControlCenter {
         document.getElementById('cancel-flow')?.addEventListener('click', () => {
             this.closeModal('flow-modal');
         });
+
+        // Experience flow execution
+        document.getElementById('execute-experience-flow')?.addEventListener('click', () => {
+            this.executeExperienceFlow();
+        });
+
+        // Cancel experience flow
+        document.getElementById('cancel-experience-flow')?.addEventListener('click', () => {
+            this.closeModal('experience-flow-modal');
+        });
     }
 
     bindKnowledgeEvents() {
@@ -462,6 +472,129 @@ class FlowControlCenter {
             </div>
         `;
     }
+
+    async executeExperienceFlow() {
+        if (this.isExecuting) return;
+
+        const experienceText = document.getElementById('experience-text').value.trim();
+        
+        if (!experienceText) {
+            this.showNotification('Please enter your personal experience text', 'error');
+            return;
+        }
+
+        if (experienceText.length < 50) {
+            this.showNotification('Please provide a more detailed experience (at least 50 characters)', 'warning');
+            return;
+        }
+
+        this.isExecuting = true;
+        const executeBtn = document.getElementById('execute-experience-flow');
+        const executionLog = document.getElementById('experience-execution-log');
+        const logContent = executionLog.querySelector('.log-content');
+
+        // Update UI
+        executeBtn.disabled = true;
+        executeBtn.innerHTML = '<div class="loading"></div> Transforming...';
+        executionLog.style.display = 'block';
+        logContent.innerHTML = 'Initializing experience blog flow...\n';
+
+        try {
+            // Start experience flow execution
+            this.appendExperienceLog('🚀 Starting Create Blog From Experience Flow');
+            this.appendExperienceLog(`📝 Experience Text Length: ${experienceText.length} characters`);
+            this.appendExperienceLog('='.repeat(60));
+            
+            const response = await fetch('/api/execute-flow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    flow_name: 'create_blog_from_experience_flow',
+                    experience_text: experienceText
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Handle streaming response
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(6));
+                            this.handleExperienceFlowEvent(data);
+                        } catch (e) {
+                            console.error('Error parsing SSE data:', e);
+                        }
+                    }
+                }
+            }
+
+        } catch (error) {
+            console.error('Flow execution error:', error);
+            this.appendExperienceLog(`❌ Error: ${error.message}`, 'error');
+            this.showNotification('Experience flow execution failed', 'error');
+        } finally {
+            this.isExecuting = false;
+            executeBtn.disabled = false;
+            executeBtn.innerHTML = '<i class="fas fa-magic"></i> Transform Experience';
+        }
+    }
+
+    handleExperienceFlowEvent(data) {
+        switch (data.type) {
+            case 'log':
+                this.appendExperienceLog(data.message, data.level);
+                break;
+            case 'progress':
+                this.appendExperienceLog(`⏳ ${data.step}: ${data.message}`);
+                break;
+            case 'success':
+                this.appendExperienceLog('✅ Experience blog flow completed successfully!', 'success');
+                this.appendExperienceLog(`📁 Output saved to: ${data.output_file}`);
+                this.showNotification('Experience blog created successfully!', 'success');
+                this.updateFlowStats();
+                break;
+            case 'error':
+                this.appendExperienceLog(`❌ Error: ${data.message}`, 'error');
+                this.showNotification('Experience blog flow failed', 'error');
+                break;
+        }
+    }
+
+    appendExperienceLog(message, level = 'info') {
+        const logContent = document.querySelector('#experience-execution-log .log-content');
+        if (!logContent) return;
+
+        const timestamp = new Date().toLocaleTimeString();
+        const levelIcon = {
+            'info': 'ℹ️',
+            'debug': '🔍',
+            'error': '❌',
+            'warning': '⚠️',
+            'success': '✅'
+        }[level] || 'ℹ️';
+
+        const logEntry = document.createElement('div');
+        logEntry.className = `log-entry log-${level}`;
+        logEntry.innerHTML = `<span class="log-time">[${timestamp}]</span> ${levelIcon} ${message}`;
+        
+        logContent.appendChild(logEntry);
+        logContent.scrollTop = logContent.scrollHeight;
+    }
 }
 
 // Global functions for HTML onclick handlers
@@ -491,6 +624,11 @@ function viewFlowPlot(flowName) {
     }
     
     window.flowControl.showModal('plot-modal');
+}
+
+// Function for experience blog flow
+function runExperienceFlow() {
+    window.flowControl.showModal('experience-flow-modal');
 }
 
 // CSS for notifications

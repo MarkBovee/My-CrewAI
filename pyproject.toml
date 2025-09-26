@@ -3,15 +3,15 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "my-crewai"
-version = "0.1.0"
-description = "CrewAI multi-agent system for generating themed LinkedIn content"
+name = "crewai-multi-flow-center"
+version = "0.2.0"
+description = "CrewAI multi-flow system with web interface for specialized AI workflows"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
     {name = "Mark Bovee", email = "mark@example.com"}
 ]
-keywords = ["crewai", "ai", "linkedin", "content-generation", "multi-agent"]
+keywords = ["crewai", "ai", "flows", "content-generation", "multi-agent", "web-interface"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",

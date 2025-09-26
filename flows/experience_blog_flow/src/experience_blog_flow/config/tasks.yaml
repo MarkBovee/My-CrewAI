@@ -1,0 +1,104 @@
+task_experience_analysis:
+  description: |
+    Analyze the provided personal experience text and extract key themes, 
+    technologies, challenges, and learning points that could be expanded into a comprehensive blog post.
+    
+    PERSONAL EXPERIENCE TO ANALYZE:
+    {experience_text}
+    
+    ANALYSIS REQUIREMENTS:
+    - Identify the main technical topics and skills involved
+    - Extract specific challenges and how they were overcome
+    - Highlight measurable outcomes and improvements
+    - Identify broader themes that would resonate with a technical audience
+    - Suggest related topics for research and expansion
+    - Note any gaps where additional industry context would be valuable
+    
+    Your analysis will be used to guide research and content creation for a comprehensive blog post.
+  expected_output: |
+    A structured analysis containing:
+    - Main technical topics and technologies mentioned
+    - Key challenges and solutions identified
+    - Measurable outcomes and improvements
+    - Broader themes and concepts for expansion
+    - Suggested related research topics
+    - Target audience considerations
+    - Gaps where industry context would add value
+  agent: coach
+
+task_experience_research:
+  description: |
+    Based on the personal experience analysis, conduct comprehensive research to enhance and expand 
+    the content with industry best practices, related case studies, and technical insights.
+    
+    RESEARCH FOCUS:
+    - Find best practices related to the technologies and approaches mentioned
+    - Research industry trends and statistics that support the experience
+    - Look for similar case studies and expert opinions
+    - Identify common pitfalls and how to avoid them
+    - Find advanced techniques and optimizations
+    - Research tools, frameworks, and methodologies mentioned
+    
+    Use the personal experience analysis from the previous task to guide your research direction.
+    Focus on finding authoritative sources that would add credibility and depth to the personal story.
+  expected_output: |
+    A comprehensive research document containing:
+    - Industry best practices and standards
+    - Relevant statistics and trends
+    - Expert insights and case studies
+    - Advanced techniques and optimizations
+    - Common challenges and solutions in the field
+    - Technical depth to support the personal experience
+    - Authoritative sources and references
+  agent: researcher
+  context:
+    - task_experience_analysis
+
+task_experience_blog:
+  description: |
+    Write a comprehensive, engaging blog post that combines the personal experience with enhanced 
+    research insights to create valuable content for a technical audience.
+    
+    Use the personal experience provided in the original input, along with research insights and 
+    key themes from previous tasks, to create a comprehensive blog post.
+    
+    STRUCTURE AND STYLE:
+    - Start with the personal story as a compelling hook
+    - Weave in technical details and lessons learned organically
+    - Support personal insights with research and industry context
+    - Include practical takeaways and actionable advice
+    - Use the personal experience as proof-of-concept for broader principles
+    - Make it educational while keeping it personal and relatable
+    
+    TECHNICAL DEPTH:
+    - Include specific technologies, tools, and methodologies
+    - Explain technical decisions and trade-offs made
+    - Share measurable results and performance improvements
+    - Provide code snippets, configurations, or examples where relevant
+    - Connect personal experience to industry best practices
+    
+    AUDIENCE VALUE:
+    - Address common challenges developers face in similar situations
+    - Provide step-by-step insights without making it a tutorial
+    - Share lessons that can be applied to similar projects
+    - Include resources and references for deeper learning
+    - Balance personal vulnerability with technical authority
+    
+    AUTHENTICITY:
+    - Keep the personal voice and authentic experience at the center
+    - Don't overshadow the personal story with too much industry context
+    - Use research to enhance, not replace, the personal narrative
+    - Maintain the human element that makes the story relatable
+  expected_output: |
+    A comprehensive blog post (1200-2000 words) featuring:
+    - Engaging personal narrative as the foundation
+    - Technical depth with specific examples and details
+    - Integration of research insights and best practices
+    - Practical takeaways and actionable recommendations
+    - Professional tone that balances personal story with expertise
+    - Clear section structure with logical flow
+    - Conclusion that ties personal learning to broader implications
+    - Resources and references for further reading
+  agent: writer
+  context:
+    - task_experience_research

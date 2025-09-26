@@ -148,8 +148,8 @@
 
                     <div class="flow-card">
                         <div class="flow-header">
-                            <div class="flow-status-indicator inactive"></div>
-                            <h3>Content Analysis Flow</h3>
+                            <div class="flow-status-indicator active"></div>
+                            <h3>Create Blog From Experience Flow</h3>
                             <div class="flow-actions">
                                 <button class="btn-icon" title="View Flow">
                                     <i class="fas fa-eye"></i>
@@ -159,23 +159,24 @@
                                 </button>
                             </div>
                         </div>
-                        <p class="flow-description">Analyze and optimize existing content for better engagement</p>
+                        <p class="flow-description">Transform personal experiences into comprehensive blog posts</p>
                         <div class="flow-meta">
                             <div class="flow-agents">
-                                <span class="agent-tag">Analyzer</span>
-                                <span class="agent-tag">Optimizer</span>
+                                <span class="agent-tag">Coach</span>
+                                <span class="agent-tag">Researcher</span>
+                                <span class="agent-tag">Writer</span>
                             </div>
                             <div class="flow-stats">
-                                <span><i class="fas fa-play"></i> 3 runs</span>
-                                <span><i class="fas fa-clock"></i> 1.8s avg</span>
+                                <span><i class="fas fa-play"></i> 0 runs</span>
+                                <span><i class="fas fa-clock"></i> 3.2s avg</span>
                             </div>
                         </div>
                         <div class="flow-actions-bottom">
-                            <button class="btn btn-outline">
+                            <button class="btn btn-outline" onclick="viewFlowPlot('create_blog_from_experience_flow')">
                                 <i class="fas fa-chart-network"></i>
                                 View Plot
                             </button>
-                            <button class="btn btn-primary" disabled>
+                            <button class="btn btn-primary" onclick="runExperienceFlow()">
                                 <i class="fas fa-play"></i>
                                 Run Flow
                             </button>
@@ -366,6 +367,47 @@
                         <div id="plot-container">
                             <iframe id="plot-iframe" src="" style="width: 100%; height: 500px; border: none;"></iframe>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience Blog Flow Modal -->
+            <div id="experience-flow-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Create Blog From Experience Flow</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="experience-text">Your Personal Experience</label>
+                            <textarea 
+                                id="experience-text" 
+                                rows="8" 
+                                placeholder="Describe your personal experience that you'd like to transform into a comprehensive blog post. Include details about challenges, solutions, technologies used, and outcomes achieved..."
+                                style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical;">Last week I worked on implementing a new feature for our application. I faced several challenges with...
+
+For example:
+- Technical challenge you encountered
+- Approach you took to solve it
+- Tools/technologies you used
+- Results or improvements achieved
+- Lessons learned</textarea>
+                            <div class="input-info">
+                                <small>💡 Share your real experience - the AI will enhance it with research and best practices to create a comprehensive blog post.</small>
+                            </div>
+                        </div>
+                        <div class="execution-log" id="experience-execution-log" style="display: none;">
+                            <h4>Execution Log</h4>
+                            <div class="log-content"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline" id="cancel-experience-flow">Cancel</button>
+                        <button class="btn btn-primary" id="execute-experience-flow">
+                            <i class="fas fa-magic"></i>
+                            Transform Experience
+                        </button>
                     </div>
                 </div>
             </div>

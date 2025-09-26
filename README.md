@@ -1,163 +1,175 @@
-# CrewAI Flow Control Center
+# CrewAI Multi-Flow Control Center
 
-Welcome to the CrewAI Flow Control Center, powered by [crewAI](https://crewai.com) and integrated with local Ollama LLM. This project demonstrates a multi-agent AI system with a professional web interface for managing and executing CrewAI flows.
+Welcome to the CrewAI Multi-Flow Control Center, powered by [crewAI](https://crewai.com) and integrated with local Ollama LLM. This project demonstrates multiple specialized AI workflows with proper separation following CrewAI best practices.
 
-## Features
+## 🏗️ Project Structure
 
-- 🌐 **Web Interface**: Professional web-based flow management and execution
-- 🔄 **CrewAI Flows**: Advanced flow architecture for complex multi-agent workflows
-- 🔍 **DuckDuckGo Search Integration**: Research latest AI and tech trends
-- 🤖 **Three-Agent Crew System**: Coach, Researcher, and Influencer Writer working together
-- 🧠 **Local Ollama LLM**: Uses `qwen3:4b` model for AI processing
-- 📊 **Flow Visualization**: Real-time flow plots and execution tracking
-- ⚙️ **Modular Architecture**: Organized helpers and tools
-- 🛠️ **Configuration Management**: Comprehensive utilities for managing models and settings
-
-## ⚠️ Knowledge Sources - DISABLED
-
-**Important**: Vector-based knowledge sources have been **permanently disabled** in this project due to GPU memory exhaustion issues.
-
-### Why Knowledge Sources Were Removed
-
-CrewAI's knowledge sources feature uses vector embeddings (via models like `mxbai-embed-large`) that consume significant GPU memory. In our testing:
-
-- **Problem**: Knowledge sources + Ollama embeddings consumed all available GPU memory
-- **Result**: Agent models (qwen3:1.7b) failed with "out of memory" errors during execution
-- **Impact**: Complete system failure when trying to run multi-agent workflows
-
-### Alternative Approach
-
-Instead of vector knowledge sources, agents now rely on:
-
-- **DuckDuckGo Search Tool**: Real-time web search for current information
-- **ScrapeWebsiteTool**: Direct website content extraction
-- **File-based Context**: Task outputs passed between agents via flow state
-
-This approach provides:
-
-- ✅ **Zero GPU memory overhead** for knowledge storage
-- ✅ **Real-time information** via web search
-- ✅ **Scalable execution** without memory constraints
-- ✅ **Reliable performance** on resource-constrained systems
-
-### Future Considerations
-
-If you have access to systems with more GPU memory (16GB+ dedicated GPU), you could re-enable knowledge sources by:
-
-1. Modifying `src/linkedin/crew.py` to include knowledge sources configuration
-2. Ensuring adequate GPU memory for both embeddings and agent models
-3. Testing with your specific hardware configuration
-
-## Project Structure
+Following CrewAI examples repository patterns, this project uses isolated flows:
 
 ```
-src/
-└── linkedin/
-    ├── config/          # Agent and task configurations
-    │   ├── agents.yaml
-    │   └── tasks.yaml
-    ├── flows/           # CrewAI flow definitions
-    │   └── create_new_post_flow.py
-    ├── helpers/         # Utility modules
-    │   ├── llm_helper.py
-    │   ├── config_helper.py
-    │   └── __init__.py
-    ├── tools/           # Custom CrewAI tools
-    │   ├── duckduckgo_search_tool.py
-    │   └── __init__.py
-    ├── crew.py          # Main crew definition
-    └── main.py          # Entry point
-
-www/                     # Web interface
-├── index.html          # Main web interface
-├── assets/
-│   ├── css/style.css   # CrewAI-themed styling
-│   └── js/app.js       # Frontend application logic
-└── plots/              # Generated flow plots
-
-web_server.py           # FastAPI backend server
-start-web.ps1           # PowerShell startup script
+flows/
+├── linkedin_content_flow/     # LinkedIn content generation
+│   ├── src/linkedin_content_flow/
+│   ├── pyproject.toml
+│   └── README.md
+├── experience_blog_flow/      # Experience-to-blog transformation
+│   ├── src/experience_blog_flow/
+│   ├── pyproject.toml
+│   └── README.md
+knowledge/                     # Shared knowledge sources
+output/                        # Generated content
+www/                          # Web interface
+web_server.py                 # FastAPI server
 ```
 
-## CrewAI Tools Overview
+## 🚀 Available Flows
 
-CrewAI provides 40+ pre-built tools to enhance your agents' capabilities. Here are the main tool categories available:
+### 1. LinkedIn Content Flow
+Multi-agent system for LinkedIn content creation:
+- **Coach**: Guides content strategy and quality
+- **Researcher**: Conducts web research
+- **Writer**: Creates comprehensive articles  
+- **Influencer**: Generates engaging posts
 
-### 🔍 Search & Research Tools
+### 2. Experience Blog Flow
+Transform personal experiences into enhanced blog posts:
+- **Experience Analyst**: Structures personal experiences
+- **Research Agent**: Adds context and research
+- **Blog Writer**: Creates comprehensive blog content
 
-- **SerperDevTool**: Google search API integration
-- **DuckDuckGo Search**: Privacy-focused web search (currently used)
-- **YouTubeSearchTool**: Search and analyze YouTube content
-- **GitHubSearchTool**: Find and analyze code repositories
+## 🌟 Features
 
-### 📄 File & Document Tools
+- 🌐 **Web Interface**: Professional flow management and execution
+- 🔄 **Multiple Flows**: Specialized workflows following CrewAI patterns
+- 🔍 **DuckDuckGo Search**: Real-time research capabilities
+- 🤖 **Optimized Agents**: Different LLMs for different tasks
+- 🧠 **Local Ollama**: Multiple model support (llama3.1, qwen2.5, qwq)
+- 📊 **Flow Visualization**: Real-time execution tracking
+- 🛡️ **Token Management**: Efficient memory and token usage
+- � **Modular Architecture**: Proper separation of concerns
 
-- **FileReadTool**: Read various file formats (PDF, DOCX, JSON, CSV, etc.)
-- **DirectoryReadTool**: Navigate and read directory structures
-- **CSVSearchTool**: Search and analyze CSV files
-- **JSONSearchTool**: Query JSON data structures
+## 📋 Usage
 
-### 🌐 Web Scraping & Browsing Tools
+### Method 1: CrewAI CLI (Recommended)
 
-- **ScrapeWebsiteTool**: Extract content from websites
-- **FirecrawlTool**: Advanced web scraping with Firecrawl
-- **SeleniumTool**: Browser automation for dynamic content
+Each flow can be run independently:
 
-### 🗄️ Database & Data Tools
+```bash
+# LinkedIn Content Flow
+cd flows/linkedin_content_flow
+crewai run
 
-- **MySQLTool**: Connect to MySQL databases
-- **PostgreSQLTool**: PostgreSQL database operations
-- **SnowflakeTool**: Data warehouse queries
-- **QdrantTool**: Vector database operations
-- **WeaviateTool**: Vector search and storage
+# Experience Blog Flow  
+cd flows/experience_blog_flow
+crewai run
+```
 
-### 🤖 AI & Machine Learning Tools
+### Method 2: Web Interface
 
-- **CodeInterpreterTool**: Execute Python code dynamically
-- **DALL-E Tool**: Generate images with OpenAI's DALL-E
-- **RAGTool**: Implement Retrieval-Augmented Generation
-- **VisionTool**: Process images and vision tasks
+Start the web server for interactive management:
 
-### ☁️ Cloud & Storage Tools
+```bash
+# Start web server
+python web_server.py
+# OR
+.\start-web.ps1
+```
 
-- **S3ReaderTool**: Access AWS S3 files
-- **AmazonBedrockTool**: AWS AI services integration
+Navigate to http://localhost:8000 for the web interface.
 
-### ⚙️ Automation Tools
-
-- **ApifyTool**: Web scraping and automation platform
-- **ComposioTool**: Connect with external services
-
-### 🔧 Tool Usage Example
+### Method 3: Direct Python Execution
 
 ```python
-from crewai_tools import FileReadTool, SerperDevTool
+# LinkedIn Content Flow
+from flows.linkedin_content_flow.src.linkedin_content_flow.main import LinkedInContentFlow
+flow = LinkedInContentFlow()
+result = flow.kickoff(inputs={"topic": "AI trends 2024"})
 
-# Add tools to your agent
-agent = Agent(
-    role="Research Analyst",
-    tools=[FileReadTool(), SerperDevTool()],
-    # ... other configuration
-)
+# Experience Blog Flow
+from flows.experience_blog_flow.src.experience_blog_flow.main import ExperienceBlogFlow
+flow = ExperienceBlogFlow()
+result = flow.kickoff(inputs={"experience_text": "Your experience..."})
 ```
 
-For the complete list of tools and detailed documentation, visit: [CrewAI Tools Documentation](https://docs.crewai.com/en/tools/overview)
+## 🧠 Knowledge Management
 
-## Installation
+The system uses persistent knowledge management:
 
-Ensure you have Python >=3.10 <3.14 and Ollama installed on your system.
+- **Web Search Results**: Stored in `knowledge/web_search_results.json`
+- **Article Memory**: Topic tracking in `knowledge/article_memory.json`
+- **Local Embeddings**: Uses `mxbai-embed-large` via Ollama
+
+### Knowledge Reset
+
+```bash
+python reset_knowledge.py --type all --stats
+```
+
+## 🛠️ Installation
 
 ### Prerequisites
 
 1. **Install Ollama**: Download from [ollama.ai](https://ollama.ai)
-2. **Pull the qwen3:4b model**:
+2. **Pull required models**:
    ```bash
-   ollama pull qwen3:4b
+   ollama pull llama3.1:8b
+   ollama pull qwen2.5:14b  
+   ollama pull qwq:32b
+   ollama pull mxbai-embed-large
    ```
 3. **Start Ollama server**:
    ```bash
    ollama serve
    ```
+
+### Python Environment
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd My-CrewAI
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Test the installation**:
+   ```bash
+   # Test LinkedIn Content Flow
+   cd flows/linkedin_content_flow
+   python -c "from src.linkedin_content_flow.main import LinkedInContentFlow; print('✅ LinkedIn flow ready')"
+   
+   # Test Experience Blog Flow  
+   cd ../experience_blog_flow
+   python -c "from src.experience_blog_flow.main import ExperienceBlogFlow; print('✅ Blog flow ready')"
+   ```
+
+## 🎯 Model Usage Strategy
+
+Different flows use optimized models for specific tasks:
+
+- **llama3.1:8b**: General purpose, web search, content generation
+- **qwen2.5:14b**: Structured analysis, experience processing  
+- **qwq:32b**: Complex reasoning, creative writing, blog enhancement
+- **mxbai-embed-large**: Knowledge source embeddings
+
+## 🔧 Configuration
+
+Each flow has its own configuration in:
+- `flows/*/src/*/config/agents.yaml` - Agent definitions and models
+- `flows/*/src/*/config/tasks.yaml` - Task workflows and outputs
+
+## 📊 Output Structure
+
+Generated content is organized by type:
+```
+output/
+├── articles/        # Research articles (LinkedIn flow)
+├── blogs/          # Blog posts (both flows)
+└── posts/          # Social media posts (LinkedIn flow)
+```
 
 ### Install Dependencies
 

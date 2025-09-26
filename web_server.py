@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 class FlowExecutionRequest(BaseModel):
     flow_name: str
     topic: str = "Latest AI and Tech Skills Trends"
+    experience_text: Optional[str] = None  # For experience blog flow
 
 
 class FlowStatus(BaseModel):
@@ -111,6 +112,15 @@ class FlowControlServer:
                     "status": "active",
                     "runs": len([f for f in self.flow_history if f.flow_name == "create_new_post_flow"]),
                     "avg_runtime": "2.1s"
+                },
+                {
+                    "name": "create_blog_from_experience_flow",
+                    "display_name": "Create Blog From Experience Flow",
+                    "description": "Transform personal experiences into comprehensive blog posts",
+                    "agents": ["Coach", "Researcher", "Writer"],
+                    "status": "active",
+                    "runs": len([f for f in self.flow_history if f.flow_name == "create_blog_from_experience_flow"]),
+                    "avg_runtime": "3.2s"
                 }
             ]
             return {"flows": flows}
@@ -152,7 +162,10 @@ class FlowControlServer:
                         
                         try:
                             yield f"data: {json.dumps({'type': 'log', 'message': 'Attempting import...', 'level': 'debug'})}\n\n"
-                            from src.linkedin.flows.create_new_post_flow import run_create_new_post_flow
+                            import sys
+                            import os
+                            sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
+                            from linkedin_content_flow.main import LinkedInContentFlow
                             yield f"data: {json.dumps({'type': 'log', 'message': 'Import successful', 'level': 'debug'})}\n\n"
                             
                             yield f"data: {json.dumps({'type': 'progress', 'step': 'Initialize', 'message': 'Setting up flow state'})}\n\n"
@@ -163,7 +176,8 @@ class FlowControlServer:
                             def run_flow_sync():
                                 """Wrapper to run the CrewAI flow in a separate thread"""
                                 try:
-                                    return run_create_new_post_flow(request.topic)
+                                    flow = LinkedInContentFlow()
+                                    return flow.kickoff(inputs={"topic": request.topic})
                                 except Exception as e:
                                     print(f"Flow execution error: {e}")
                                     raise
@@ -181,8 +195,8 @@ class FlowControlServer:
                                 
                                 # Find the output file
                                 output_dir = Path("output/posts")
-                                output_files = list(output_dir.glob(f"*{request.topic.replace(' ', '_')}*.txt"))
-                                output_file = str(output_files[-1]) if output_files else "output/posts/latest.txt"
+                                output_files = list(output_dir.glob(f"*{request.topic.replace(' ', '_')}*.md"))
+                                output_file = str(output_files[-1]) if output_files else "output/posts/latest.md"
                                 
                                 # Record successful execution
                                 self.flow_history.append(FlowStatus(
@@ -215,6 +229,87 @@ class FlowControlServer:
                                 status="failed",
                                 created_at=datetime.now().isoformat()
                             ))
+                            
+                    elif request.flow_name == "create_blog_from_experience_flow":
+                        # Handle experience blog flow
+                        if not request.experience_text:
+                            yield f"data: {json.dumps({'type': 'error', 'message': 'Experience text is required for this flow'})}\n\n"
+                            return
+                            
+                        yield f"data: {json.dumps({'type': 'progress', 'step': 'Import', 'message': 'Loading experience blog flow module'})}\n\n"
+                        
+                        try:
+                            yield f"data: {json.dumps({'type': 'log', 'message': 'Attempting import...', 'level': 'debug'})}\n\n"
+                            import sys
+                            import os
+                            sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'experience_blog_flow', 'src'))
+                            from experience_blog_flow.main import ExperienceBlogFlow
+                            yield f"data: {json.dumps({'type': 'log', 'message': 'Import successful', 'level': 'debug'})}\n\n"
+                            
+                            yield f"data: {json.dumps({'type': 'progress', 'step': 'Initialize', 'message': 'Setting up experience blog flow state'})}\n\n"
+                            
+                            # Execute the flow in a thread pool to handle CrewAI's internal asyncio.run()
+                            yield f"data: {json.dumps({'type': 'log', 'message': 'Starting experience blog flow in thread pool...', 'level': 'debug'})}\n\n"
+                            
+                            def run_experience_flow_sync():
+                                """Wrapper to run the CrewAI experience blog flow in a separate thread"""
+                                try:
+                                    flow = ExperienceBlogFlow()
+                                    return flow.kickoff(inputs={"experience_text": request.experience_text})
+                                except Exception as e:
+                                    print(f"Experience blog flow execution error: {e}")
+                                    raise
+                            
+                            try:
+                                # Use thread pool executor to run the CrewAI flow
+                                loop = asyncio.get_event_loop()
+                                with concurrent.futures.ThreadPoolExecutor() as executor:
+                                    result = await loop.run_in_executor(executor, run_experience_flow_sync)
+                                
+                                yield f"data: {json.dumps({'type': 'log', 'message': f'Experience blog flow execution completed. Result: {type(result)}', 'level': 'debug'})}\n\n"
+                                
+                                yield f"data: {json.dumps({'type': 'progress', 'step': 'Analyze', 'message': 'Analyzing personal experience'})}\n\n"
+                                yield f"data: {json.dumps({'type': 'progress', 'step': 'Research', 'message': 'Conducting enhanced research'})}\n\n"
+                                yield f"data: {json.dumps({'type': 'progress', 'step': 'Generate', 'message': 'Creating comprehensive blog post'})}\n\n"
+                                yield f"data: {json.dumps({'type': 'progress', 'step': 'Save', 'message': 'Saving enhanced blog content'})}\n\n"
+                                
+                                # Find the output file
+                                output_dir = Path("output/blogs")
+                                output_files = list(output_dir.glob(f"blog_post_*.md"))
+                                output_file = str(output_files[-1]) if output_files else "output/blogs/latest.md"
+                                
+                                # Record successful execution
+                                self.flow_history.append(FlowStatus(
+                                    flow_name=request.flow_name,
+                                    status="completed",
+                                    created_at=datetime.now().isoformat(),
+                                    output_file=output_file
+                                ))
+                                
+                                yield f"data: {json.dumps({'type': 'success', 'message': 'Experience blog flow completed successfully!', 'output_file': output_file})}\n\n"
+                                
+                            except Exception as flow_error:
+                                error_msg = f"Experience blog flow execution error: {str(flow_error)}"
+                                yield f"data: {json.dumps({'type': 'error', 'message': error_msg})}\n\n"
+                                logger.error(f"Experience blog flow execution failed: {flow_error}")
+                                import traceback
+                                logger.error(traceback.format_exc())
+                            
+                        except ImportError as e:
+                            error_msg = f"Failed to import experience blog flow module: {str(e)}"
+                            yield f"data: {json.dumps({'type': 'error', 'message': error_msg})}\n\n"
+                            
+                        except Exception as e:
+                            error_msg = f"Experience blog flow execution failed: {str(e)}"
+                            yield f"data: {json.dumps({'type': 'error', 'message': error_msg})}\n\n"
+                            
+                            # Record failed execution
+                            self.flow_history.append(FlowStatus(
+                                flow_name=request.flow_name,
+                                status="failed",
+                                created_at=datetime.now().isoformat()
+                            ))
+                            
                     else:
                         yield f"data: {json.dumps({'type': 'error', 'message': f'Unknown flow: {request.flow_name}'})}\n\n"
                 
@@ -256,7 +351,10 @@ class FlowControlServer:
         async def get_knowledge_stats():
             """Get knowledge statistics"""
             try:
-                from linkedin.helpers.knowledge_helper import KnowledgeHelper
+                import sys
+                import os
+                sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
+                from linkedin_content_flow.helpers.knowledge_helper import KnowledgeHelper
                 helper = KnowledgeHelper()
                 stats = helper.get_knowledge_stats()
                 return {"success": True, "data": stats}
@@ -268,7 +366,10 @@ class FlowControlServer:
         async def reset_knowledge(request: KnowledgeResetRequest):
             """Reset knowledge data"""
             try:
-                from linkedin.helpers.knowledge_helper import KnowledgeHelper
+                import sys
+                import os
+                sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
+                from linkedin_content_flow.helpers.knowledge_helper import KnowledgeHelper
                 helper = KnowledgeHelper()
                 
                 if request.type == "topics":
@@ -295,7 +396,10 @@ class FlowControlServer:
         async def check_topic_coverage(request: TopicCheckRequest):
             """Check if a topic has been covered before"""
             try:
-                from linkedin.helpers.knowledge_helper import check_topic_similarity
+                import sys
+                import os
+                sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
+                from linkedin_content_flow.helpers.knowledge_helper import check_topic_similarity
                 
                 if not request.topic:
                     return {"success": False, "error": "Topic is required"}
