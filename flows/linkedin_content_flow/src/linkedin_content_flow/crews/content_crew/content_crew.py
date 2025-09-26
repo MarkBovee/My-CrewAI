@@ -2,8 +2,16 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import ScrapeWebsiteTool
-from linkedin_content_flow.tools.search_tool import search_tool
-from linkedin_content_flow.helpers.llm_helper import LLMHelper
+import sys
+import os
+from pathlib import Path
+
+# Add project root to path for shared components
+project_root = Path(__file__).parent.parent.parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+from tools.search_tool import search_tool
+from helpers.llm_helper import LLMHelper
 
 
 @CrewBase

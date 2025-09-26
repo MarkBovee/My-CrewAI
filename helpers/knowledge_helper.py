@@ -139,3 +139,64 @@ def store_web_results(search_query: str, results: List[Dict[str, Any]], task_top
     """
     helper = KnowledgeHelper()
     return helper.store_web_search_results(search_query, results, task_topic)
+
+
+def check_topic_similarity(topic: str, threshold: float = 0.8) -> Dict[str, Any]:
+    """
+    Check if a topic has been covered before using similarity matching
+    
+    Args:
+        topic: Topic to check for similarity
+        threshold: Similarity threshold (0.0-1.0)
+        
+    Returns:
+        Dictionary with similarity results and recommendations
+    """
+    helper = KnowledgeHelper()
+    
+    try:
+        # Load article memory
+        article_memory = helper._load_json_file(helper.article_memory_file)
+        
+        if not article_memory.get("articles", []):
+            return {
+                "is_similar": False,
+                "similarity_score": 0.0,
+                "similar_topics": [],
+                "recommendation": "Topic is unique, proceed with creation"
+            }
+        
+        # Simple keyword-based similarity for now
+        # In a real implementation, you might use embeddings/vector similarity
+        topic_words = set(topic.lower().split())
+        similar_articles = []
+        
+        for article in article_memory["articles"]:
+            article_words = set(article["topic"].lower().split())
+            common_words = topic_words.intersection(article_words)
+            similarity = len(common_words) / max(len(topic_words), len(article_words))
+            
+            if similarity >= threshold:
+                similar_articles.append({
+                    "topic": article["topic"],
+                    "similarity": similarity,
+                    "date_created": article.get("date_created", "unknown")
+                })
+        
+        is_similar = len(similar_articles) > 0
+        max_similarity = max([a["similarity"] for a in similar_articles], default=0.0)
+        
+        return {
+            "is_similar": is_similar,
+            "similarity_score": max_similarity,
+            "similar_topics": similar_articles[:3],  # Top 3 similar topics
+            "recommendation": "Consider different angle or skip" if is_similar else "Topic is unique, proceed with creation"
+        }
+        
+    except Exception as e:
+        return {
+            "is_similar": False,
+            "similarity_score": 0.0,
+            "similar_topics": [],
+            "recommendation": f"Error checking similarity: {str(e)}"
+        }

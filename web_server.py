@@ -351,10 +351,7 @@ class FlowControlServer:
         async def get_knowledge_stats():
             """Get knowledge statistics"""
             try:
-                import sys
-                import os
-                sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
-                from linkedin_content_flow.helpers.knowledge_helper import KnowledgeHelper
+                from helpers.knowledge_helper import KnowledgeHelper
                 helper = KnowledgeHelper()
                 stats = helper.get_knowledge_stats()
                 return {"success": True, "data": stats}
@@ -366,10 +363,7 @@ class FlowControlServer:
         async def reset_knowledge(request: KnowledgeResetRequest):
             """Reset knowledge data"""
             try:
-                import sys
-                import os
-                sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
-                from linkedin_content_flow.helpers.knowledge_helper import KnowledgeHelper
+                from helpers.knowledge_helper import KnowledgeHelper
                 helper = KnowledgeHelper()
                 
                 if request.type == "topics":
@@ -396,10 +390,7 @@ class FlowControlServer:
         async def check_topic_coverage(request: TopicCheckRequest):
             """Check if a topic has been covered before"""
             try:
-                import sys
-                import os
-                sys.path.insert(0, os.path.join(os.getcwd(), 'flows', 'linkedin_content_flow', 'src'))
-                from linkedin_content_flow.helpers.knowledge_helper import check_topic_similarity
+                from helpers.knowledge_helper import check_topic_similarity
                 
                 if not request.topic:
                     return {"success": False, "error": "Topic is required"}
